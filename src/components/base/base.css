@@ -1,12 +1,11 @@
 div.sidebar {
     background-color: #f1f1f1;
     height: 100vh;
-    display:inline-block
+    float: left;
 }
 
 div.content {
     background-color: red;
-    display:inline-block;
 }
 
 ul {

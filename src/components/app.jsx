@@ -1,8 +1,8 @@
 import React from "react";
-import Base from "./base/base.jsx"
-import Main from "./main/main.jsx"
-import Mgmt from "./mgmt.jsx"   
-import About from "./about/about.jsx"   
+import Base from "./Base/Base.jsx"
+import Main from "./Main/Main.jsx"
+import Mgmt from "./Mgmt.jsx"   
+import About from "./About/About.jsx"   
 import {Routes, Route} from "react-router-dom";
 
 function App() {

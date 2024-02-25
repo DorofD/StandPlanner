@@ -1,8 +1,7 @@
 import React, { Component } from "react";
 import "./base.css";
-import { Outlet, Link} from "react-router-dom";
+import { NavLink as NavLinkBase, Outlet, Link } from "react-router-dom";
 
-import { NavLink as NavLinkBase } from 'react-router-dom'; 
 
 const NavLink = React.forwardRef((props, ref) => (
   <NavLinkBase
@@ -11,6 +10,7 @@ const NavLink = React.forwardRef((props, ref) => (
     className={props.activeClassName}
   />
 ));
+
 function Base() {
     return (
         <>

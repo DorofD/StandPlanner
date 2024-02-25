@@ -1,20 +1,27 @@
 import React from "react";
 import "./main.css";
-import { Button } from "./button.jsx"
-import { stands } from "./stands.js"
+import { Stand } from "../Stand/Stand"
+import { Button } from "../Button/Button";
+import { stands as standsFromFile } from "./stands.js";
 
+
+function StandList( {stands} ){
+    const standList = []
+    for (let i = 0; i < stands.length; i++) {
+        standList.push(
+            <Stand standName={stands[i].name} standState={stands[i].state} standOs={stands[i].os}/>
+        )
+    }
+    return (
+        standList
+    )
+}
 
 function Main() {
     return (
         <>
             <div>
-
-                {stands[0].name + stands[0].state + stands[0].os}
-                <br />
-                {stands[1].name + stands[1].state + stands[1].os}
-                <br />
-                {stands[2].name + stands[2].state + stands[2].os}
-                <br />
+                <StandList stands={ standsFromFile }/>
                 <Button text={'button 1'}/>
                 <Button text={'button 2'}/>
             </div>
