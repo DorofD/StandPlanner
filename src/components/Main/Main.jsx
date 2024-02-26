@@ -1,5 +1,5 @@
 import React from "react";
-import "./main.css";
+import "./Main.css";
 import { Stand } from "../Stand/Stand"
 import { Button } from "../Button/Button";
 import { stands as standsFromFile } from "./stands.js";
