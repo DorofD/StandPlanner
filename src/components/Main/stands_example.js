@@ -20,6 +20,7 @@ export const stands = [
         os: 'ubuntu 18'
     },
     {
+        
         name: 'stand 5',
         state: 'free',
         os: 'ubuntu 18'

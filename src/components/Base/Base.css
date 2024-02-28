@@ -1,11 +1,14 @@
 div.sidebar {
     background-color: #f1f1f1;
-    height: 100vh;
     float: left;
+    display: flex;
+    align-items: stretch;
+    height: 100%;
 }
 
 div.content {
     background-color: red;
+    display: flex
 }
 
 ul {

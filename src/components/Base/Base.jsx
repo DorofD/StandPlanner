@@ -11,6 +11,7 @@ const NavLink = React.forwardRef((props, ref) => (
   />
 ));
 
+
 function Base() {
     return (
         <>
@@ -18,7 +19,9 @@ function Base() {
                 <nav>
                     <ul>
                         <li> <NavLink to="/" >Главная</NavLink></li>
-                        <li> <NavLink to="/mgmt" >Управление</NavLink></li>
+                        <li> <NavLink to="/planner" >Планировщик</NavLink></li>
+                        <li> <NavLink to="/stands" >Стенды</NavLink></li>
+                        <li> <NavLink to="/admin" >Администрирование</NavLink></li>
                         <li> <NavLink to="/about">О приложении</NavLink></li>
                     </ul>
                 </nav>

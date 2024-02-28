@@ -2,7 +2,7 @@ import React from "react";
 import "./Main.css";
 import { Stand } from "../Stand/Stand"
 import { Button } from "../Button/Button";
-import { stands as standsFromFile } from "./stands.js";
+import { stands as standsFromFile } from "./stands_example.js";
 
 
 function StandList( {stands} ){
