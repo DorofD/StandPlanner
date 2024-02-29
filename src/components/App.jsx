@@ -6,11 +6,12 @@ import Planner from "./Planner/Planner"
 import Admin from "./Admin/Admin"   
 import About from "./About/About"   
 import {Routes, Route} from "react-router-dom";
+import Clock from "./Clock/Clock";
 
 function App() {
     return (
         <>
-
+            <Clock/>
             <Routes>
                 <Route path="/" element={<Base />}>
                     <Route index element={<Main />}/>

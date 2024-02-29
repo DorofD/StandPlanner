@@ -1,8 +1,8 @@
 import React from "react";
 import { useState } from "react";
 import "./Main.css";
-import { Stand } from "../Stand/Stand"
-import { Button } from "../Button/Button";
+import { Stand } from "../Stand/Stand.jsx"
+import { Button } from "../Button/Button.jsx";
 import { stands as standsFromFile } from "./stands_example.js";
 
 

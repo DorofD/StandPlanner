@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 
-function Stands() {
+export default function Stands() {
     return (
         <div>
             Управление стендами
@@ -8,4 +8,3 @@ function Stands() {
     );
   
 }
-export default Stands;
