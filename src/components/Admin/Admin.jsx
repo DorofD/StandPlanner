@@ -1,11 +1,9 @@
 import React, { Component } from "react";
 
-function Mgmt() {
+export default function Admin() {
     return (
         <div>
-            подрочильда
+            Админская панель
       </div>
     );
-  
 }
-export default Mgmt;

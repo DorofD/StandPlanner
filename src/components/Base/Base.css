@@ -8,9 +8,13 @@ div.sidebar {
 }
 
 div.content {
-    background-color: red;
+    /* background-color: red; */
     display: flex;
     padding: 2%;
+}
+
+nav.sidebar {
+    width: 100%;
 }
 
 ul {
@@ -24,12 +28,12 @@ ul {
 li a {
     display: block;
     color: #000;
-    padding-top: 10%;
-    padding-bottom: 10%;
-    padding-left: 16%;
-    padding-right: 35%;
+    padding-top: 8%;
+    padding-bottom: 8%;
+    padding-left: 10%;
     text-decoration: none;
     width: 100%;
+    box-sizing: border-box;
 }
 
 /* Change the link color on hover */

@@ -16,7 +16,7 @@ function Base() {
     return (
         <>
             <div className="sidebar">
-                <nav>
+                <nav className="sidebar">
                     <ul>
                         <li> <NavLink to="/" >Главная</NavLink></li>
                         <li> <NavLink to="/planner" >Планировщик</NavLink></li>
