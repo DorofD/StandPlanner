@@ -1,10 +1,20 @@
 div.sidebar {
     background-color: #f1f1f1;
     float: left;
-    display: flex;
+    display: inline-flex;
     align-items: stretch;
     height: 95%;
     width: 12%;
+}
+@media (width < 1540px){
+    div.sidebar {
+        width: 20%;
+    }
+}
+@media (width < 900px){
+    div.sidebar {
+        width: 30%;
+    }
 }
 
 div.content {
@@ -26,7 +36,7 @@ ul {
 }
 
 li a {
-    display: block;
+    display: inline-block;
     color: #000;
     padding-top: 8%;
     padding-bottom: 8%;
