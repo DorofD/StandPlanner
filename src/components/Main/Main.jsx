@@ -2,7 +2,7 @@ import React from "react";
 import { useState, useEffect} from "react";
 import "./Main.css";
 import { Stand } from "../Stand/Stand"
-import { Button } from "../Button/Button";
+import Button from "../Button/Button";
 
 
 export default function Main() {
@@ -44,6 +44,21 @@ export default function Main() {
         }
     }
 
+    async function sendPost() {
+        try {
+            const response = await fetch('http://127.0.0.1:5000', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    id: '1',
+                })
+            })
+            console.log(response)
+        } catch (err) {
+            console.log(err)
+        }
+    }
+
     useEffect(() => {
         getStands()
     }, [])
@@ -57,8 +72,9 @@ export default function Main() {
                         {stands.map(stand => <li key={stand.id}>{stand.name} | {stand.os} | {stand.state}</li>)}
                     </ul>}
                 
-                <Button onClick={() =>handleClick('btn1')}> Button 1 </Button>
-                <Button onClick={() => getStands()}> Request </Button>
+                <Button onClick={() => handleClick('btn1')}> Button1 </Button>
+                <Button onClick={() => sendPost()}> Send POST </Button>
+                <Button onClick={() => getStands()}> Get stands </Button>
                 {content}
             </div>
         </>

@@ -2,13 +2,12 @@ import React, { Component } from "react";
 import "./About.css";
 
 
-function About() {
+export default function About() {
     return (
         <div>
             <br />
-            Ознакомиться с работой сервиса можно в документации!!
+            Ознакомиться с работой сервиса можно в документации
       </div>
     );
   
 }
-export default About;

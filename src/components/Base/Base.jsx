@@ -12,7 +12,7 @@ const NavLink = React.forwardRef((props, ref) => (
 ));
 
 
-function Base() {
+export default function Base() {
     return (
         <>
             <div className="sidebar">
@@ -34,5 +34,3 @@ function Base() {
         </>
     );
 }
-
-export default Base;

@@ -5,9 +5,8 @@ export function Stand({ standName, standState, standOs}) {
     return (
         <>
         <div className="stand">
-        {standName} {standState} {standOs}
+            {standName} {standState} {standOs}
         </div>
-        
         </>
     )
 }

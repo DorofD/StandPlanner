@@ -1,12 +1,12 @@
 import React from "react";
+import {Routes, Route} from "react-router-dom"
 import Main from "./Main/Main"
 import Base from "./Base/Base"
 import Stands from "./Stands/Stands"
 import Planner from "./Planner/Planner"   
 import Admin from "./Admin/Admin"   
 import About from "./About/About"   
-import {Routes, Route} from "react-router-dom";
-import Clock from "./Clock/Clock";
+import Clock from "./Clock/Clock"
 
 function App() {
     return (
