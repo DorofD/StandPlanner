@@ -43,5 +43,13 @@ def index():
         return json.dumps({'success': False, 'ok': False}), 200, {'ContentType': 'application/json'}
 
 
+@app.route('/login', methods=(['POST']))
+@cross_origin()
+def login():
+    json_request = request.json
+    print(json_request)
+    return json.dumps({'success': False, 'ok': False}), 200, {'ContentType': 'application/json'}
+
+
 if __name__ == '__main__':
     app.run(host='0.0.0.0', debug=False)
