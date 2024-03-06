@@ -1,4 +1,3 @@
-from sys import platform
 import os
 from dotenv import load_dotenv
 

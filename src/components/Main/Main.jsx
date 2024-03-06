@@ -39,6 +39,7 @@ export default function Main() {
             const stands = await response.json()
             setStands(stands)
             setLoading('loaded')
+            localStorage.setItem('stands', JSON.stringify(stands))
         } catch (err) {
             setLoading('error')
         }
@@ -46,14 +47,27 @@ export default function Main() {
 
     async function sendPost() {
         try {
-            const response = await fetch('http://127.0.0.1:5000', {
+            const response = await fetch('http://127.0.0.1:5000/login', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
-                    id: '1',
+                    login: 'admin',
+                    password: 'admin'
                 })
             })
-            console.log(response)
+
+            if (await response.status == 200) {
+                const user = await response.json()
+                
+                localStorage.setItem('user', JSON.stringify(user))
+            } else {
+                console.log('unauthorized')
+            }
+            
+            const user = await response.json()
+            console.log(response.status)
+            console.log(user)
+            
         } catch (err) {
             console.log(err)
         }

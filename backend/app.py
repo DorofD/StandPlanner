@@ -1,7 +1,6 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, make_response
 from flask_cors import CORS, cross_origin
-import json
-
+from services.users import signin
 
 app = Flask(__name__)
 cors = CORS(app)
@@ -31,24 +30,21 @@ stands = [
 ]
 
 
-@app.route('/', methods=(['POST', 'GET']))
+@app.route('/', methods=(['GET']))
 @cross_origin()
 def index():
-    if request.method == 'GET':
-        result = jsonify(stands)
-        return result
-    if request.method == 'POST':
-        json_request = request.json
-        print(json_request)
-        return json.dumps({'success': False, 'ok': False}), 200, {'ContentType': 'application/json'}
+    result = jsonify(stands)
+    return result
 
 
 @app.route('/login', methods=(['POST']))
 @cross_origin()
 def login():
-    json_request = request.json
-    print(json_request)
-    return json.dumps({'success': False, 'ok': False}), 200, {'ContentType': 'application/json'}
+    user = request.json
+    auth_result = signin(user['login'], user['password'])
+    if auth_result:
+        return jsonify({'success': True, 'body': auth_result}), 200, {'ContentType': 'application/json'}
+    return jsonify({'success': False}), 401, {'ContentType': 'application/json'}
 
 
 if __name__ == '__main__':
