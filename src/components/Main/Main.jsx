@@ -1,7 +1,6 @@
 import React from "react";
 import { useState, useEffect} from "react";
 import "./Main.css";
-import { Stand } from "../Stand/Stand"
 import Button from "../Button/Button";
 
 
@@ -13,20 +12,13 @@ export default function Main() {
     const [loading, setLoading] = useState('loading')
     const [stands, setStands] = useState([])
 
-    // function StandList( {stands} ){
-    //     const standList = []
-    //     for (let i = 0; i < stands.length; i++) {
-    //         standList.push(
-    //             <Stand standName={stands[i].name} standState={stands[i].state} standOs={stands[i].os}/>
-    //         )
-    //     }
-    //     return (
-    //         standList
-    //     )
-    // }
-    
+
     function handleClick(type) {
         setContent(type)
+        const a = localStorage.getItem('isAuthenticated')
+        if (a == 'true') {
+            console.log(11)
+        }
     }
     
     
@@ -39,39 +31,11 @@ export default function Main() {
             const stands = await response.json()
             setStands(stands)
             setLoading('loaded')
-            localStorage.setItem('stands', JSON.stringify(stands))
         } catch (err) {
             setLoading('error')
         }
     }
 
-    async function sendPost() {
-        try {
-            const response = await fetch('http://127.0.0.1:5000/login', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    login: 'admin',
-                    password: 'admin'
-                })
-            })
-
-            if (await response.status == 200) {
-                const user = await response.json()
-                
-                localStorage.setItem('user', JSON.stringify(user))
-            } else {
-                console.log('unauthorized')
-            }
-            
-            const user = await response.json()
-            console.log(response.status)
-            console.log(user)
-            
-        } catch (err) {
-            console.log(err)
-        }
-    }
 
     useEffect(() => {
         getStands()
@@ -87,7 +51,6 @@ export default function Main() {
                     </ul>}
                 
                 <Button onClick={() => handleClick('btn1')}> Button1 </Button>
-                <Button onClick={() => sendPost()}> Send POST </Button>
                 <Button onClick={() => getStands()}> Get stands </Button>
                 {content}
             </div>

@@ -16,14 +16,3 @@ def execute_db_query(query, value_array=0):
     conn.commit()
     conn.close()
     return result
-
-
-def get_user(login: str):
-    query = f"""
-            SELECT * FROM users
-            WHERE login = '{login}'
-            """
-    return execute_db_query(query)
-
-
-# print(get_user('edorofeev'))

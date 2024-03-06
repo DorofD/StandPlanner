@@ -7,8 +7,14 @@ import Planner from "./Planner/Planner"
 import Admin from "./Admin/Admin"   
 import About from "./About/About"   
 import Clock from "./Clock/Clock"
+import Login from "./Login/Login";
 
 function App() {
+    // if (localStorage.getItem('isAuthenticated') != 'true') {
+    //     return <>
+    //         <Login />
+    //     </>
+    // }
     return (
         <>
             <Clock/>
@@ -17,7 +23,7 @@ function App() {
                     <Route index element={<Main />}/>
                     <Route path="planner" element={<Planner />}/>
                     <Route path="stands" element={<Stands />}/>
-                    <Route path="Admin" element={<Admin />}/>
+                    <Route path="admin" element={<Admin />}/>
                     <Route path="about" element={<About />}/>
                 </Route> 
             </Routes>
