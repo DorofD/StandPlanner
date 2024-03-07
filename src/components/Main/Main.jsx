@@ -1,8 +1,9 @@
 import React from "react";
-import { useState, useEffect} from "react";
+import { useState, useEffect, useContext} from "react";
 import "./Main.css";
 import Button from "../Button/Button";
-
+import { AuthContext } from "../App";
+import { AuthProvider } from "../App";
 
 export default function Main() {
     // квадратные скобки - деструктуризация в js
@@ -11,14 +12,13 @@ export default function Main() {
     const [content, setContent] = useState("Нажми на кнопку")
     const [loading, setLoading] = useState('loading')
     const [stands, setStands] = useState([])
-
+    const {isAuthenticated} = useContext(AuthContext)
+    
 
     function handleClick(type) {
-        setContent(type)
-        const a = localStorage.getItem('isAuthenticated')
-        if (a == 'true') {
-            console.log(11)
-        }
+        // setContent(type)
+        console.log(isAuthenticated)
+        setAu
     }
     
     

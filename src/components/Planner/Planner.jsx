@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 
-function Planner() {
+export default function Planner() {
     return (
         <div>
             Планировщик
@@ -8,4 +8,3 @@ function Planner() {
     );
   
 }
-export default Planner;
