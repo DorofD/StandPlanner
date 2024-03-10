@@ -1,16 +1,21 @@
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 const path = require("path");
 
 module.exports = {
   entry: "./src/index.js",
   mode: "development",
   output: {
-    filename: "./main.js"
+    // filename: "./main.js",
+    path: path.resolve(__dirname, "./dist"),
+      filename: "js/[name].[hash].js",
+      clean: true,
+      publicPath: "/",
   },
   devServer: {
     static: { 
-        directory: 'dist', 
+        directory: path.join(__dirname, "public"),
       },
-    compress: true,
+    historyApiFallback: true,
     port: 9000,
 
   },
@@ -42,5 +47,10 @@ module.exports = {
 
   resolve: {
     extensions: ['', '.js', '.jsx'],
-  }
+  },
+  
+  plugins: [
+    new HtmlWebpackPlugin({template: path.join(__dirname, "public", "index.html"),
+    inject: "body",})
+  ]
 };

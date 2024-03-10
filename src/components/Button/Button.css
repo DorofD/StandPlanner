@@ -1,0 +1,41 @@
+button.login {
+    text-transform: uppercase;
+    outline: 0;
+    background: #4CAF50;
+    width: 100%;
+    border: 0;
+    padding: 15px;
+    color: #FFFFFF;
+    cursor: pointer;
+    
+  }
+  
+button.login:hover {
+      background-color: #555;
+      color: white;
+    }
+    
+button.logout {
+        width: 5%;
+        border: 0;
+        height: 100%;
+        margin-left: 10px;
+        color: #000;
+        cursor: pointer;
+}
+    
+button.logout:hover {
+          background-color: #555;
+          color: white;
+}
+
+@media (width < 1540px){
+    button.logout {
+        width: 10%;
+    }
+}
+@media (width < 900px){
+    button.logout {
+        width: 20%;
+    }
+}

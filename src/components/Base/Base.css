@@ -18,7 +18,6 @@ div.sidebar {
 }
 
 div.content {
-    /* background-color: red; */
     display: flex;
     padding: 2%;
 }
@@ -46,7 +45,6 @@ li a {
     box-sizing: border-box;
 }
 
-/* Change the link color on hover */
 li a:hover {
     background-color: #555;
     color: white;
@@ -56,3 +54,19 @@ li a:hover {
     background-color: #4CAF50;
     color: white;
 }
+
+div.header {
+    background-color: #f1f1f1;
+    display: flex;
+    width: 100%;
+    height: 5%;
+    float: right;
+    align-items: center;
+    justify-content: right;
+}
+
+span.header {
+    margin-right: 1%;
+    font-size: large;
+}
+

@@ -2,8 +2,8 @@ import React from "react";
 import { useState, useEffect, useContext} from "react";
 import "./Main.css";
 import Button from "../Button/Button";
-import { AuthContext } from "../App";
-import { AuthProvider } from "../App";
+import { AuthContext, useAuthContext } from "../App";
+
 
 export default function Main() {
     // квадратные скобки - деструктуризация в js
@@ -12,16 +12,14 @@ export default function Main() {
     const [content, setContent] = useState("Нажми на кнопку")
     const [loading, setLoading] = useState('loading')
     const [stands, setStands] = useState([])
-    const {isAuthenticated} = useContext(AuthContext)
-    
+    const { isAuthenticated} = useAuthContext()
 
     function handleClick(type) {
-        // setContent(type)
-        console.log(isAuthenticated)
-        setAu
+        setContent(type)
+        
     }
     
-    
+
     async function getStands() {
         try {
             setLoading('loading')
@@ -35,7 +33,7 @@ export default function Main() {
             setLoading('error')
         }
     }
-
+    
 
     useEffect(() => {
         getStands()
@@ -49,7 +47,6 @@ export default function Main() {
                 {loading === 'loaded' && <ul>
                         {stands.map(stand => <li key={stand.id}>{stand.name} | {stand.os} | {stand.state}</li>)}
                     </ul>}
-                
                 <Button onClick={() => handleClick('btn1')}> Button1 </Button>
                 <Button onClick={() => getStands()}> Get stands </Button>
                 {content}

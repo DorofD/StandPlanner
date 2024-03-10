@@ -1,7 +1,8 @@
-import React, { Component } from "react";
+import React, { Component, useState, useEffect} from "react";
 import "./Base.css";
-import { NavLink as NavLinkBase, Outlet, Link } from "react-router-dom";
-
+import { NavLink as NavLinkBase, Outlet } from "react-router-dom";
+import { useAuthContext } from "../App";
+import Button from "../Button/Button";
 
 const NavLink = React.forwardRef((props, ref) => (
   <NavLinkBase
@@ -13,8 +14,21 @@ const NavLink = React.forwardRef((props, ref) => (
 
 
 export default function Base() {
+    const { isAuthenticated, toogleAuth} = useAuthContext()
+    const {userName} = useAuthContext()
+    const [now, setNow] = useState(new Date())
+    
+    useEffect(() => {
+        setInterval(() => setNow(new Date()), 1000)
+    }, [])
+
     return (
         <>
+            <div className="header">
+                <span className="header">{now.toLocaleTimeString()}</span>
+                {userName}
+                <Button style={"logout"} type={"submit"} onClick={toogleAuth}> Выйти </Button> 
+            </div>
             <div className="sidebar">
                 <nav className="sidebar">
                     <ul>
@@ -29,8 +43,6 @@ export default function Base() {
             <div className="content">
                 <Outlet />
             </div>
-
-    
         </>
     );
 }
