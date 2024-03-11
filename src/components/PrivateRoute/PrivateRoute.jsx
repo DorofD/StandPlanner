@@ -8,7 +8,7 @@ export const PrivateRoute = () => {
     
     const { isAuthenticated } = useAuthContext();
     console.log(isAuthenticated, 'in PrivateRoute')
-    if (isAuthenticated) {
+    if (!isAuthenticated) {
         return <Outlet/>
     } else {
         return <Login/>;

@@ -19,7 +19,8 @@ div.sidebar {
 
 div.content {
     display: flex;
-    padding: 2%;
+    height: 95%;
+    padding-left: 1px;
 }
 
 nav.sidebar {

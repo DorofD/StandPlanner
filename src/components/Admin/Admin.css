@@ -1,0 +1,60 @@
+div.admin-sidebar {
+    background-color: #f1f1f1;
+    float: left;
+    display: inline-flex;
+    align-items: stretch;
+    height: 100%;
+    width: 12%;
+}
+
+@media (width < 1280px){
+    div.admin-sidebar {
+        width: 20%;
+    }
+}
+
+@media (width < 880px){
+    div.admin-sidebar {
+        width: 30%;
+    }
+}
+
+div.admin-content {
+    display: flex;
+    height: 95%;
+    padding: 1%;
+}
+
+nav.admin-sidebar {
+    width: 100%;
+}
+
+
+ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+
+}
+
+li a {
+    display: inline-block;
+    color: #000;
+    padding-top: 8%;
+    padding-bottom: 8%;
+    padding-left: 10%;
+    text-decoration: none;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+li a:hover {
+    background-color: #555;
+    color: white;
+}
+
+.active {
+    background-color: #4CAF50;
+    color: white;
+}
