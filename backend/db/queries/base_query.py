@@ -7,8 +7,10 @@ def execute_db_query(query, value_array=0):
     cursor = conn.cursor()
     if not value_array:
         cursor.execute(query)
-        result = cursor.fetchone()
-        if result:
+        result = cursor.fetchall()
+        if result and type(result) == list:
+            result = [dict(i) for i in result]
+        elif result:
             result = dict(result)
     else:
         cursor.executemany(query, value_array)

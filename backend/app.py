@@ -1,6 +1,7 @@
 from flask import Flask, request, jsonify, make_response
 from flask_cors import CORS, cross_origin
 from backend.services.user_service import signin
+from backend.db.queries.users import get_user
 
 app = Flask(__name__)
 cors = CORS(app)
@@ -40,6 +41,18 @@ def index():
 @app.route('/login', methods=(['POST']))
 @cross_origin()
 def login():
+    user = request.json
+    auth_result = signin(user['login'], user['password'])
+    if auth_result:
+        return jsonify({'success': True, 'body': auth_result}), 200, {'ContentType': 'application/json'}
+    return jsonify({'success': False}), 401, {'ContentType': 'application/json'}
+
+
+@app.route('/users', methods=(['GET']))
+@cross_origin()
+def users():
+    if request.method == 'GET':
+
     user = request.json
     auth_result = signin(user['login'], user['password'])
     if auth_result:
