@@ -1,4 +1,4 @@
-from backend.db.queries.base_query import execute_db_query
+from backend.repository.queries.base_query import execute_db_query
 
 
 def get_users():

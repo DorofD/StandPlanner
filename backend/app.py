@@ -1,7 +1,7 @@
 from flask import Flask, request, jsonify, make_response
 from flask_cors import CORS, cross_origin
 from backend.services.user_service import signin
-from backend.db.queries.users import get_user
+from backend.repository.queries.users import get_users
 
 app = Flask(__name__)
 cors = CORS(app)
@@ -52,7 +52,8 @@ def login():
 @cross_origin()
 def users():
     if request.method == 'GET':
-
+        result = jsonify(get_users())
+        return result
     user = request.json
     auth_result = signin(user['login'], user['password'])
     if auth_result:

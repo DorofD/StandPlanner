@@ -22,7 +22,6 @@ div.admin-sidebar {
 div.admin-content {
     display: flex;
     height: 95%;
-    padding: 1%;
 }
 
 nav.admin-sidebar {

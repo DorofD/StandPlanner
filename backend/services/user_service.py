@@ -1,7 +1,7 @@
 import json
 from ldap3 import Connection
 from backend.services.env_vars import get_env_var
-from backend.db.queries.users import get_user
+from backend.repository.queries.users import get_user
 
 
 LDAP_SERVER = get_env_var('LDAP_SERVER')
@@ -31,6 +31,10 @@ def ldap_auth(login: str, password: str):
 
     except:
         return False
+
+
+def local_auth(login: str, password: str):
+    pass
 
 
 def signin(login, password):

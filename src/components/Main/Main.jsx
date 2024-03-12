@@ -41,7 +41,7 @@ export default function Main() {
 
     return (
         <>
-            <div>
+            <div className="main">
                 {loading === 'loading' && <p> Loading ...</p>}
                 {loading === 'error' && <p> бекенд отвалился</p>}
                 {loading === 'loaded' && <ul>

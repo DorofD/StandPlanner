@@ -1,0 +1,24 @@
+div.users {
+    margin: 10%;
+}
+
+.user {
+    /* display: none; */
+    border: solid 3px black;
+    border-color: black;
+    color: red;
+    padding: 10px;
+}
+
+.user:hover {
+    background-color: antiquewhite;
+}
+
+
+.input {
+    display: none;
+  }
+  
+.input:checked + div {
+    border: solid 20px green
+}
