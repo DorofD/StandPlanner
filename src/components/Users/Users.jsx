@@ -5,7 +5,7 @@ import "./Users.css"
 export default function Users() {
     const [users, setUsers] = useState([])
     const [loading, setLoading] = useState('loading')
-
+    const [pickedUser, setPickedUser] = useState()
 
     async function getUsers() {
         try {
@@ -21,6 +21,8 @@ export default function Users() {
         }
     }
     
+    
+
     useEffect(() => {
         getUsers()
     }, [])
@@ -32,10 +34,10 @@ export default function Users() {
             {loading === 'error' && <p> бекенд отвалился</p>}
             {loading === 'loaded' && <ul>
                         {users.map(user => <>
-                        <label>
-                            <input class="input" name="type" type="checkbox"></input>
-                            <li id={user.id}>{user.login} {user.role} {user.auth_type}</li>
-                        </label>
+                            <li className={pickedUser === user.id && "picked user" || "user"}
+                                id={user.id} onClick={() => (setPickedUser(user.id))}>
+                                    {user.login} {user.role} {user.auth_type}
+                            </li>
                         </>)}
                                     </ul>}
       </div>

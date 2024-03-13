@@ -3,22 +3,21 @@ div.users {
 }
 
 .user {
-    /* display: none; */
-    border: solid 3px black;
-    border-color: black;
-    color: red;
     padding: 10px;
+    cursor: pointer;
+    user-select: none;
 }
 
 .user:hover {
-    background-color: antiquewhite;
+    padding: 10px;
+    background-color: #f1f1f1;
+    border: solid 3px black;
+    border-color: black;
 }
 
-
-.input {
-    display: none;
-  }
-  
-.input:checked + div {
-    border: solid 20px green
+.picked {
+    padding: 10px;
+    background-color: #c4fdc6;
+    border: solid 3px black;
+    border-color: black;
 }
