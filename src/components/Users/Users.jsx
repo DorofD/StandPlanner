@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import { useState, useEffect } from "react";
 import "./Users.css";
-import Button from "../Button/Button"
 import UserCard from "./UserCard/UserCard";
 
 export default function Users() {
@@ -42,7 +41,7 @@ export default function Users() {
                                 login={user.login}
                                 role={user.role}
                                 authType={user.auth_type}
-                                picked={'picked'}></UserCard> 
+                                picked={true}></UserCard> 
                                 ||
                                 <UserCard id={user.id}
                                 onClick={() => (setPickedUser(user.id))}
@@ -50,9 +49,6 @@ export default function Users() {
                                 role={user.role}
                                 authType={user.auth_type}></UserCard> 
                             }
-                                    {pickedUser === user.id && <>
-                                        biba
-                                    </>}
                             </>)}
                 </>}
       </div>
