@@ -1,23 +1,5 @@
 div.users {
     margin: 10%;
+    width: 100%;
 }
 
-.user {
-    padding: 10px;
-    cursor: pointer;
-    user-select: none;
-}
-
-.user:hover {
-    padding: 10px;
-    background-color: #f1f1f1;
-    border: solid 3px black;
-    border-color: black;
-}
-
-.picked {
-    padding: 10px;
-    background-color: #c4fdc6;
-    border: solid 3px black;
-    border-color: black;
-}
