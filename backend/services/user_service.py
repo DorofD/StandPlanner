@@ -1,7 +1,7 @@
 import json
 from ldap3 import Connection
 from backend.services.env_vars import get_env_var
-from backend.repository.queries.users import get_user
+from backend.repository.queries.users import get_user_db, add_user_db, delete_user_db, change_user_db
 
 
 LDAP_SERVER = get_env_var('LDAP_SERVER')
@@ -28,7 +28,6 @@ def ldap_auth(login: str, password: str):
         if conn.bind():
             return True
         return False
-
     except:
         return False
 
@@ -37,8 +36,8 @@ def local_auth(login: str, password: str):
     pass
 
 
-def signin(login, password):
-    user = get_user(login)
+def signin(login: str, password: str):
+    user = get_user_db(login)
     if not user:
         return False
     if user['auth_type'] == 'ldap':
@@ -50,6 +49,22 @@ def signin(login, password):
             return {'login': login, 'role': user['role']}
         return False
 
+
+def add_user(login: str, auth_type: str, role: str):
+    if auth_type == 'ldap':
+        add_user_db(login=login, auth_type=auth_type, role=role)
+    else:
+        pasword = 'password'
+        add_user_db(login=login, auth_type=auth_type,
+                    role=role, password=pasword)
+
+
+def change_user(id: int, role: str):
+    change_user_db(id=id, role=role)
+
+
+def delete_user(id: int):
+    delete_user_db(id=id)
 
 # print(signin('edorofeev', EDOROFEEV_PASS))
 # print(signin('admin', 'admin'))

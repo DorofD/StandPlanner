@@ -1,14 +1,14 @@
 from backend.repository.queries.base_query import execute_db_query
 
 
-def get_users():
+def get_users_db():
     query = f"""
             SELECT * FROM users
             """
     return execute_db_query(query)
 
 
-def get_user(login: str):
+def get_user_db(login: str):
     query = f"""
             SELECT * FROM users
             WHERE login = '{login}'
@@ -16,13 +16,29 @@ def get_user(login: str):
     return execute_db_query(query)
 
 
-def add_user(login, auth_type, role, password):
+def add_user_db(login: str, auth_type: str, role: str,  password: str = ''):
     query = f"""
             INSERT INTO users ('login', 'auth_type', 'role', 'password') VALUES('{login}', '{auth_type}', '{role}', '{password}');
             """
     return execute_db_query(query)
 
 
-# print(get_user('edorofeev'))
-print(get_users())
-# print(add_user('user', 'local', 'user', 'user'))
+def change_user_db(id: int, role: str):
+    query = f"""
+            UPDATE users SET role = '{role}'
+            WHERE id = '{id}'
+            """
+    return execute_db_query(query)
+
+
+def delete_user_db(id: int):
+    query = f"""
+            DELETE FROM users
+            WHERE id = '{id}'
+            """
+    return execute_db_query(query)
+
+
+# print(get_user_db('edorofeev'))
+# print(get_users_db())
+# print(add_user_db('user', 'local', 'user', 'user'))

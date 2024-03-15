@@ -21,7 +21,7 @@ div.admin-sidebar {
 
 div.admin-content {
     display: flex;
-    height: 95%;
+    height: 100%;
     width: 60%;
 }
 

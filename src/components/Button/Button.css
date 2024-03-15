@@ -40,9 +40,10 @@ button.logout:hover {
 }
 
 button.userChange {
+    margin: 0 auto;
     display: block;
     text-transform: uppercase;
-    background: #4CAF50;
+    background: #4caf50;
     width: 150px;
     border: 0;
     padding: 10px;
@@ -52,7 +53,21 @@ button.userChange {
     margin-bottom: 6px;
 }
 
+button.UserAdd {
+    display: block;
+    margin: 0 auto;
+    text-transform: uppercase;
+    background: #4CAF50;
+    width: 150px;
+    height: 40px;
+    border: 0;
+    color: #FFFFFF;
+    cursor: pointer;
+    border-radius: 10px;
+}
+
 button.userDelete {
+    margin: 0 auto;
     display: block;
     text-transform: uppercase;
     background: #ff2020;
@@ -62,7 +77,7 @@ button.userDelete {
     color: #FFFFFF;
     cursor: pointer;
     border-radius: 10px;
-    margin-top: 6px;
+    margin-top: 10px;
 }
 
 button:hover {

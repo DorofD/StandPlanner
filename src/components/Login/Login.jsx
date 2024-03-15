@@ -43,8 +43,8 @@ export default function Login() {
         } catch (err) {
             console.log(err)
         }
-        
     }
+    
     return (
         <>
             <div className="login">  
