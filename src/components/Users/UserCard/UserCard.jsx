@@ -9,7 +9,7 @@ export default function UserCard({id, login, role, authType, picked = false, onC
             <>
                 <div id={id} className={"userCard"} onClick={onClick}>
                     <p className="login">{login}</p>
-                    Роль:{role} Тип авторизации: {authType}
+                    <p className="params">Роль: </p>{role}  <p className="params">Тип авторизации: </p> {authType}
                 </div>
             </>
         );
@@ -19,7 +19,16 @@ export default function UserCard({id, login, role, authType, picked = false, onC
                 <div id={id} className={"userCardPicked"} onClick={onClick}>
                     <div className="userContent">
                         <p className="login">{login}</p>
-                        Роль:{role} Тип авторизации: {authType}
+                        <p className="params">Роль: </p>
+                        <select name="" id=""> 
+                                {role === 'admin' && <option value="admin" selected >admin</option> || <option value="admin">admin</option>}
+                                {role === 'user' && <option value="user" selected >user</option> || <option value="user">user</option>}
+                            </select>
+                        <p className="params">Тип авторизации: </p>
+                            <select name="" id=""> 
+                                {authType === 'ldap' && <option value="ldap" selected >ldap</option> || <option value="ldap">ldap</option>}
+                                {authType === 'local' && <option value="local" selected >local</option> || <option value="local">local</option>}
+                            </select>
                     </div>
                     <div className="userButtons">
                         <Button style={'userChange'}>Изменить</Button>

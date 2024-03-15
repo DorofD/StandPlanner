@@ -3,3 +3,8 @@ div.users {
     width: 100%;
 }
 
+@media (width < 980px){
+    div.users {
+        margin: 1%;
+    }
+}

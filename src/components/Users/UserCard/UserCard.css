@@ -7,6 +7,7 @@
     border-radius: 10px;
     margin: 10px;
     box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2), 0 5px 5px 0 rgba(0, 0, 0, 0.24);
+    height: 80px;
 }
 
 
@@ -25,6 +26,7 @@
     border-radius: 10px;
     margin: 10px;
     background-color: #f0fff1;
+    height: 80px;
 
 }
 
@@ -39,8 +41,18 @@ div.userButtons {
 }
 
 p.login {
-    
-    font-size: 24px;
+    font-size: 22px;
+    font-weight: 600;
     margin-top: 0;
     margin-bottom: 20px;
+}
+/* input.login {
+    font-weight: 600;
+    margin-top: 0;
+    margin-bottom: 20px;
+} */
+
+p.params {
+    display: inline;
+    color: rgba(0, 0, 0, 0.5);
 }

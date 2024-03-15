@@ -13,7 +13,7 @@ div.admin-sidebar {
     }
 }
 
-@media (width < 880px){
+@media (width < 980px){
     div.admin-sidebar {
         width: 30%;
     }
@@ -23,6 +23,12 @@ div.admin-content {
     display: flex;
     height: 95%;
     width: 60%;
+}
+
+@media (width < 980px){
+    div.admin-content {
+        width: 100%;
+    }
 }
 
 nav.admin-sidebar {

@@ -30,7 +30,6 @@ export default function Users() {
 
     return (
         <div className="users">
-            Управление пользователями
                 {loading === 'loading' && <p> Loading ...</p>}
                 {loading === 'error' && <p> бекенд отвалился</p>}
                 {loading === 'loaded' && <>

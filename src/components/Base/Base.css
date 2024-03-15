@@ -6,14 +6,19 @@ div.sidebar {
     height: 95%;
     width: 12%;
 }
-@media (width < 1540px){
+@media (width < 1670px){
     div.sidebar {
-        width: 20%;
+        width: 15%;
     }
 }
-@media (width < 900px){
+@media (width < 1370px){
     div.sidebar {
-        width: 30%;
+        width: 23%;
+    }
+}
+@media (width < 1000px){
+    div.sidebar {
+        width: 24%;
     }
 }
 
@@ -70,4 +75,3 @@ span.header {
     margin-right: 1%;
     font-size: large;
 }
-
