@@ -60,6 +60,8 @@ def users():
         if data['action'] == 'add':
             add_user(login=data['login'],
                      role=data['role'], auth_type=data['auth_type'])
+        if data['action'] == 'change':
+            print('sex')
         if data['action'] == 'delete':
             delete_user(id=data['id'])
 

@@ -5,11 +5,15 @@ import "./UserCard.css";
 
 export default function UserCard({id, login, role, authType, picked = false, onClick, onSubmitFunc}) {
 
+    const [selectedValue, setSelectedValue] = useState('');
+
+    const handleChange = (event) => {
+        setSelectedValue(event.target.value);
+      };
+
     async function deleteUser(e) {
         // Prevent the browser from reloading the page
         e.preventDefault();
-    
-        // Read the form data
 
         try {
             const response = await fetch('http://127.0.0.1:5000/users', {
@@ -19,17 +23,45 @@ export default function UserCard({id, login, role, authType, picked = false, onC
                     action: 'delete',
                     id: id
                 })
+
             })
             if (response.status == 200) {
                 const user = await response.json()
                 onSubmitFunc('')
-                console.log(2222222222)
 
             } else {
-                console.log('asdasdasd')
+                console.log('userCard error')
             }
             
-            
+        } catch (err) {
+            console.log(err)
+        }
+    }
+
+    async function changeUser(e) {
+        // Prevent the browser from reloading the page
+        // e.preventDefault();
+        
+        try {
+            const response = await fetch('http://127.0.0.1:5000/users', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    action: 'change',
+                    id: id,
+                    role: selectedValue
+
+                })
+
+            })
+            if (response.status == 200) {
+                const user = await response.json()
+                onSubmitFunc('')
+
+            } else {
+                console.log('userCard error')
+            }
+
         } catch (err) {
             console.log(err)
         }
@@ -51,14 +83,15 @@ export default function UserCard({id, login, role, authType, picked = false, onC
                     <div className="userContent">
                         <p className="login">{login}</p>
                         <p className="params">Роль: </p>
-                        <select name="" id=""> 
-                                {role === 'admin' && <option value="admin" selected >admin</option> || <option value="admin">admin</option>}
-                                {role === 'user' && <option value="user" selected >user</option> || <option value="user">user</option>}
+                        <select name="role" onChange={handleChange}>
+                                {<option value="admin" selected>Роль</option>}
+                                {<option value="admin">admin</option>}
+                                {<option value="user" >user</option>}
                             </select>
                         <p className="params">Тип авторизации: </p> {authType}
                     </div>
                     <div className="userButtons">
-                        <Button style={'userChange'}>Изменить</Button>
+                        <Button style={'userChange'} onClick={changeUser}>Изменить</Button>
                         <Button style={'userDelete'} onClick={deleteUser}>Удалить</Button>
                     </div>
                 </div>
