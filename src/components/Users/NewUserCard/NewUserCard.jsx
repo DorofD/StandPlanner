@@ -30,7 +30,6 @@ export default function NewUserCard({id, role, authType, picked = false, onClick
             if (response.status == 200) {
                 const user = await response.json()
                 onSubmitFunc('')
-                console.log(2222222222)
 
             } else {
                 console.log('asdasdasd')

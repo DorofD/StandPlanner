@@ -1,7 +1,7 @@
-from flask import Flask, request, jsonify, make_response
+from flask import Flask, request, jsonify
 from flask_cors import CORS, cross_origin
-from backend.services.user_service import signin, add_user, delete_user
-from backend.repository.queries.users import get_users_db
+from backend.services.user_service import signin, add_user, delete_user, get_users, change_user
+
 
 app = Flask(__name__)
 cors = CORS(app)
@@ -52,7 +52,7 @@ def login():
 @cross_origin()
 def users():
     if request.method == 'GET':
-        result = jsonify(get_users_db())
+        result = jsonify(get_users())
         return result
     if request.method == 'POST':
         data = request.json
@@ -61,7 +61,7 @@ def users():
             add_user(login=data['login'],
                      role=data['role'], auth_type=data['auth_type'])
         if data['action'] == 'change':
-            print('sex')
+            change_user(id=data['id'], role=data['role'])
         if data['action'] == 'delete':
             delete_user(id=data['id'])
 

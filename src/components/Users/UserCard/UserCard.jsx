@@ -2,20 +2,19 @@ import React, { Component } from "react";
 import { useState, useEffect } from "react";
 import Button from "../../Button/Button"
 import "./UserCard.css";
+// import useNotification from "../../Notification/Notification";
 
-export default function UserCard({id, login, role, authType, picked = false, onClick, onSubmitFunc}) {
+export default function UserCard({id, login, role, authType, picked = false, onClick, onSubmitFunc, notification}) {
 
     const [selectedValue, setSelectedValue] = useState('');
 
     const handleChange = (event) => {
         setSelectedValue(event.target.value);
       };
+      
+    // const { notificationComponent, showNotification } = useNotification();
 
-    async function deleteUser(e) {
-        // Prevent the browser from reloading the page
-        e.preventDefault();
-
-        try {
+    async function deleteUser() {
             const response = await fetch('http://127.0.0.1:5000/users', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -30,19 +29,16 @@ export default function UserCard({id, login, role, authType, picked = false, onC
                 onSubmitFunc('')
 
             } else {
-                console.log('userCard error')
+                console.log('userDelete error')
             }
-            
-        } catch (err) {
-            console.log(err)
-        }
     }
 
-    async function changeUser(e) {
-        // Prevent the browser from reloading the page
-        // e.preventDefault();
-        
-        try {
+    async function changeUser() {
+            if (!selectedValue) {
+                console.log('changeUser error role')
+                return false
+            }
+            // showNotification('Пользователь изменён', 'notification success')
             const response = await fetch('http://127.0.0.1:5000/users', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -57,14 +53,11 @@ export default function UserCard({id, login, role, authType, picked = false, onC
             if (response.status == 200) {
                 const user = await response.json()
                 onSubmitFunc('')
+                // notification('Пользователь изменён', 'notification success')
 
             } else {
-                console.log('userCard error')
+                console.log('userChange error')
             }
-
-        } catch (err) {
-            console.log(err)
-        }
     }
 
     if (!picked) {
@@ -93,8 +86,11 @@ export default function UserCard({id, login, role, authType, picked = false, onC
                     <div className="userButtons">
                         <Button style={'userChange'} onClick={changeUser}>Изменить</Button>
                         <Button style={'userDelete'} onClick={deleteUser}>Удалить</Button>
+                        {/* <button onClick={() => showNotification('Это тестовое уведомление!', 'notification success')}></button> */}
+                        <button onClick={() => notification('Пользователь изменён', 'notification success')}></button>
                     </div>
                 </div>
+                {/* {notificationComponent} */}
             </>
         )
     }
