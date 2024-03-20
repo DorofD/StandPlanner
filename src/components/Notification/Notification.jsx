@@ -1,20 +1,23 @@
 import React, { Component } from "react";
 import "./Notification.css";
+import { useNotificationContext } from "../App";
 
-export default function Notification ({notificationData={message:'', type:''}}) {
-   
+
+
+export default function Notification ({notificationData1={message:'', type:''}}) {
+    
+    const {notificationData, notificationToggle} = useNotificationContext();
     console.log('notification data from Notification', notificationData)
 
-    console.log(1)
     const message = notificationData['message']
-    console.log(2)
     const type = notificationData['type']
-    console.log(3)
-
+    console.log(message)
+    console.log(type)
+    console.log( 'toggle from Notification', notificationToggle)
     if (!message) return (<></>);
 
     return (
-      <div className={type} >
+      <div className={type} key={notificationToggle} >
         {message}
       </div>
     );

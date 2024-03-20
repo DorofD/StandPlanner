@@ -13,7 +13,7 @@ div.notification {
     animation-name: fadeInOut;
     animation-duration: 3s; /* Общая продолжительность анимации теперь составляет 4 секунды */
     animation-timing-function: ease-in-out;
-    animation-fill-mode: forwards; /* Это гарантирует, что элемент останется в конечном состоянии анимации */
+    animation-fill-mode: forwards; /*Это гарантирует, что элемент останется в конечном состоянии анимации*/
 }
 
 div.notification.success {

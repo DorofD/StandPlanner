@@ -14,8 +14,11 @@ export default function UserCard({id, login, role, authType, picked = false, onC
         setSelectedValue(event.target.value);
       };
       
-    const { notificationData, setNotification } = useNotificationContext();
-    
+    const { notificationData, setNotificationData, toggleNotificationFunc, notificationToggle } = useNotificationContext();
+    console.log('setNotification type is ', typeof(setNotificationData))
+    console.log('data is ', notificationData)
+    console.log(typeof(toggleNotificationFunc))
+    console.log(notificationToggle)
     async function deleteUser() {
             const response = await fetch('http://127.0.0.1:5000/users', {
                 method: 'POST',
@@ -55,7 +58,8 @@ export default function UserCard({id, login, role, authType, picked = false, onC
             if (response.status == 200) {
                 const user = await response.json()
                 onSubmitFunc('')
-                setNotification({message:'biba', type: 'notification success'})
+                setNotificationData({message:'biba', type: 'notification success'})
+                toggleNotificationFunc()
                 // notification('Пользователь изменён', 'notification success')
 
             } else {
@@ -92,10 +96,6 @@ export default function UserCard({id, login, role, authType, picked = false, onC
                         <button ></button>
                     </div>
                 </div>
-                {createPortal(
-                    <notificationComponent  />,
-                    document.body
-                )}
             </>
         )
     }
