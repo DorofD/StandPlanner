@@ -3,13 +3,11 @@ import { useState, useEffect } from "react";
 import "./Users.css";
 import UserCard from "./UserCard/UserCard";
 import NewUserCard from "./NewUserCard/NewUserCard";
-import useNotification from "../Notification/Notification";
 
 export default function Users() {
     const [users, setUsers] = useState([])
     const [loading, setLoading] = useState('loading')
     const [pickedUser, setPickedUser] = useState()
-    const { notificationComponent, showNotification } = useNotification();
 
     async function getUsers() {
         try {
@@ -45,8 +43,7 @@ export default function Users() {
                         role={'Роль'}
                         authType={'Тип авторизации'}
                         picked={true}
-                        onSubmitFunc={() => changeParentState()}
-                        notification={showNotification}>
+                        onSubmitFunc={() => changeParentState()}>
                         </NewUserCard> 
                         ||
                         <NewUserCard id={0}
@@ -78,7 +75,6 @@ export default function Users() {
                             }
                             </>)}
                 </>}
-                {notificationComponent}
       </div>
     );
 }

@@ -12,7 +12,6 @@ import Logs from "./Logs/Logs";
 import { PrivateRoute } from "./PrivateRoute/PrivateRoute";
 
 export const AuthContext = createContext();
-
 export const AuthProvider = ({ children }) => {
     // Используем хук useState для создания переменной isAuthenticated и функции setAuth для ее изменения
     const [isAuthenticated, setAuth] = useState(false);
@@ -27,6 +26,23 @@ export const AuthProvider = ({ children }) => {
 };
 
 export const useAuthContext = () => useContext(AuthContext)
+
+// контекст уведомлений
+export const NotificationContext = createContext();
+export const NotificationProvider = ({ children }) => {
+    // Используем хук useState для создания переменной isAuthenticated и функции setAuth для ее изменения
+    const [notificationData, setNotificationData] = useState({message:'', type:''});
+    
+    // Возвращаем контекст провайдера, передавая значения isAuthenticated и setAuth в качестве значения контекста
+    return (
+      <NotificationContext.Provider value={{ notificationData, setNotificationData }}>
+        {children}
+      </NotificationContext.Provider>
+    );
+};
+
+export const useNotificationContext = () => useContext(NotificationContext)
+
 
 export default function App() {
     

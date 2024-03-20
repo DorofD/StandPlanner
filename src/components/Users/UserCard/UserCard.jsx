@@ -1,10 +1,12 @@
 import React, { Component } from "react";
 import { useState, useEffect } from "react";
+import { createPortal } from 'react-dom';
 import Button from "../../Button/Button"
 import "./UserCard.css";
-// import useNotification from "../../Notification/Notification";
+import { useNotificationContext } from "../../App";
 
-export default function UserCard({id, login, role, authType, picked = false, onClick, onSubmitFunc, notification}) {
+
+export default function UserCard({id, login, role, authType, picked = false, onClick, onSubmitFunc}) {
 
     const [selectedValue, setSelectedValue] = useState('');
 
@@ -12,8 +14,8 @@ export default function UserCard({id, login, role, authType, picked = false, onC
         setSelectedValue(event.target.value);
       };
       
-    // const { notificationComponent, showNotification } = useNotification();
-
+    const { notificationData, setNotification } = useNotificationContext();
+    
     async function deleteUser() {
             const response = await fetch('http://127.0.0.1:5000/users', {
                 method: 'POST',
@@ -53,6 +55,7 @@ export default function UserCard({id, login, role, authType, picked = false, onC
             if (response.status == 200) {
                 const user = await response.json()
                 onSubmitFunc('')
+                setNotification({message:'biba', type: 'notification success'})
                 // notification('Пользователь изменён', 'notification success')
 
             } else {
@@ -86,11 +89,13 @@ export default function UserCard({id, login, role, authType, picked = false, onC
                     <div className="userButtons">
                         <Button style={'userChange'} onClick={changeUser}>Изменить</Button>
                         <Button style={'userDelete'} onClick={deleteUser}>Удалить</Button>
-                        {/* <button onClick={() => showNotification('Это тестовое уведомление!', 'notification success')}></button> */}
-                        <button onClick={() => notification('Пользователь изменён', 'notification success')}></button>
+                        <button ></button>
                     </div>
                 </div>
-                {/* {notificationComponent} */}
+                {createPortal(
+                    <notificationComponent  />,
+                    document.body
+                )}
             </>
         )
     }

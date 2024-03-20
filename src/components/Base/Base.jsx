@@ -1,8 +1,9 @@
 import React, { Component, useState, useEffect} from "react";
 import "./Base.css";
 import { NavLink as NavLinkBase, Outlet } from "react-router-dom";
-import { useAuthContext } from "../App";
+import { useAuthContext, useNotificationContext } from "../App";
 import Button from "../Button/Button";
+import Notification from "../Notification/Notification";
 
 const NavLink = React.forwardRef((props, ref) => (
   <NavLinkBase
@@ -16,16 +17,18 @@ const NavLink = React.forwardRef((props, ref) => (
 export default function Base() {
     const { isAuthenticated, toogleAuth} = useAuthContext()
     const {userName} = useAuthContext()
-    const [now, setNow] = useState(new Date())
-    
+    // const [now, setNow] = useState(new Date())
+    const {notificationData} = useNotificationContext()
+    console.log('notification data from Base', notificationData)
+
     useEffect(() => {
-        setInterval(() => setNow(new Date()), 1000)
+        // setInterval(() => setNow(new Date()), 1000)
     }, [])
 
     return (
         <>
             <div className="header">
-                <span className="header">{now.toLocaleTimeString()}</span>
+                {/* <span className="header">{now.toLocaleTimeString()}</span> */}
                 {userName}
                 <Button style={"logout"} type={"submit"} onClick={toogleAuth}> Выйти </Button> 
             </div>
@@ -39,6 +42,7 @@ export default function Base() {
                         <li> <NavLink to="/about">О приложении</NavLink></li>
                     </ul>
                 </nav>
+                <Notification data={notificationData}/>
             </div>
             <div className="content">
                 <Outlet />

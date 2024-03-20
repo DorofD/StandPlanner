@@ -1,28 +1,21 @@
-import React, {useState, Component } from "react";
+import React, { Component } from "react";
 import "./Notification.css";
 
-function Notification ({message, style}) {
-    
-    if (!message) return null;
-  return (
-    <div className={style} >
-      {message}
-    </div>
-  );
-};
+export default function Notification ({notificationData={message:'', type:''}}) {
+   
+    console.log('notification data from Notification', notificationData)
 
-export default function useNotification () {
+    console.log(1)
+    const message = notificationData['message']
+    console.log(2)
+    const type = notificationData['type']
+    console.log(3)
 
-    const [notification, setNotification] = useState(null);
+    if (!message) return (<></>);
 
-    const showNotification = (message, style) => {
-        console.log(1)
-        const notificationComponent = (
-            <Notification message={message} style={style} />
-        );
-        setNotification(notificationComponent);
-        setTimeout(() => setNotification(null), 3000);
-    };
-
-    return { notificationComponent: notification, showNotification };
+    return (
+      <div className={type} >
+        {message}
+      </div>
+    );
 };
