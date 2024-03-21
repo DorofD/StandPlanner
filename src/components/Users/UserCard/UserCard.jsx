@@ -43,7 +43,6 @@ export default function UserCard({id, login, role, authType, picked = false, onC
                 console.log('changeUser error role')
                 return false
             }
-            // showNotification('Пользователь изменён', 'notification success')
             const response = await fetch('http://127.0.0.1:5000/users', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -58,9 +57,8 @@ export default function UserCard({id, login, role, authType, picked = false, onC
             if (response.status == 200) {
                 const user = await response.json()
                 onSubmitFunc('')
-                setNotificationData({message:'biba', type: 'notification success'})
+                setNotificationData({message:'Пользователь успешно изменен', type: 'success'})
                 toggleNotificationFunc()
-                // notification('Пользователь изменён', 'notification success')
 
             } else {
                 console.log('userChange error')
@@ -93,7 +91,6 @@ export default function UserCard({id, login, role, authType, picked = false, onC
                     <div className="userButtons">
                         <Button style={'userChange'} onClick={changeUser}>Изменить</Button>
                         <Button style={'userDelete'} onClick={deleteUser}>Удалить</Button>
-                        <button ></button>
                     </div>
                 </div>
             </>
