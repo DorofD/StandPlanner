@@ -2,7 +2,7 @@ import React from "react";
 import { useState, useEffect, useContext} from "react";
 import "./Main.css";
 import Button from "../Button/Button";
-import { AuthContext, useAuthContext } from "../App";
+import { useAuthContext } from "../../hooks/useAuthContext";
 
 
 export default function Main() {

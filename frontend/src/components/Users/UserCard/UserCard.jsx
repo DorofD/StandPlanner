@@ -1,9 +1,8 @@
 import React, { Component } from "react";
-import { useState, useEffect } from "react";
-import { createPortal } from 'react-dom';
+import { useState } from "react";
 import Button from "../../Button/Button"
 import "./UserCard.css";
-import { useNotificationContext } from "../../App";
+import { useNotificationContext } from "../../../hooks/useNotificationContext";
 
 
 export default function UserCard({id, login, role, authType, picked = false, onClick, onSubmitFunc}) {
@@ -15,10 +14,7 @@ export default function UserCard({id, login, role, authType, picked = false, onC
       };
       
     const { notificationData, setNotificationData, toggleNotificationFunc, notificationToggle } = useNotificationContext();
-    console.log('setNotification type is ', typeof(setNotificationData))
-    console.log('data is ', notificationData)
-    console.log(typeof(toggleNotificationFunc))
-    console.log(notificationToggle)
+
     async function deleteUser() {
             const response = await fetch('http://127.0.0.1:5000/users', {
                 method: 'POST',
@@ -32,9 +28,12 @@ export default function UserCard({id, login, role, authType, picked = false, onC
             if (response.status == 200) {
                 const user = await response.json()
                 onSubmitFunc('')
+                setNotificationData({message:'Пользователь удалён', type: 'success'})
+                toggleNotificationFunc()
 
             } else {
-                console.log('userDelete error')
+                setNotificationData({message:'Не удалось удалить пользователя', type: 'error'})
+                toggleNotificationFunc()
             }
     }
 
@@ -57,11 +56,12 @@ export default function UserCard({id, login, role, authType, picked = false, onC
             if (response.status == 200) {
                 const user = await response.json()
                 onSubmitFunc('')
-                setNotificationData({message:'Пользователь успешно изменен', type: 'success'})
+                setNotificationData({message:'Пользователь изменен', type: 'success'})
                 toggleNotificationFunc()
-
+                
             } else {
-                console.log('userChange error')
+                setNotificationData({message:'Не удалось изменить пользователя', type: 'error'})
+                toggleNotificationFunc()
             }
     }
 
@@ -77,7 +77,7 @@ export default function UserCard({id, login, role, authType, picked = false, onC
     } else {
         return (
             <>
-                <div id={id} className={"userCardPicked"} onClick={onClick}>
+                <div key={id} className={"userCardPicked"} onClick={onClick}>
                     <div className="userContent">
                         <p className="login">{login}</p>
                         <p className="params">Роль: </p>

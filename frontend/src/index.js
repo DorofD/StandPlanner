@@ -2,7 +2,8 @@ import React from "react";
 import ReactDOM from "react-dom/client"
 import App from "./components/App.jsx";
 import { BrowserRouter } from "react-router-dom"
-import { AuthProvider, NotificationProvider } from "./components/App.jsx";
+import { AuthProvider } from "./contexts/AuthContext.js";
+import { NotificationProvider  } from "./contexts/NotificationContext.js";
 
 
 const root = ReactDOM.createRoot(document.getElementById("root"));

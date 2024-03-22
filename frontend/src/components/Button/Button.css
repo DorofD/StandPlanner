@@ -21,6 +21,7 @@ button.logout {
         margin-left: 10px;
         color: #000;
         cursor: pointer;
+        font-size: large;
 }
     
 button.logout:hover {

@@ -6,14 +6,21 @@
 
 div.notification {
     position: fixed;
-    top: 200px;
-    right: 200px;
+    top: 90%;
+    right: 40%;
     padding: 10px;
-      /* Применение анимации */
     animation-name: fadeInOut;
-    animation-duration: 3s; /* Общая продолжительность анимации теперь составляет 4 секунды */
+    animation-duration: 3s; /* Общая продолжительность анимации теперь составляет 3 секунды */
     animation-timing-function: ease-in-out;
     animation-fill-mode: forwards; /*Это гарантирует, что элемент останется в конечном состоянии анимации*/
+    border-radius: 10px;
+}
+
+
+@media (width < 1000px){
+  div.notification {
+      right: 20%;
+  }
 }
 
 div.notification.success {

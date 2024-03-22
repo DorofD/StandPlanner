@@ -1,7 +1,7 @@
 import json
 from ldap3 import Connection
-from backend.services.env_vars import get_env_var
-from backend.repository.queries.users import get_user_db, get_users_db, add_user_db, delete_user_db, change_user_db
+from services.env_vars import get_env_var
+from repository.queries.users import get_user_db, get_users_db, add_user_db, delete_user_db, change_user_db
 
 
 LDAP_SERVER = get_env_var('LDAP_SERVER')
@@ -40,6 +40,7 @@ def signin(login: str, password: str):
     user = get_user_db(login)
     if not user:
         return False
+    user = user[0]
     if user['auth_type'] == 'ldap':
         if ldap_auth(login, password):
             return {'login': login, 'role': user['role']}

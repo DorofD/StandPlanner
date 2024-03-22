@@ -1,6 +1,6 @@
 from flask import Flask, request, jsonify
 from flask_cors import CORS, cross_origin
-from backend.services.user_service import signin, add_user, delete_user, get_users, change_user
+from services.user_service import signin, add_user, delete_user, get_users, change_user
 
 
 app = Flask(__name__)

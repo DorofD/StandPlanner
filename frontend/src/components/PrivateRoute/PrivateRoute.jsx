@@ -1,5 +1,5 @@
 import React from "react";
-import { useAuthContext } from "../App";
+import { useAuthContext } from "../../hooks/useAuthContext";
 import { Outlet } from "react-router-dom";
 import Login from "../Login/Login";
 
@@ -7,8 +7,7 @@ import Login from "../Login/Login";
 export const PrivateRoute = () => {
     
     const { isAuthenticated } = useAuthContext();
-    console.log(isAuthenticated, 'in PrivateRoute')
-    if (!isAuthenticated) {
+    if (isAuthenticated) {
         return <Outlet/>
     } else {
         return <Login/>;

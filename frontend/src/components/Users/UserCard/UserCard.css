@@ -1,4 +1,4 @@
-.NewUserCard {
+.userCard {
     display: block;
     padding: 10px;
     cursor: pointer;
@@ -11,42 +11,41 @@
 }
 
 
-.NewUserCard:hover {
+.userCard:hover {
     padding: 10px;
     background-color: #f1f1f1;
     border: solid 3px #474747;
 }
 
-.NewUserCardPicked {
+.userCardPicked {
     display: flex;
-    align-items: center;
     padding: 10px;
     cursor: pointer;
     user-select: none;
     border: solid 3px #7c7c7c;
     border-radius: 10px;
     margin: 10px;
-    background-color: #f0fff1;
+    /* background-color: #f0fff1; */
     margin: 20px;
     height: 80px;
-
 }
 
-div.NewUserContent {
+div.userContent {
     display: block;
     width: 75%;
 }
 
-div.NewUserButtons {
+div.userButtons {
     display: block;
     width: 25%;
+    align-items: center;
 }
 
 @media (width < 1000px){
-    div.NewUserContent {
+    div.userContent {
         width: 70%;
     }
-    div.NewUserButton {
+    div.userButton {
         width: 30%;
     }
 }

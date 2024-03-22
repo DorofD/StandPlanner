@@ -1,9 +1,10 @@
 import React, { Component } from "react";
-import { useState, useEffect } from "react";
 import Button from "../../Button/Button"
+import { useNotificationContext } from "../../../hooks/useNotificationContext";
 import "./NewUserCard.css";
 
 export default function NewUserCard({id, role, authType, picked = false, onClick, onSubmitFunc}) {
+    const { notificationData, setNotificationData, toggleNotificationFunc, notificationToggle } = useNotificationContext();
 
     async function addUser(e) {
         // Prevent the browser from reloading the page
@@ -16,7 +17,6 @@ export default function NewUserCard({id, role, authType, picked = false, onClick
         const login = formJson['login']
         const role = formJson['role']
         const authType = formJson['authType']
-        try {
             const response = await fetch('http://127.0.0.1:5000/users', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -30,15 +30,13 @@ export default function NewUserCard({id, role, authType, picked = false, onClick
             if (response.status == 200) {
                 const user = await response.json()
                 onSubmitFunc('')
+                setNotificationData({message:'Пользователь добавлен', type: 'success'})
+                toggleNotificationFunc()
 
             } else {
-                console.log('asdasdasd')
+                setNotificationData({message:'Не удалось добавить пользователя', type: 'error'})
+                toggleNotificationFunc()
             }
-            
-            
-        } catch (err) {
-            console.log(err)
-        }
     }
 
     if (!picked) {

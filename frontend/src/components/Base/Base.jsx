@@ -1,9 +1,10 @@
 import React, { Component, useState, useEffect} from "react";
 import "./Base.css";
 import { NavLink as NavLinkBase, Outlet } from "react-router-dom";
-import { useAuthContext, useNotificationContext } from "../App";
 import Button from "../Button/Button";
 import Notification from "../Notification/Notification";
+import { useNotificationContext } from "../../hooks/useNotificationContext";
+import { useAuthContext } from "../../hooks/useAuthContext";
 
 const NavLink = React.forwardRef((props, ref) => (
   <NavLinkBase
@@ -16,14 +17,10 @@ const NavLink = React.forwardRef((props, ref) => (
 
 export default function Base() {
     const { isAuthenticated, toogleAuth} = useAuthContext()
-    const {userName} = useAuthContext()
-    // const [now, setNow] = useState(new Date())
+    const {userName, userRole} = useAuthContext()
     const {notificationData} = useNotificationContext()
-    console.log('notification data from Base', notificationData)
+    console.log('user role from Base is', userRole)
 
-    useEffect(() => {
-        // setInterval(() => setNow(new Date()), 1000)
-    }, [])
 
     return (
         <>
@@ -34,15 +31,17 @@ export default function Base() {
             </div>
             <div className="sidebar">
                 <nav className="sidebar">
+                <Notification data={notificationData}/>
                     <ul>
                         <li> <NavLink to="/" >Главная</NavLink></li>
                         <li> <NavLink to="/planner" >Планировщик</NavLink></li>
+                        {userRole === 'admin' && <>
                         <li> <NavLink to="/stands" >Стенды</NavLink></li>
                         <li> <NavLink to="/admin" >Администрирование</NavLink></li>
+                        </>}
                         <li> <NavLink to="/about">О приложении</NavLink></li>
                     </ul>
                 </nav>
-                <Notification data={notificationData}/>
             </div>
             <div className="content">
                 <Outlet />

@@ -1,12 +1,13 @@
 import React from "react";
-import { useState, useEffect} from "react";
+import { useState } from "react";
 import "./Login.css";
 import Button from "../Button/Button";
-import { useAuthContext } from "../App";
+import { useAuthContext } from "../../hooks/useAuthContext";
 
 export default function Login() {
     const { isAuthenticated, toogleAuth} = useAuthContext()
     const { userName, setUserName} = useAuthContext()
+    const { userRole, setUserRole} = useAuthContext()
     const [status, setStatus] = useState('')
 
     async function getAuth(e) {
@@ -31,7 +32,8 @@ export default function Login() {
             })
             if (response.status == 200) {
                 const user = await response.json()
-                setUserName(username)
+                setUserName(user.body.login)
+                setUserRole(user.body.role)
                 toogleAuth()
 
             } else {
