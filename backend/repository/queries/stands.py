@@ -23,12 +23,12 @@ def add_stand_db(name: str, description: str = ''):
     return execute_db_query(query)
 
 
-# def change_stand_db(id: int, role: str):
-#     query = f"""
-#             UPDATE stands SET role = '{role}'
-#             WHERE id = '{id}'
-#             """
-#     return execute_db_query(query)
+def change_stand_db(id: int, name: str, description: str):
+    query = f"""
+            UPDATE stands SET name = '{name}', description = '{description}' 
+            WHERE id = '{id}'
+            """
+    return execute_db_query(query)
 
 
 def delete_stand_db(id: int):

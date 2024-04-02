@@ -1,6 +1,6 @@
 import json
 from ldap3 import Connection
-from services.env_vars import get_env_var
+from env_vars import get_env_var
 from repository.queries.users import get_user_db, get_users_db, add_user_db, delete_user_db, change_user_db
 
 

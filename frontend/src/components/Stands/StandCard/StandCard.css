@@ -1,0 +1,58 @@
+.standCard {
+    /* display: block; */
+    vertical-align: middle;
+    padding: 10px;
+    cursor: pointer;
+    user-select: none;
+    border: solid 3px #afafaf;
+    border-radius: 10px;
+    margin: 20px;
+    box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2), 0 5px 5px 0 rgba(0, 0, 0, 0.24);
+    height: 30px;
+}
+
+.standCard:hover {
+    /* padding: 10px; */
+    background-color: #f1f1f1;
+    border: solid 3px #474747;
+}
+
+.standCardPicked {
+    /* display: flex; */
+    padding: 10px;
+    cursor: pointer;
+    user-select: none;
+    border: solid 3px #646464;
+    border-radius: 10px;
+    margin: 10px;
+    /* background-color: #f0fff1; */
+    margin: 20px;
+    height: 30px;
+}
+
+div.userContent {
+    display: block;
+    width: 75%;
+}
+
+div.userButtons {
+    display: block;
+    width: 25%;
+    align-items: center;
+}
+
+@media (width < 1000px){
+    div.userContent {
+        width: 70%;
+    }
+    div.userButton {
+        width: 30%;
+    }
+}
+
+p.name {
+    font-size: 22px;
+    font-weight: 600;
+    margin-top: 0;
+    margin-bottom: 0px;
+}

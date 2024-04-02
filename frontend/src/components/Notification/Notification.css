@@ -7,7 +7,7 @@
 div.notification {
     position: fixed;
     top: 90%;
-    right: 40%;
+    right: 5%;
     padding: 10px;
     animation-name: fadeInOut;
     animation-duration: 3s; /* Общая продолжительность анимации теперь составляет 3 секунды */
@@ -19,7 +19,7 @@ div.notification {
 
 @media (width < 1000px){
   div.notification {
-      right: 20%;
+      right: 1%;
   }
 }
 
@@ -30,4 +30,9 @@ div.notification.success {
 div.notification.error {
     color: #000000;
     background-color: #ee9090;
+}
+
+div.notification.info {
+    color: #000000;
+    background-color: #eed590;
 }

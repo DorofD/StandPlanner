@@ -36,23 +36,14 @@ export default function Users() {
     return (
         <div className="users">
                 {
-                    pickedUser === 0 &&
                         <NewUserCard id={0}
                         onClick={() => (setPickedUser(0))}
                         login={'Добавить пользователя'}
                         role={'Роль'}
                         authType={'Тип авторизации'}
-                        picked={true}
+                        picked={pickedUser === 0 && true || false}
                         onSubmitFunc={() => changeParentState()}>
                         </NewUserCard> 
-                        ||
-                        <NewUserCard id={0}
-                        onClick={() => (setPickedUser(0))}
-                        login={'Добавить пользователя'}
-                        role={'Роль'}
-                        authType={'Тип авторизации'}
-                        picked={false}
-                        ></NewUserCard> 
                 }
                 {loading === 'loading' && <p> Loading ...</p>}
                 {loading === 'error' && <p> бекенд отвалился</p>}
