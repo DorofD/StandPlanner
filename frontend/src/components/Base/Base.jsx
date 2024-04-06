@@ -19,7 +19,6 @@ export default function Base() {
     const { isAuthenticated, toogleAuth} = useAuthContext()
     const {userName, userRole} = useAuthContext()
     const {notificationData} = useNotificationContext()
-    console.log('user role from Base is', userRole)
 
 
     return (

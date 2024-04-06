@@ -4,7 +4,7 @@ import React, { Component } from "react";
 export default function Logs() {
     return (
         <div>
-            Просмотр логов
+            В разработке
       </div>
     );
 }

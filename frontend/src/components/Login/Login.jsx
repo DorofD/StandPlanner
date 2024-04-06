@@ -3,13 +3,16 @@ import { useState } from "react";
 import "./Login.css";
 import Button from "../Button/Button";
 import { useAuthContext } from "../../hooks/useAuthContext";
+import { useNotificationContext } from "../../hooks/useNotificationContext";
+import { useNavigate } from 'react-router-dom';
 
 export default function Login() {
+    const { notificationData, setNotificationData, toggleNotificationFunc, notificationToggle } = useNotificationContext();
     const { isAuthenticated, toogleAuth} = useAuthContext()
     const { userName, setUserName} = useAuthContext()
     const { userRole, setUserRole} = useAuthContext()
     const [status, setStatus] = useState('')
-
+    const navigate = useNavigate();
     async function getAuth(e) {
         // Prevent the browser from reloading the page
         e.preventDefault();
@@ -35,7 +38,9 @@ export default function Login() {
                 setUserName(user.body.login)
                 setUserRole(user.body.role)
                 toogleAuth()
-
+                setNotificationData({message:'', type: 'success'})
+                toggleNotificationFunc()
+                navigate('/');
             } else {
                 setStatus('error')
                 console.log('unauthorized')

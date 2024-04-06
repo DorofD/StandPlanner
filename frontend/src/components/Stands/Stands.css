@@ -52,6 +52,10 @@ textarea.stands:focus {
     border: solid 4px #646464;
 }
 
+textarea.stands:disabled {
+    background-color: #f1f1f1;
+}
+
 input.stands {
     font-family: Arial;
     font-size: 18px;
@@ -63,4 +67,8 @@ input.stands {
 
 input.stands:focus {
     border: solid 3px #646464;
+}
+
+input.stands:disabled {
+    background-color: #f1f1f1;
 }

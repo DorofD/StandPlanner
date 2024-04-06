@@ -23,10 +23,41 @@ def create_db():
                 "description"	TEXT,
                 PRIMARY KEY("id" AUTOINCREMENT)
             );
-
             """
     cursor = conn.cursor()
     cursor.execute(query)
+
+    query = """
+            CREATE TABLE IF NOT EXISTS "reservations" (
+                "id"	INTEGER NOT NULL UNIQUE,
+                "user_id"	INTEGER NOT NULL,
+                "stand_id"	INTEGER NOT NULL,
+                "start_time"	TEXT NOT NULL,
+                "duration"	TEXT NOT NULL,
+                "status"	TEXT NOT NULL,
+                FOREIGN KEY("user_id") REFERENCES "users"("id"),
+                FOREIGN KEY("stand_id") REFERENCES "stands"("id"),
+                PRIMARY KEY("id" AUTOINCREMENT)
+            );
+            """
+    cursor = conn.cursor()
+    cursor.execute(query)
+
+    query = """
+                CREATE TABLE IF NOT EXISTS "comments" (
+                    "id"	INTEGER NOT NULL UNIQUE,
+                    "user_id"	INTEGER NOT NULL,
+                    "stand_id"	INTEGER NOT NULL,
+                    "text"	TEXT NOT NULL,
+                    "time"	TEXT NOT NULL,
+                    FOREIGN KEY("user_id") REFERENCES "users"("id"),
+                    FOREIGN KEY("stand_id") REFERENCES "stands"("id"),
+                    PRIMARY KEY("id" AUTOINCREMENT)
+                );
+            """
+    cursor = conn.cursor()
+    cursor.execute(query)
+
     conn.commit()
     conn.close()
 

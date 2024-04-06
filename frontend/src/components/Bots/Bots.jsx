@@ -4,7 +4,7 @@ import React, { Component } from "react";
 export default function Bots() {
     return (
         <div>
-            Боты
+            В разработке
       </div>
     );
 }

@@ -26,6 +26,12 @@ def login():
     return jsonify({'success': False}), 401, {'ContentType': 'application/json'}
 
 
+@app.route('/reservations', methods=(['GET', 'POST']))
+@cross_origin()
+def reservations():
+    pass
+
+
 @app.route('/stands', methods=(['GET', 'POST']))
 @cross_origin()
 def stands():

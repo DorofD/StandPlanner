@@ -7,7 +7,7 @@ import { useNotificationContext } from "../../hooks/useNotificationContext";
 export default function Stands() {
     const [stands, setStands] = useState([])
     const [loading, setLoading] = useState('loading')
-    const [pickedStand, setPickedStand] = useState({id: '', name: '', description: ''})
+    const [pickedStand, setPickedStand] = useState({id: 'default', name: '', description: ''})
     const { notificationData, setNotificationData, toggleNotificationFunc, notificationToggle } = useNotificationContext();
     const [clickCount, setClickCount] = useState(0);
     const [clickTimer, setClickTimer] = useState(null);
@@ -156,10 +156,20 @@ export default function Stands() {
 
         </div>
         <div className="stands-change-window">
-            <input className="stands" placeholder={pickedStand['id'] === 0 && "Новый стенд" || ''} value={pickedStand['id'] === 0 && '' || pickedStand['name']} onChange={changeStandName}></input>
-            <textarea name="stand-description" id={pickedStand['id']} placeholder={pickedStand['id'] === 0 && 'Описание стенда' || ''} className="stands" value={pickedStand['description']} onChange={changeStandDescription}></textarea>
+            <input className="stands"
+                disabled={pickedStand['id'] === 'default' && 'disabled' || ''}
+                placeholder={pickedStand['id'] === 0 && "Новый стенд" || ''}
+                value={pickedStand['id'] === 0 && '' || pickedStand['name']}
+                onChange={changeStandName}></input>
+            <textarea name="stand-description"
+                disabled={pickedStand['id'] === 'default' && 'disabled' || ''}
+                id={pickedStand['id']}
+                placeholder={pickedStand['id'] === 0 && 'Описание стенда' || ''}
+                className="stands"
+                value={pickedStand['description']}
+                onChange={changeStandDescription}></textarea>
             {pickedStand['id'] === 0 && <Button style={'userChange'} onClick={addStand}>Добавить</Button>}
-            {(pickedStand['id'] != 0 && pickedStand['id']) && <>
+            {(pickedStand['id'] != 0 && pickedStand['id'] != 'default') && <>
             <Button style={'userChange'} onClick={changeStand}>Изменить</Button>
             <Button style={'userDelete'} onClick={handleClick}>Удалить</Button>
             </>

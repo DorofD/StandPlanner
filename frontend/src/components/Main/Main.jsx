@@ -9,15 +9,9 @@ export default function Main() {
     // квадратные скобки - деструктуризация в js
     // content - первый элемент массива useState
     // setContent - функция, которая изменяет это значение
-    const [content, setContent] = useState("Нажми на кнопку")
     const [loading, setLoading] = useState('loading')
     const [stands, setStands] = useState([])
     const { isAuthenticated} = useAuthContext()
-
-    function handleClick(type) {
-        setContent(type)
-        
-    }
     
 
     async function getStands() {
@@ -42,14 +36,16 @@ export default function Main() {
     return (
         <>
             <div className="main">
+                В разработке
+                <br></br>
+                <br></br>
                 {loading === 'loading' && <p> Loading ...</p>}
                 {loading === 'error' && <p> бекенд отвалился</p>}
                 {loading === 'loaded' && <ul>
                         {stands.map(stand => <li key={stand.id}>{stand.name} | {stand.os} | {stand.state}</li>)}
                     </ul>}
-                <Button onClick={() => handleClick('btn1')}> Button1 </Button>
+
                 <Button onClick={() => getStands()}> Get stands </Button>
-                {content}
             </div>
         </>
     );
