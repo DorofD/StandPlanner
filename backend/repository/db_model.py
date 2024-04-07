@@ -34,6 +34,8 @@ def create_db():
                 "stand_id"	INTEGER NOT NULL,
                 "start_time"	TEXT NOT NULL,
                 "duration"	TEXT NOT NULL,
+                "start_job"	TEXT,
+                "end_job"	TEXT,
                 "status"	TEXT NOT NULL,
                 FOREIGN KEY("user_id") REFERENCES "users"("id"),
                 FOREIGN KEY("stand_id") REFERENCES "stands"("id"),

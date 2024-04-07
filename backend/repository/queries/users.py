@@ -41,4 +41,4 @@ def delete_user_db(id: int):
 
 # print(get_user_db('edorofeev'))
 # print(get_users_db())
-# print(add_user_db('user', 'local', 'user', 'user'))
+# print(add_user_db('user8', 'local', 'user', 'user'))
