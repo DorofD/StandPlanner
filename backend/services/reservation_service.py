@@ -19,8 +19,24 @@ def run_scheduler():
 scheduler = run_scheduler()
 
 
+def check_reservation_intersections(stand_id: int, start_time: str, duration: str):
+    pass
+
+
+# статусы: planned, active, completed
+def change_reservation_status(id: int, status: str):
+    pass
+
+
+def add_reservaiton(user_id: int, stand_id: int, start_time: str, duration: str):
+    # проверка на пересечение времени с другими резервированиями
+    # создание резервирования, получение его id
+    # создание start_job и end_job c передачей им id созданного резервирования и получения их id
+    # запись полученных id задач в резервирование
+    pass
+
+
 def task_to_run(job_num):
-    # Здесь ваш код для работы с базой данных
     with open('data.txt', 'a') as f:
         f.write(f'running {job_num} \n')
         f.write(str(datetime.now()) + '\n')
