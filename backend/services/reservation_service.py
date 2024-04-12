@@ -1,6 +1,7 @@
 from apscheduler.schedulers.background import BackgroundScheduler
 from apscheduler.executors.pool import ThreadPoolExecutor
 from repository.queries.reservations import add_reservation_db, change_reservation_status_db
+from errors.intersection_error import IntersectionError
 from datetime import datetime, time, timedelta
 
 
