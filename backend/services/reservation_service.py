@@ -22,7 +22,10 @@ scheduler = run_scheduler()
 
 
 def check_reservation_intersections(stand_id: int, start_time: str, duration: str):
-    pass
+    try:
+        pass
+    except IntersectionError as error:
+        raise error
 
 
 def change_reservation_status(id: int, status: str):
@@ -101,10 +104,15 @@ create_reservaiton(1, 1, '2024-04-12 22:00', '3:20')
 #     'job 5'], misfire_grace_time=300)
 
 # print('id --------------------------- ', job.id)
+# print('id --------------------------- ', job.id)
 
 # print('1-----------')
 # print(scheduler.get_jobs())
 # print('2-----------')
+# print('1-----------')
+# print(scheduler.get_jobs())
+# print('2-----------')
 
+# time.sleep(70)
 # time.sleep(70)
 scheduler.shutdown()
