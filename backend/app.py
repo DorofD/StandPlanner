@@ -2,6 +2,7 @@ from flask import Flask, request, jsonify
 from flask_cors import CORS, cross_origin
 from services.user_service import signin, add_user, delete_user, get_users, change_user
 from services.stand_service import get_stands, add_stand, delete_stand, change_stand
+from errors.intersection_error import IntersectionError
 
 app = Flask(__name__)
 cors = CORS(app)
@@ -69,6 +70,12 @@ def users():
             delete_user(id=data['id'])
 
     return jsonify({'success': True}), 200, {'ContentType': 'application/json'}
+
+
+@app.errorhandler(IntersectionError)
+def handle_value_error(error):
+    """Обработка исключений типа ValueError."""
+    return jsonify({'error': str(error.message)}), 500
 
 
 if __name__ == '__main__':
