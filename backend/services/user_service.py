@@ -11,8 +11,6 @@ LDAP_USER_CN = get_env_var('LDAP_USER_CN')
 SEARCH_USER_CATALOG = get_env_var('SEARCH_USER_CATALOG')
 SEARCH_BASE = get_env_var('SEARCH_BASE')
 
-EDOROFEEV_PASS = get_env_var('EDOROFEEV_PASS')
-
 
 def ldap_auth(login: str, password: str):
     try:
