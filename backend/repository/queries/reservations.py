@@ -8,6 +8,15 @@ def get_reservations():
     return execute_db_query(query)
 
 
+# проверить
+def get_reservation_jobs(id: int):
+    query = f"""
+            SELECT id, start_job, end_job FROM reservations
+            WHERE rid = '{id}'
+            """
+    return execute_db_query(query, last_row_id=True)
+
+
 def get_reservations_for_check_intersections(stand_id: int):
     query = f"""
             SELECT * FROM reservations
@@ -66,6 +75,14 @@ def change_reservation_start_time_db(id: int, start_time: str):
 def change_reservation_duration_db(id: int, duration: str):
     query = f"""
             UPDATE reservations SET duration = '{duration}'
+            WHERE id = '{id}'
+            """
+    return execute_db_query(query)
+
+
+def delete_reservation_db(id: int):
+    query = f"""
+            DELETE FROM reservations
             WHERE id = '{id}'
             """
     return execute_db_query(query)

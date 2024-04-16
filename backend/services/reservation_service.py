@@ -1,6 +1,6 @@
 from apscheduler.schedulers.background import BackgroundScheduler
 from apscheduler.executors.pool import ThreadPoolExecutor
-from repository.queries.reservations import add_reservation_db, change_reservation_status_db, change_reservation_job_db, get_reservations_for_check_intersections, get_info_for_failed_intersection
+from repository.queries.reservations import add_reservation_db, change_reservation_status_db, change_reservation_job_db, get_reservations_for_check_intersections, get_info_for_failed_intersection, delete_reservation_db
 from errors.intersection_error import IntersectionError
 from datetime import datetime, time, timedelta
 
@@ -73,12 +73,14 @@ def create_reservaiton(user_id: int, stand_id: int, start_time: str, duration: s
         id=last_row_id, job_type='end_job', job_id=end_job.id)
 
 
+def delete_reservation(id: int):
+    #
+    delete_reservation_db(id)
+
+
 # create_reservaiton(1, 19, '2024-04-15 23:42', '1:3')
 
-
 # print(scheduler.get_jobs())
-
-
 # time.sleep(70)
 # time.sleep(700)
 scheduler.shutdown()
