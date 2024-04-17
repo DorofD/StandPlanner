@@ -1,23 +1,22 @@
 from repository.queries.base_query import execute_db_query
 
 
-def get_reservations():
+def get_reservations_db():
     query = f"""
             SELECT * FROM reservations
             """
     return execute_db_query(query)
 
 
-# проверить
-def get_reservation_jobs(id: int):
+def get_reservation_db(id: int):
     query = f"""
-            SELECT id, start_job, end_job FROM reservations
-            WHERE rid = '{id}'
+            SELECT * FROM reservations
+            WHERE id = '{id}'
             """
-    return execute_db_query(query, last_row_id=True)
+    return execute_db_query(query)
 
 
-def get_reservations_for_check_intersections(stand_id: int):
+def get_reservations_for_check_intersections_db(stand_id: int):
     query = f"""
             SELECT * FROM reservations
             WHERE stand_id = {stand_id}
@@ -26,7 +25,7 @@ def get_reservations_for_check_intersections(stand_id: int):
     return execute_db_query(query)
 
 
-def get_info_for_failed_intersection(id: int):
+def get_info_for_failed_intersection_db(id: int):
     query = f"""
             SELECT users.login, reservations.start_time FROM reservations
             JOIN users ON reservations.user_id=users.id

@@ -1,7 +1,7 @@
 from apscheduler.schedulers.background import BackgroundScheduler
 from apscheduler.executors.pool import ThreadPoolExecutor
-from repository.queries.reservations import add_reservation_db, change_reservation_status_db, change_reservation_job_db, get_reservations_for_check_intersections, get_info_for_failed_intersection, delete_reservation_db
-from errors.intersection_error import IntersectionError
+from repository.queries.reservations import *
+from errors.reservation_errors import *
 from datetime import datetime, time, timedelta
 
 
@@ -22,7 +22,7 @@ scheduler = run_scheduler()
 
 
 def check_intersections(stand_id: int, start_time: datetime, end_time: datetime):
-    reservations = get_reservations_for_check_intersections(stand_id)
+    reservations = get_reservations_for_check_intersections_db(stand_id)
     for reservation in reservations:
         temp_parsed_start_time = datetime.strptime(
             reservation['start_time'], '%Y-%m-%d %H:%M')
@@ -32,7 +32,7 @@ def check_intersections(stand_id: int, start_time: datetime, end_time: datetime)
             timedelta(hours=temp_parsed_duration.hour,
                       minutes=temp_parsed_duration.minute)
         if max(start_time, temp_parsed_start_time) < min(end_time, temp_end_time):
-            info = get_info_for_failed_intersection(reservation['id'])
+            info = get_info_for_failed_intersection_db(reservation['id'])
             error = IntersectionError(
                 username=info[0]['login'], start_time=info[0]['start_time'])
             raise error
@@ -40,14 +40,12 @@ def check_intersections(stand_id: int, start_time: datetime, end_time: datetime)
 
 
 def change_reservation_status(id: int, status: str):
-    """
-    статусы: planned, active, completed
-    """
+    """ статусы: planned, active, completed """
     change_reservation_status_db(id, status)
     pass
 
 
-def create_reservaiton(user_id: int, stand_id: int, start_time: str, duration: str):
+def add_reservaiton(user_id: int, stand_id: int, start_time: str, duration: str):
     """
     start_time - ожидается строка в формате '%Y-%m-%d %H:%M' 
     duration - ожидается строка в формате '%H:%M'
@@ -74,7 +72,13 @@ def create_reservaiton(user_id: int, stand_id: int, start_time: str, duration: s
 
 
 def delete_reservation(id: int):
-    #
+    reservation = get_reservation_db(id)
+    if reservation['status'] == 'active':
+        raise DeleteError()
+    start_job_id = reservation['start_job']
+    end_job_id = reservation['end_job']
+    scheduler.remove_job(start_job_id)
+    scheduler.remove_job(end_job_id)
     delete_reservation_db(id)
 
 

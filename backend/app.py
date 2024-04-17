@@ -2,7 +2,9 @@ from flask import Flask, request, jsonify
 from flask_cors import CORS, cross_origin
 from services.user_service import signin, add_user, delete_user, get_users, change_user
 from services.stand_service import get_stands, add_stand, delete_stand, change_stand
-from errors.intersection_error import IntersectionError
+# from services.reservation_service import add_reservaiton, delete_reservation
+import services.reservation_service as reservation_service
+from errors.reservation_errors import *
 
 app = Flask(__name__)
 cors = CORS(app)
@@ -30,7 +32,20 @@ def login():
 @app.route('/reservations', methods=(['GET', 'POST']))
 @cross_origin()
 def reservations():
-    pass
+    if request.method == 'GET':
+        pass
+    if request.method == 'POST':
+        data = request.json
+        if data['action'] == 'add':
+            reservation_service.add_reservaiton(data['user_id'], data['stand_id'],
+                                                data['start_time'], data['end_time'])
+        if data['action'] == 'change':
+            pass
+        if data['action'] == 'delete':
+            reservation_service.delete_reservation(data['reservation_id'])
+            pass
+
+    return jsonify({'success': True}), 200, {'ContentType': 'application/json'}
 
 
 @app.route('/stands', methods=(['GET', 'POST']))
@@ -75,7 +90,13 @@ def users():
 @app.errorhandler(IntersectionError)
 def handle_value_error(error):
     """Обработка исключений типа ValueError."""
-    return jsonify({'error': str(error.message)}), 500
+    return jsonify({'error': str(error.message)}), 400
+
+
+@app.errorhandler(DeleteError)
+def handle_value_error(error):
+    """Обработка исключений типа ValueError."""
+    return jsonify({'error': str(error.message)}), 400
 
 
 if __name__ == '__main__':
