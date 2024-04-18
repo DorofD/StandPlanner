@@ -23,7 +23,7 @@ export default function Base() {
 
     return (
         <>
-            <div className="header">
+            <div className="header" id="modal-root">
                 {/* <span className="header">{now.toLocaleTimeString()}</span> */}
                 {userName}
                 <Button style={"logout"} type={"submit"} onClick={toogleAuth}> Выйти </Button> 
