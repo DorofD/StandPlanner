@@ -67,6 +67,32 @@ button.UserAdd {
     border-radius: 10px;
 }
 
+button.reservationAdd {
+    display: block;
+    margin: 0 auto;
+    text-transform: uppercase;
+    background: #4CAF50;
+    width: 150px;
+    height: 40px;
+    border: 0;
+    color: #FFFFFF;
+    cursor: pointer;
+    border-radius: 10px;
+}
+
+button.reservationExit{
+    display: block;
+    margin: 0 auto;
+    text-transform: uppercase;
+    background: #ff2020;
+    width: 150px;
+    height: 40px;
+    border: 0;
+    color: #FFFFFF;
+    cursor: pointer;
+    border-radius: 10px;
+}
+
 button.userDelete {
     margin: 0 auto;
     display: block;

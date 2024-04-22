@@ -19,16 +19,17 @@
   
 .form-row label, .form-row input {
     flex: 1; /* Равномерно распределяет пространство между элементами */
-    margin: 0 10px; /* Отступы между элементами */
+    margin: 10px 30px; /* Отступы между элементами */
 }
 
 .timeInput {
-    font-family: monospace;
+    font-family: Arial;
     width: 60px;
     padding: 8px;
-    letter-spacing: 1px;
+    /* letter-spacing: 1px; */
 }
-  
+
 .timeInput::placeholder {
+    font-family: Arial;
     color: rgba(0, 0, 0, 0.5); /* Полупрозрачные символы */
 }

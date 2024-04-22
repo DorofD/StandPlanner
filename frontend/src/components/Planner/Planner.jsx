@@ -60,6 +60,22 @@ export default function Planner() {
             <form onSubmit={handleSubmit} className="form-container">
                 <div className="form-row">
                     <label>Стенд</label>
+                    <input type="text" name="stand" className="timeInput" value={formData.stand} onChange={handleChange} />
+                </div>
+                <div className="form-row">
+                    <label>Дата</label>
+                    <input type="text" name="date" className="timeInput" value={formData.date} onChange={handleChange} />
+                </div>
+                <div className="form-row">
+                    <label>Время начала</label>
+                    <input type="text" id="timeInput" className="timeInput" placeholder="hh:mm" maxlength="5" onChange={handleT} value={startTime}/>
+                </div>
+                <div className="form-row">
+                <label>Длительность</label>
+                    <input type="text" name="duration" className="timeInput" value={formData.duration} onChange={handleChange} />
+                </div>
+                {/* <div className="form-row">
+                    <label>Стенд</label>
                     <label>Дата</label>
                     <label>Время начала</label>
                     <label>Длительность</label>
@@ -69,10 +85,10 @@ export default function Planner() {
                     <input type="text" name="date" value={formData.date} onChange={handleChange} />
                     <input type="text" id="timeInput" className="timeInput" placeholder="hh:mm" maxlength="5" onChange={handleT} value={startTime}/>
                     <input type="text" name="duration" value={formData.duration} onChange={handleChange} />
-                </div>
+                </div> */}
                 <div className="form-row">
-                <Button style={"UserAdd"} type={"submit"}> Создать </Button>
-                <Button style={"userDelete"} onClick={closeModal}> Закрыть </Button>
+                <Button style={"reservation.add"} type={"submit"}> Создать </Button>
+                <Button style={"reservationExit"} onClick={closeModal}> Закрыть </Button>
                 </div>
                 <div className="form-row">
                     {/* <span id="error-message" style="color: red;"></span> */}
