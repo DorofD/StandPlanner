@@ -17,21 +17,41 @@ export default function Planner() {
         duration: ''
       });
 
-      const handleChange = (event) => {
-        const { name, value } = event.target;
-        setFormData(prevState => ({
-          ...prevState,
-          [name]: value
-        }));
-      }
+    const handleChange = (event) => {
+      const { name, value } = event.target;
+      setFormData(prevState => ({
+        ...prevState,
+        [name]: value
+      }));
+    }
 
-      const handleSubmit = (event) => {
-        event.preventDefault();
-        // Обработка данных формы
-        console.log(formData);
-        closeModal()
-      }
+    const handleSubmit = (event) => {
+      event.preventDefault();
+      // Обработка данных формы
+      console.log(formData);
+      closeModal()
+    }
 
+
+    const [startTime, setValue] = useState('');
+
+    const handleT = (e) => {
+      let inputValue = e.target.value;
+  
+      // Удаляем все нецифровые символы
+      inputValue = inputValue.replace(/\D/g, '');
+  
+      // Добавляем двоеточие после первых двух цифр
+      if (inputValue.length >= 2) {
+        inputValue = inputValue.substring(0, 2) + ':' + inputValue.substring(2);
+      }
+  
+      // Обрезаем строку до максимально допустимой длины "HH:MM"
+      if (inputValue.length > 5) {
+        inputValue = inputValue.substring(0, 5);
+      }
+      setValue(inputValue); 
+    }
 
     return (
         <div>
@@ -47,11 +67,11 @@ export default function Planner() {
                 <div className="form-row">
                     <input type="text" name="stand" value={formData.stand} onChange={handleChange} />
                     <input type="text" name="date" value={formData.date} onChange={handleChange} />
-                    <input type="text" id="timeInput" className="timeInput" placeholder="__:__" maxlength="5" onChange={handleChange} />
+                    <input type="text" id="timeInput" className="timeInput" placeholder="hh:mm" maxlength="5" onChange={handleT} value={startTime}/>
                     <input type="text" name="duration" value={formData.duration} onChange={handleChange} />
                 </div>
                 <div className="form-row">
-                <Button style={"UserAdd"} type={"submit"}> Войти </Button>
+                <Button style={"UserAdd"} type={"submit"}> Создать </Button>
                 <Button style={"userDelete"} onClick={closeModal}> Закрыть </Button>
                 </div>
                 <div className="form-row">
