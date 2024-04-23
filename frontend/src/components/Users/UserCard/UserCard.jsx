@@ -7,10 +7,10 @@ import { useNotificationContext } from "../../../hooks/useNotificationContext";
 
 export default function UserCard({id, login, role, authType, picked = false, onClick, onSubmitFunc}) {
 
-    const [selectedValue, setSelectedValue] = useState('');
+    const [selectedRole, setSelectedRole] = useState('');
 
-    const handleChange = (event) => {
-        setSelectedValue(event.target.value);
+    function handleRoleChange (e) {
+        setSelectedRole(e.target.value);
       };
       
     const { notificationData, setNotificationData, toggleNotificationFunc, notificationToggle } = useNotificationContext();
@@ -38,7 +38,7 @@ export default function UserCard({id, login, role, authType, picked = false, onC
     }
 
     async function changeUser() {
-            if (!selectedValue) {
+            if (!selectedRole) {
                 console.log('changeUser error role')
                 return false
             }
@@ -48,7 +48,7 @@ export default function UserCard({id, login, role, authType, picked = false, onC
                 body: JSON.stringify({
                     action: 'change',
                     id: id,
-                    role: selectedValue
+                    role: selectedRole
 
                 })
 
@@ -81,7 +81,7 @@ export default function UserCard({id, login, role, authType, picked = false, onC
                     <div className="userContent">
                         <p className="login">{login}</p>
                         <p className="params">Роль: </p>
-                        <select name="role" onChange={handleChange}>
+                        <select name="role" onChange={handleRoleChange}>
                                 {<option value="admin" selected>Роль</option>}
                                 {<option value="admin">admin</option>}
                                 {<option value="user" >user</option>}

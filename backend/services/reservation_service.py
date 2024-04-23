@@ -25,7 +25,7 @@ def check_intersections(stand_id: int, start_time: datetime, end_time: datetime)
     reservations = get_reservations_for_check_intersections_db(stand_id)
     for reservation in reservations:
         temp_parsed_start_time = datetime.strptime(
-            reservation['start_time'], '%Y-%m-%d %H:%M')
+            reservation['start_time'], '%d-%m-%Y %H:%M')
         temp_parsed_duration = datetime.strptime(
             reservation['duration'], '%H:%M').time()
         temp_end_time = temp_parsed_start_time + \
@@ -47,10 +47,10 @@ def change_reservation_status(id: int, status: str):
 
 def add_reservaiton(user_id: int, stand_id: int, start_time: str, duration: str):
     """
-    start_time - ожидается строка в формате '%Y-%m-%d %H:%M' 
+    start_time - ожидается строка в формате '%d-%m-%Y %H:%M' 
     duration - ожидается строка в формате '%H:%M'
     """
-    parsed_start_time = datetime.strptime(start_time, '%Y-%m-%d %H:%M')
+    parsed_start_time = datetime.strptime(start_time, '%d-%m-%Y %H:%M')
     parsed_duration = datetime.strptime(duration, '%H:%M').time()
     end_time = parsed_start_time + \
         timedelta(hours=parsed_duration.hour, minutes=parsed_duration.minute)

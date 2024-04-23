@@ -9,36 +9,17 @@ button.login {
     cursor: pointer;
 }
   
-button.login:hover {
-      background-color: #555;
-      color: white;
-}
     
 button.logout {
-        width: 5%;
-        border: 0;
-        height: 100%;
-        margin-left: 10px;
-        color: #000;
-        cursor: pointer;
-        font-size: large;
-}
-    
-button.logout:hover {
-          background-color: #555;
-          color: white;
+    width: 5%;
+    border: 0;
+    height: 100%;
+    margin-left: 10px;
+    color: #000;
+    cursor: pointer;
+    font-size: large;
 }
 
-@media (width < 1540px){
-    button.logout {
-        width: 10%;
-    }
-}
-@media (width < 900px){
-    button.logout {
-        width: 20%;
-    }
-}
 
 button.userChange {
     margin: 0 auto;
@@ -67,6 +48,20 @@ button.UserAdd {
     border-radius: 10px;
 }
 
+button.userDelete {
+    margin: 0 auto;
+    display: block;
+    text-transform: uppercase;
+    background: #ff2020;
+    width: 150px;
+    border: 0;
+    padding: 10px;
+    color: #FFFFFF;
+    cursor: pointer;
+    border-radius: 10px;
+    margin-top: 10px;
+}
+
 button.reservationAdd {
     display: block;
     margin: 0 auto;
@@ -91,20 +86,6 @@ button.reservationExit{
     color: #FFFFFF;
     cursor: pointer;
     border-radius: 10px;
-}
-
-button.userDelete {
-    margin: 0 auto;
-    display: block;
-    text-transform: uppercase;
-    background: #ff2020;
-    width: 150px;
-    border: 0;
-    padding: 10px;
-    color: #FFFFFF;
-    cursor: pointer;
-    border-radius: 10px;
-    margin-top: 10px;
 }
 
 button:hover {
