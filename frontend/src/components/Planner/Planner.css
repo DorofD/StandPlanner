@@ -21,10 +21,22 @@
     font-family: Arial;
     font-size: large;
     flex: 1; /* Равномерно распределяет пространство между элементами */
-    margin: 10px 40px; /* Отступы между элементами */
+    margin: 10px 10px; /* Отступы между элементами */
 }
 
 .reservationParam {
-    width: 80px;
+    width: 400px;
     padding: 8px;
+    border: solid 3px #afafaf;
+    border-radius: 10px;
+}
+
+.reservationParam:focus {
+    border: solid 3px #646464;
+}
+
+.reservationLabel {
+    width: 40px;
+    padding: 8px;
+    vertical-align: middle;
 }

@@ -4,11 +4,14 @@
     left: 0;
     right: 0;
     bottom: 0;
-    background-color: rgba(0, 0, 0, 0.5);
+    /* background-color: rgba(0, 0, 0, 0.1); */
+    background-color: rgba(241, 241, 241, 0.7);
     z-index: 1000;
   }
   
 .modal {
+    border: solid 4px #afafaf;
+    border-radius: 10px;
     position: fixed;
     top: 50%;
     left: 50%;
