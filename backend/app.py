@@ -37,8 +37,10 @@ def reservations():
     if request.method == 'POST':
         data = request.json
         if data['action'] == 'add':
-            reservation_service.add_reservaiton(data['user_id'], data['stand_id'],
-                                                data['start_time'], data['end_time'])
+            print(data['user_id'], data['stand_id'],
+                  data['start_time'], data['duration'])
+            # reservation_service.add_reservaiton(data['user_id'], data['stand_id'],
+            #                                     data['start_time'], data['end_time'])
         if data['action'] == 'change':
             pass
         if data['action'] == 'delete':

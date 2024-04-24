@@ -11,6 +11,7 @@ export default function Login() {
     const { isAuthenticated, toogleAuth} = useAuthContext()
     const { userName, setUserName} = useAuthContext()
     const { userRole, setUserRole} = useAuthContext()
+    const { userId, setUserId} = useAuthContext()
     const [status, setStatus] = useState('')
     const navigate = useNavigate();
     async function getAuth(e) {
@@ -37,6 +38,7 @@ export default function Login() {
                 const user = await response.json()
                 setUserName(user.body.login)
                 setUserRole(user.body.role)
+                setUserId(user.body.id)
                 toogleAuth()
                 setNotificationData({message:'', type: 'success'})
                 toggleNotificationFunc()

@@ -1,6 +1,8 @@
 import React, { useState, useEffect, Component } from "react";
 import Modal from "../Modal/Modal";
 import Button from "../Button/Button";
+import { useAuthContext } from "../../hooks/useAuthContext";
+import { useNotificationContext } from "../../hooks/useNotificationContext";
 import './Planner.css'
 
 function getCurrentDateString() {
@@ -16,20 +18,21 @@ function getCurrentDateString() {
   
 
 export default function Planner() {
+    const {userId} = useAuthContext()
     const [loading, setLoading] = useState('loading')
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [stands, setStands] = useState([])
-      
+    const { notificationData, setNotificationData, toggleNotificationFunc, notificationToggle } = useNotificationContext();  
     const currentDate = getCurrentDateString()
     
-    const [stand, setStand] = useState('');
+    const [standId, setStandId] = useState(0);
     const [date, setDate] = useState(currentDate);
     const [startTime, setStartTime] = useState('');
     const [duration, setDuration] = useState('');
 
     const openModal = () => setIsModalOpen(true);
     function closeModal(){
-      setStand('')
+      setStandId(0)
       setDate(currentDate)
       setStartTime('')
       setDuration('')
@@ -39,7 +42,7 @@ export default function Planner() {
 
     function handleStand(e) {
         let inputValue = e.target.value;
-        setStand(inputValue);
+        setStandId(inputValue);
     }
 
 
@@ -128,10 +131,56 @@ export default function Planner() {
     }, [])
 
 
-    const handleSubmit = (event) => {
+    async function handleSubmit(event) {
       event.preventDefault();
+
+      if (standId == 0) {
+        setNotificationData({message:'Стенд не выбран', type: 'error'})
+        toggleNotificationFunc()
+        return 0
+      }
+
+      if (startTime.length < 5) {
+        setNotificationData({message:'Время начала введено некорректно', type: 'error'})
+        toggleNotificationFunc()
+        return 0
+      }
+
+      if (duration.length < 5) {
+        setNotificationData({message:'Длительность введена некорректно', type: 'error'})
+        toggleNotificationFunc()
+        return 0
+      }
+      try {
+        const response = await fetch('http://127.0.0.1:5000/reservations', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                action: 'add',
+                user_id: userId,
+                stand_id: standId,
+                start_time: date + ' ' + startTime,
+                duration: duration
+            })
+        })
+        if (response.status == 200) {
+            const user = await response.json()
+            setNotificationData({message:'Стенд зарезервирован', type: 'success'})
+            toggleNotificationFunc()
+        } else {
+            setNotificationData({message:'Ошибка создания резервирования', type: 'success'})
+            toggleNotificationFunc()
+        }
+        
+        
+    } catch (err) {
+        console.log(err)
+    }
+      console.log(standId)
+      console.log(date)
       console.log(startTime)
-      console.log(currentDate)
+      console.log(duration)
+      console.log(userId)
       closeModal()
     }   
 

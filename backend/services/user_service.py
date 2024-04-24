@@ -41,11 +41,11 @@ def signin(login: str, password: str):
     user = user[0]
     if user['auth_type'] == 'ldap':
         if ldap_auth(login, password):
-            return {'login': login, 'role': user['role']}
+            return {'id': user['id'], 'login': login, 'role': user['role']}
         return False
     else:
         if password == user['password']:
-            return {'login': login, 'role': user['role']}
+            return {'id': user['id'], 'login': login, 'role': user['role']}
         return False
 
 
