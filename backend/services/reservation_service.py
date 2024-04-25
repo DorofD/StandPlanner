@@ -33,6 +33,7 @@ def check_intersections(stand_id: int, start_time: datetime, end_time: datetime)
                       minutes=temp_parsed_duration.minute)
         if max(start_time, temp_parsed_start_time) < min(end_time, temp_end_time):
             info = get_info_for_failed_intersection_db(reservation['id'])
+            print(info)
             error = IntersectionError(
                 username=info[0]['login'], start_time=info[0]['start_time'])
             raise error

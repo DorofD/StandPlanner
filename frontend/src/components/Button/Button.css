@@ -22,6 +22,8 @@ button.logout {
 
 
 button.userChange {
+    font-family: Arial;
+    font-size: medium;
     margin: 0 auto;
     display: block;
     text-transform: uppercase;
@@ -36,6 +38,8 @@ button.userChange {
 }
 
 button.UserAdd {
+    font-family: Arial;
+    font-size: medium;
     display: block;
     margin: 0 auto;
     text-transform: uppercase;
@@ -49,6 +53,8 @@ button.UserAdd {
 }
 
 button.userDelete {
+    font-family: Arial;
+    font-size: medium;
     margin: 0 auto;
     display: block;
     text-transform: uppercase;
@@ -63,6 +69,8 @@ button.userDelete {
 }
 
 button.reservationAdd {
+    font-family: Arial;
+    font-size: medium;
     display: block;
     margin: 0 auto;
     text-transform: uppercase;
@@ -76,6 +84,8 @@ button.reservationAdd {
 }
 
 button.reservationExit{
+    font-family: Arial;
+    font-size: medium;
     display: block;
     margin: 0 auto;
     text-transform: uppercase;

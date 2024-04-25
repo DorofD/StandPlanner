@@ -37,16 +37,13 @@ def reservations():
     if request.method == 'POST':
         data = request.json
         if data['action'] == 'add':
-            print(data['user_id'], data['stand_id'],
-                  data['start_time'], data['duration'])
-            # reservation_service.add_reservaiton(data['user_id'], data['stand_id'],
-            #                                     data['start_time'], data['end_time'])
+            reservation_service.add_reservaiton(data['user_id'], data['stand_id'],
+                                                data['start_time'], data['duration'])
         if data['action'] == 'change':
             pass
         if data['action'] == 'delete':
             reservation_service.delete_reservation(data['reservation_id'])
             pass
-
     return jsonify({'success': True}), 200, {'ContentType': 'application/json'}
 
 
@@ -92,13 +89,13 @@ def users():
 @app.errorhandler(IntersectionError)
 def handle_value_error(error):
     """Обработка исключений типа ValueError."""
-    return jsonify({'error': str(error.message)}), 400
+    return jsonify({'error': str(error)}), 400
 
 
 @app.errorhandler(DeleteError)
 def handle_value_error(error):
     """Обработка исключений типа ValueError."""
-    return jsonify({'error': str(error.message)}), 400
+    return jsonify({'error': str(error)}), 400
 
 
 if __name__ == '__main__':

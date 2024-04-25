@@ -164,11 +164,12 @@ export default function Planner() {
             })
         })
         if (response.status == 200) {
-            const user = await response.json()
-            setNotificationData({message:'Стенд зарезервирован', type: 'success'})
+            setNotificationData({message: 'Стенд зарезервирован', type: 'success'})
             toggleNotificationFunc()
+            closeModal()
         } else {
-            setNotificationData({message:'Ошибка создания резервирования', type: 'success'})
+            const responseData = await response.json()
+            setNotificationData({message: responseData.error, type: 'error long'})
             toggleNotificationFunc()
         }
         
@@ -176,12 +177,6 @@ export default function Planner() {
     } catch (err) {
         console.log(err)
     }
-      console.log(standId)
-      console.log(date)
-      console.log(startTime)
-      console.log(duration)
-      console.log(userId)
-      closeModal()
     }   
 
 
