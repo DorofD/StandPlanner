@@ -2,7 +2,6 @@ from flask import Flask, request, jsonify
 from flask_cors import CORS, cross_origin
 from services.user_service import signin, add_user, delete_user, get_users, change_user
 from services.stand_service import get_stands, add_stand, delete_stand, change_stand
-# from services.reservation_service import add_reservaiton, delete_reservation
 import services.reservation_service as reservation_service
 from errors.reservation_errors import *
 
@@ -33,7 +32,8 @@ def login():
 @cross_origin()
 def reservations():
     if request.method == 'GET':
-        pass
+        reservations = reservation_service.get_reservations_for_planner()
+        return jsonify(reservations)
     if request.method == 'POST':
         data = request.json
         if data['action'] == 'add':

@@ -8,6 +8,16 @@ def get_reservations_db():
     return execute_db_query(query)
 
 
+def get_reservations_for_planner_db():
+    query = f"""
+            SELECT reservations.id, users.login, stands.name, reservations.start_time, reservations.duration, reservations.status FROM reservations
+            JOIN users ON reservations.user_id=users.id
+            JOIN stands ON reservations.stand_id=stands.id
+            WHERE status = 'planned' OR status = 'active'
+            """
+    return execute_db_query(query)
+
+
 def get_reservation_db(id: int):
     query = f"""
             SELECT * FROM reservations

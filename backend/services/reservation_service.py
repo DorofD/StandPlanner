@@ -83,7 +83,11 @@ def delete_reservation(id: int):
     delete_reservation_db(id)
 
 
+def get_reservations_for_planner():
+    return get_reservations_for_planner_db()
+
 # create_reservaiton(1, 19, '2024-04-15 23:42', '1:3')
+
 
 # print(scheduler.get_jobs())
 # time.sleep(70)

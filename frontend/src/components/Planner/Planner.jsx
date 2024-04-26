@@ -19,9 +19,11 @@ function getCurrentDateString() {
 
 export default function Planner() {
     const {userId} = useAuthContext()
-    const [loading, setLoading] = useState('loading')
+    const [loadingStands, setLoadingStands] = useState('loading')
+    const [loadingReservations, setLoadingReservations] = useState('loading')
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [stands, setStands] = useState([])
+    const [reservations, setReservations] = useState([])
     const { notificationData, setNotificationData, toggleNotificationFunc, notificationToggle } = useNotificationContext();  
     const currentDate = getCurrentDateString()
     
@@ -113,21 +115,36 @@ export default function Planner() {
     
     async function getStands() {
         try {
-            setLoading('loading')
+            setLoadingStands('loading')
             const response = await fetch('http://127.0.0.1:5000', {
                 method: 'GET',
             })
             const stands = await response.json()
             setStands(stands)
-            setLoading('loaded')
+            setLoadingStands('loaded')
         } catch (err) {
-            setLoading('error')
+            setLoadingStands('error')
+        }
+    }
+
+    async function getReservations() {
+        try {
+            setLoadingReservations('loading')
+            const response = await fetch('http://127.0.0.1:5000/reservations', {
+                method: 'GET',
+            })
+            const reservations = await response.json()
+            setReservations(reservations)
+            setLoadingReservations('loaded')
+        } catch (err) {
+            setLoadingReservations('error')
         }
     }
 
 
     useEffect(() => {
         getStands()
+        getReservations()
     }, [])
 
 
@@ -167,6 +184,7 @@ export default function Planner() {
             setNotificationData({message: 'Стенд зарезервирован', type: 'success'})
             toggleNotificationFunc()
             closeModal()
+            getReservations()
         } else {
             const responseData = await response.json()
             setNotificationData({message: responseData.error, type: 'error long'})
@@ -182,15 +200,20 @@ export default function Planner() {
 
     return (
         <div>
-        <button onClick={openModal}>Открыть модальное окно</button>
+        <button onClick={openModal}>Создать резервирование</button>
+        {loadingReservations === 'loading' && <p> Loading ...</p>}
+                {loadingReservations === 'error' && <p> бекенд отвалился</p>}
+                {loadingReservations === 'loaded' && <ul>
+                        {reservations.map(reservation => <li key={reservation.id}> Пользователь {reservation.login} | Стенд {reservation.name} | Время начала {reservation.start_time} | Длительность {reservation.duration} | Статус {reservation.status} </li>)}
+                    </ul>}
         <Modal isOpen={isModalOpen} onClose={closeModal}>
             <form onSubmit={handleSubmit} className="form-container">
                 <div className="form-row">
                     <label className="reservationLabel">Стенд</label>
                     <select className='reservationParam' onChange={handleStand}>
-                                {loading === 'loaded' && <>{<option value="defaultStand" selected>Стенд</option>}
+                                {loadingStands === 'loaded' && <>{<option value="defaultStand" selected>Стенд</option>}
                                   {stands.map(stand =><option value={stand.id}>{stand.name}</option>)}</>}
-                                {loading === 'error' && <>{<option value="defaultStand" selected>Бекенд отвалился</option>}</>}
+                                {loadingStands === 'error' && <>{<option value="defaultStand" selected>Бекенд отвалился</option>}</>}
                     </select>
                 </div>
                 <div className="form-row">
