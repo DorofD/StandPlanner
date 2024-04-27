@@ -26,11 +26,15 @@ export default function Planner() {
     const [reservations, setReservations] = useState([])
     const { notificationData, setNotificationData, toggleNotificationFunc, notificationToggle } = useNotificationContext();  
     const currentDate = getCurrentDateString()
+
+
     
     const [standId, setStandId] = useState(0);
     const [date, setDate] = useState(currentDate);
     const [startTime, setStartTime] = useState('');
     const [duration, setDuration] = useState('');
+    
+    const [filter, setFilter] = useState({ user: '', stand: '' });
 
     const openModal = () => setIsModalOpen(true);
     function closeModal(){
@@ -197,14 +201,28 @@ export default function Planner() {
     }
     }   
 
+    function handleFilter() {
+      
+    }
+
+    const filteredReservations = reservations.filter(item => {
+      return (
+        (filter.user === '' || item.login.includes(filter.user)) &&
+        (filter.stand === '' || item.name.includes(filter.stand))
+      );
+    }
+    )
+
 
     return (
-        <div>
+        <div className="reservations">
         <button onClick={openModal}>Создать резервирование</button>
+        <input type="text" className="reservationParam" placeholder="user" onChange={e => setFilter({...filter, user: e.target.value})} value={filter.user}/>
+        <input type="text" className="reservationParam" placeholder="stand" onChange={e => setFilter({...filter, stand: e.target.value})} value={filter.stand}/>
         {loadingReservations === 'loading' && <p> Loading ...</p>}
                 {loadingReservations === 'error' && <p> бекенд отвалился</p>}
                 {loadingReservations === 'loaded' && <ul>
-                        {reservations.map(reservation => <li key={reservation.id}> Пользователь {reservation.login} | Стенд {reservation.name} | Время начала {reservation.start_time} | Длительность {reservation.duration} | Статус {reservation.status} </li>)}
+                        {filteredReservations.map(reservation => <li key={reservation.id}> Пользователь {reservation.login} | Стенд {reservation.name} | Время начала {reservation.start_time} | Длительность {reservation.duration} | Статус {reservation.status} </li>)}
                     </ul>}
         <Modal isOpen={isModalOpen} onClose={closeModal}>
             <form onSubmit={handleSubmit} className="form-container">
