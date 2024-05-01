@@ -4,6 +4,8 @@ import Button from "../Button/Button";
 import { useAuthContext } from "../../hooks/useAuthContext";
 import { useNotificationContext } from "../../hooks/useNotificationContext";
 import './Planner.css'
+import filterLogo from './filter.png'
+import ReservationCard from "./ReservationCard/ReservationCard";
 
 function getCurrentDateString() {
     const now = new Date();
@@ -18,7 +20,7 @@ function getCurrentDateString() {
   
 
 export default function Planner() {
-    const {userId} = useAuthContext()
+    const {userId, userName} = useAuthContext()
     const [loadingStands, setLoadingStands] = useState('loading')
     const [loadingReservations, setLoadingReservations] = useState('loading')
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -201,9 +203,6 @@ export default function Planner() {
     }
     }   
 
-    function handleFilter() {
-      
-    }
 
     const filteredReservations = reservations.filter(item => {
       return (
@@ -216,41 +215,52 @@ export default function Planner() {
 
     return (
         <div className="reservations">
-        <button onClick={openModal}>Создать резервирование</button>
-        <input type="text" className="reservationParam" placeholder="user" onChange={e => setFilter({...filter, user: e.target.value})} value={filter.user}/>
-        <input type="text" className="reservationParam" placeholder="stand" onChange={e => setFilter({...filter, stand: e.target.value})} value={filter.stand}/>
-        {loadingReservations === 'loading' && <p> Loading ...</p>}
-                {loadingReservations === 'error' && <p> бекенд отвалился</p>}
-                {loadingReservations === 'loaded' && <ul>
-                        {filteredReservations.map(reservation => <li key={reservation.id}> Пользователь {reservation.login} | Стенд {reservation.name} | Время начала {reservation.start_time} | Длительность {reservation.duration} | Статус {reservation.status} </li>)}
-                    </ul>}
-        <Modal isOpen={isModalOpen} onClose={closeModal}>
-            <form onSubmit={handleSubmit} className="form-container">
-                <div className="form-row">
-                    <label className="reservationLabel">Стенд</label>
-                    <select className='reservationParam' onChange={handleStand}>
-                                {loadingStands === 'loaded' && <>{<option value="defaultStand" selected>Стенд</option>}
-                                  {stands.map(stand =><option value={stand.id}>{stand.name}</option>)}</>}
-                                {loadingStands === 'error' && <>{<option value="defaultStand" selected>Бекенд отвалился</option>}</>}
-                    </select>
-                </div>
-                <div className="form-row">
-                    <label className="reservationLabel">Дата</label>
-                    <input type="text" name="date" className="reservationParam" placeholder={"dd-mm-yyyy"} onChange={handleDate} value={date}/>
-                </div>
-                <div className="form-row">
-                    <label className="reservationLabel">Время начала</label>
-                    <input type="text" id="timeInput" className="reservationParam" placeholder="hh:mm" onChange={handleStartTime} value={startTime} />
-                </div>
-                <div className="form-row">
-                <label className="reservationLabel">Длительность</label>
-                    <input type="text" name="duration" className="reservationParam" placeholder="hh:mm" onChange={handleDuration} value={duration}/>
-                </div>
-                <div className="form-row">
-                <Button style={"reservationAdd"} type={"submit"}> Создать </Button>
-                <Button style={"reservationExit"} onClick={closeModal}> Закрыть </Button>
-                </div>
-                <div className="form-row">
+           <div className="newReservation">
+              <button onClick={openModal} className="newReservation">Зарезервировать стенд</button>
+           </div>
+          <div className="plannerFilter">
+            <img src={filterLogo} alt="zalupa" className="filterLogo"/>
+            <input type="text" className="reservationFilter" placeholder="user" onChange={e => setFilter({...filter, user: e.target.value})} value={filter.user}/>
+            <input type="text" className="reservationFilter" placeholder="stand" onChange={e => setFilter({...filter, stand: e.target.value})} value={filter.stand}/>
+            <button onClick={() => setFilter({ user: '', stand: '' })} className="clearFilter">Очистить</button>
+          </div>
+
+          <div className="reservationList">
+
+            {loadingReservations === 'loading' && <p> Loading ...</p>}
+                    {loadingReservations === 'error' && <p> бекенд отвалился</p>}
+                    {loadingReservations === 'loaded' && <ul>
+                            {filteredReservations.map(reservation => <ReservationCard reservation={reservation} currentUser={userName}></ReservationCard>)}
+                        </ul>}
+          </div>
+
+          <Modal isOpen={isModalOpen} onClose={closeModal}>
+              <form onSubmit={handleSubmit} className="form-container">
+                  <div className="form-row">
+                      <label className="reservationLabel">Стенд</label>
+                      <select className='reservationParam' onChange={handleStand}>
+                                  {loadingStands === 'loaded' && <>{<option value="defaultStand" selected>Стенд</option>}
+                                    {stands.map(stand =><option value={stand.id}>{stand.name}</option>)}</>}
+                                  {loadingStands === 'error' && <>{<option value="defaultStand" selected>Бекенд отвалился</option>}</>}
+                      </select>
+                  </div>
+                  <div className="form-row">
+                      <label className="reservationLabel">Дата</label>
+                      <input type="text" name="date" className="reservationParam" placeholder={"dd-mm-yyyy"} onChange={handleDate} value={date}/>
+                  </div>
+                  <div className="form-row">
+                      <label className="reservationLabel">Время начала</label>
+                      <input type="text" id="timeInput" className="reservationParam" placeholder="hh:mm" onChange={handleStartTime} value={startTime} />
+                  </div>
+                  <div className="form-row">
+                  <label className="reservationLabel">Длительность</label>
+                      <input type="text" name="duration" className="reservationParam" placeholder="hh:mm" onChange={handleDuration} value={duration}/>
+                  </div>
+                  <div className="form-row">
+                  <Button style={"reservationAdd"} type={"submit"}> Создать </Button>
+                  <Button style={"reservationExit"} onClick={closeModal}> Закрыть </Button>
+                  </div>
+                  <div className="form-row">
                 </div>
             </form>
         </Modal>

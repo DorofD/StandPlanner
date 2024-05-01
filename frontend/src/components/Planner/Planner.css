@@ -2,22 +2,69 @@ div.reservations {
     margin-left: 0;
     margin-right: 0;
     margin-bottom: 0;
-    width: 80%;
+    width: 60%;
     overflow: auto;
-
+    /* background-color: aqua; */
 }
+
 div.reservations::-webkit-scrollbar {
     width: 10px;
     background-color: #f1f1f1;
     margin: 40px;
 }
 
-.newReservation {
-    display: flex;
-    flex-direction: row;
-    width: 100%;
-    height: 100%;
-    background-color: aqua;
+div.plannerFilter {
+    margin: 10px;
+}
+
+.filterLogo {
+    width: 35px;
+    vertical-align: middle;
+}
+
+.reservationFilter {
+    font-family: Arial;
+    font-size: large;
+    width: 300px;
+    padding: 8px;
+    margin-left: 10px;
+    border: solid 3px #afafaf;
+    border-radius: 10px;
+}
+
+.clearFilter {
+    font-family: Arial;
+    font-size: medium;
+    width: 100px;
+    padding: 8px;
+    margin-left: 10px;
+    border: solid 3px #afafaf;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+div.newReservation {
+    text-align: center;
+    margin: 10px;
+    margin-top: 20px;
+}
+
+button.newReservation {
+    font-family: Arial;
+    font-size: 18px;
+    padding: 5px;
+    margin-bottom: 10px;
+    border: solid 3px #afafaf;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+button.newReservation:focus {
+    border: solid 3px #646464;
+}
+
+div.reservationList{
+    margin: 10px;
 }
 
 .form-container {
