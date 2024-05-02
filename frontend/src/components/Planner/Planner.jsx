@@ -30,7 +30,7 @@ export default function Planner() {
     const [reservations, setReservations] = useState([])
     const { notificationData, setNotificationData, toggleNotificationFunc, notificationToggle } = useNotificationContext();  
     const currentDate = getCurrentDateString()
-
+    const modalMode = 'newReservation'
 
     
     const [standId, setStandId] = useState(0);
@@ -161,6 +161,7 @@ export default function Planner() {
         toggleNotificationFunc()
         return 0
       }
+
       try {
         const response = await apiAddReservation(userId, standId, date, startTime, duration)
         if (response.status == 200) {
@@ -213,6 +214,11 @@ export default function Planner() {
 
           <Modal isOpen={isModalOpen} onClose={closeModal}>
               <form onSubmit={handleSubmit} className="form-container">
+                    <div className="form-head">
+                        {modalMode == 'newReservation' && <>Новое резервирование</>
+                        ||
+                        modalMode == 'changeReservation' && <>Изменить резервирование</>}
+                    </div>
                   <div className="form-row">
                       <label className="reservationLabel">Стенд</label>
                       <select className='reservationParam' onChange={handleStand}>
@@ -234,8 +240,19 @@ export default function Planner() {
                       <input type="text" name="duration" className="reservationParam" placeholder="hh:mm" onChange={handleDuration} value={duration}/>
                   </div>
                   <div className="form-row">
-                  <Button style={"reservationAdd"} type={"submit"}> Создать </Button>
-                  <Button style={"reservationExit"} onClick={closeModal}> Закрыть </Button>
+                  {modalMode == 'newReservation' && 
+                  <>
+                    <Button style={"reservationAdd"} type={"submit"}> Создать </Button>
+                    <Button style={"reservationExit"} onClick={closeModal}> Закрыть </Button>
+                  </>
+                  ||
+                  modalMode == 'changeReservation' &&
+                  <>
+                    <Button style={"reservationAdd"} type={"submit"}> Создать </Button>
+                    <Button style={"reservationExit"} type={"submit"}> Создать </Button>
+                    <Button style={"reservationExit"} onClick={closeModal}> Закрыть </Button>
+                  </>
+                  }
                   </div>
                   <div className="form-row">
                 </div>
