@@ -6,6 +6,8 @@ import { useNotificationContext } from "../../hooks/useNotificationContext";
 import './Planner.css'
 import filterLogo from './filter.png'
 import ReservationCard from "./ReservationCard/ReservationCard";
+import { apiGetReservations, apiAddReservation } from "../../sevices/apiReservations";
+import { apiGetStands } from "../../sevices/apiStands";
 
 function getCurrentDateString() {
     const now = new Date();
@@ -64,17 +66,14 @@ export default function Planner() {
             inputValue = inputValue.slice(0, 5) + '-' + inputValue.slice(5, 9);
           }
           
-          // Ограничиваем длину строки до 10 символов (дд-мм-гггг)
           inputValue = inputValue.slice(0, 10);
         setDate(inputValue); 
     }
 
+
     function handleStartTime(e) {
         let inputValue = e.target.value;
-    
-        // Удаляем все нецифровые символы
         inputValue = inputValue.replace(/\D/g, '');
-        // Добавляем двоеточие после первых двух цифр
         if (inputValue.length > 2) {
           if (Number(inputValue.slice(0, 2)) >= 24) {
             inputValue = '23:' + inputValue.slice(2);
@@ -88,8 +87,7 @@ export default function Planner() {
             inputValue = inputValue.slice(0, 2) + ':59'
           }
         }
-        
-        // Обрезаем строку до максимально допустимой длины "HH:MM"
+
         if (inputValue.length > 5) {
           inputValue = inputValue.slice(0, 5);
         }
@@ -98,10 +96,7 @@ export default function Planner() {
 
     function handleDuration(e) {
       let inputValue = e.target.value;
-    
-      // Удаляем все нецифровые символы
       inputValue = inputValue.replace(/\D/g, '');
-      // Добавляем двоеточие после первых двух цифр
       if (inputValue.length > 2) {
           inputValue = inputValue.slice(0, 2) + ':' + inputValue.slice(2);
       }
@@ -111,8 +106,6 @@ export default function Planner() {
           inputValue = inputValue.slice(0, 2) + ':59'
         }
       }
-      
-      // Обрезаем строку до максимально допустимой длины "HH:MM"
       if (inputValue.length > 5) {
         inputValue = inputValue.slice(0, 5);
       }
@@ -122,10 +115,7 @@ export default function Planner() {
     async function getStands() {
         try {
             setLoadingStands('loading')
-            const response = await fetch('http://127.0.0.1:5000', {
-                method: 'GET',
-            })
-            const stands = await response.json()
+            const stands = await apiGetStands()
             setStands(stands)
             setLoadingStands('loaded')
         } catch (err) {
@@ -136,10 +126,7 @@ export default function Planner() {
     async function getReservations() {
         try {
             setLoadingReservations('loading')
-            const response = await fetch('http://127.0.0.1:5000/reservations', {
-                method: 'GET',
-            })
-            const reservations = await response.json()
+            const reservations = await apiGetReservations()
             setReservations(reservations)
             setLoadingReservations('loaded')
         } catch (err) {
@@ -175,17 +162,7 @@ export default function Planner() {
         return 0
       }
       try {
-        const response = await fetch('http://127.0.0.1:5000/reservations', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                action: 'add',
-                user_id: userId,
-                stand_id: standId,
-                start_time: date + ' ' + startTime,
-                duration: duration
-            })
-        })
+        const response = await apiAddReservation(userId, standId, date, startTime, duration)
         if (response.status == 200) {
             setNotificationData({message: 'Стенд зарезервирован', type: 'success'})
             toggleNotificationFunc()

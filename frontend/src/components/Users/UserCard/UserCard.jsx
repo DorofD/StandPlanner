@@ -3,7 +3,7 @@ import { useState } from "react";
 import Button from "../../Button/Button"
 import "./UserCard.css";
 import { useNotificationContext } from "../../../hooks/useNotificationContext";
-
+import { apiDeleteUser, apiChangeUser } from "../../../sevices/apiUsers"
 
 export default function UserCard({id, login, role, authType, picked = false, onClick, onSubmitFunc}) {
 
@@ -16,17 +16,8 @@ export default function UserCard({id, login, role, authType, picked = false, onC
     const { notificationData, setNotificationData, toggleNotificationFunc, notificationToggle } = useNotificationContext();
 
     async function deleteUser() {
-            const response = await fetch('http://127.0.0.1:5000/users', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    action: 'delete',
-                    id: id
-                })
-
-            })
+            const response = await apiDeleteUser(id)
             if (response.status == 200) {
-                const user = await response.json()
                 onSubmitFunc('')
                 setNotificationData({message:'Пользователь удалён', type: 'success'})
                 toggleNotificationFunc()
@@ -42,17 +33,7 @@ export default function UserCard({id, login, role, authType, picked = false, onC
                 console.log('changeUser error role')
                 return false
             }
-            const response = await fetch('http://127.0.0.1:5000/users', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    action: 'change',
-                    id: id,
-                    role: selectedRole
-
-                })
-
-            })
+            const response = await apiChangeUser(id, selectedRole)
             if (response.status == 200) {
                 const user = await response.json()
                 onSubmitFunc('')

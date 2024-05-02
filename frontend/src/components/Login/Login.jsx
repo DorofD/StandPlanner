@@ -5,6 +5,7 @@ import Button from "../Button/Button";
 import { useAuthContext } from "../../hooks/useAuthContext";
 import { useNotificationContext } from "../../hooks/useNotificationContext";
 import { useNavigate } from 'react-router-dom';
+import { apiAuth } from "../../sevices/apiLogin";
 
 export default function Login() {
     const { notificationData, setNotificationData, toggleNotificationFunc, notificationToggle } = useNotificationContext();
@@ -15,10 +16,8 @@ export default function Login() {
     const [status, setStatus] = useState('')
     const navigate = useNavigate();
     async function getAuth(e) {
-        // Prevent the browser from reloading the page
         e.preventDefault();
-    
-        // Read the form data
+
         const form = e.target;
         const formData = new FormData(form);
         const formJson = Object.fromEntries(formData.entries());
@@ -26,14 +25,7 @@ export default function Login() {
         const password = formJson['password']
         setStatus('loading')
         try {
-            const response = await fetch('http://127.0.0.1:5000/login', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    login: username,
-                    password: password
-                })
-            })
+            const response = await apiAuth(username, password)
             if (response.status == 200) {
                 const user = await response.json()
                 setUserName(user.body.login)

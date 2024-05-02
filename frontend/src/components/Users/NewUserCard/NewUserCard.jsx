@@ -2,31 +2,21 @@ import React, { Component } from "react";
 import Button from "../../Button/Button"
 import { useNotificationContext } from "../../../hooks/useNotificationContext";
 import "./NewUserCard.css";
+import { apiAddUser} from "../../../sevices/apiUsers"
 
 export default function NewUserCard({id, role, authType, picked = false, onClick, onSubmitFunc}) {
     const { notificationData, setNotificationData, toggleNotificationFunc, notificationToggle } = useNotificationContext();
 
     async function addUser(e) {
-        // Prevent the browser from reloading the page
         e.preventDefault();
-    
-        // Read the form data
+
         const form = e.target;
         const formData = new FormData(form);
         const formJson = Object.fromEntries(formData.entries());
         const login = formJson['login']
         const role = formJson['role']
         const authType = formJson['authType']
-            const response = await fetch('http://127.0.0.1:5000/users', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    action: 'add',
-                    login: login,
-                    role: role, 
-                    auth_type: authType
-                })
-            })
+            const response = await apiAddUser(login, role, authType)
             if (response.status == 200) {
                 const user = await response.json()
                 onSubmitFunc('')

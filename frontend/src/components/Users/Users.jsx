@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import "./Users.css";
 import UserCard from "./UserCard/UserCard";
 import NewUserCard from "./NewUserCard/NewUserCard";
+import { apiGetUsers } from "../../sevices/apiUsers";
 
 export default function Users() {
     const [users, setUsers] = useState([])
@@ -12,9 +13,7 @@ export default function Users() {
     async function getUsers() {
         try {
             setLoading('loading')
-            const response = await fetch('http://127.0.0.1:5000/users', {
-                method: 'GET',
-            })
+            const response = await apiGetUsers()
             const users = await response.json()
             setUsers(users)
             setLoading('loaded')

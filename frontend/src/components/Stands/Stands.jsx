@@ -3,6 +3,7 @@ import Button from "../Button/Button";
 import StandCard from "./StandCard/StandCard";
 import "./Stands.css"
 import { useNotificationContext } from "../../hooks/useNotificationContext";
+import { apiGetStands, apiAddStand, apiChangeStand, apiDeleteStand } from "../../sevices/apiStands";
 
 export default function Stands() {
     const [stands, setStands] = useState([])
@@ -23,10 +24,7 @@ export default function Stands() {
     async function getStands() {
         try {
             setLoading('loading')
-            const response = await fetch('http://127.0.0.1:5000', {
-                method: 'GET',
-            })
-            const stands = await response.json()
+            const stands = await apiGetStands()
             setStands(stands)
             setLoading('loaded')
         } catch (err) {
@@ -35,16 +33,7 @@ export default function Stands() {
     }
     
     async function addStand() {
-        const response = await fetch('http://127.0.0.1:5000/stands', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                action: 'add',
-                name: pickedStand['name'],
-                description: pickedStand['description']
-            })
-
-        })
+        const response = await apiAddStand(pickedStand['name'], pickedStand['description'])
         if (response.status == 200) {
             getStands()
             setPickedStand({id: '', name: '', description: ''})
@@ -58,17 +47,7 @@ export default function Stands() {
     }
 
     async function changeStand() {
-        const response = await fetch('http://127.0.0.1:5000/stands', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                action: 'change',
-                id: pickedStand['id'],
-                name: pickedStand['name'],
-                description: pickedStand['description']
-            })
-
-        })
+        const response = await apiChangeStand(pickedStand['id'], pickedStand['name'], pickedStand['description'])
         if (response.status == 200) {
             getStands()
             setNotificationData({message:'Стенд изменён', type: 'success'})
@@ -81,15 +60,7 @@ export default function Stands() {
     }
 
     async function deleteStand() {
-        const response = await fetch('http://127.0.0.1:5000/stands', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                action: 'delete',
-                id: pickedStand['id']
-            })
-
-        })
+        const response = await apiDeleteStand(pickedStand['id'])
         if (response.status == 200) {
             getStands()
             setPickedStand({id: '', name: '', description: ''})
