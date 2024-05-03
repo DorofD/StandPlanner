@@ -30,23 +30,38 @@ export default function Planner() {
     const [reservations, setReservations] = useState([])
     const { notificationData, setNotificationData, toggleNotificationFunc, notificationToggle } = useNotificationContext();  
     const currentDate = getCurrentDateString()
-    const modalMode = 'newReservation'
+    const [modalMode, setModalMode] = useState('new')
 
     
     const [standId, setStandId] = useState(0);
     const [date, setDate] = useState(currentDate);
     const [startTime, setStartTime] = useState('');
     const [duration, setDuration] = useState('');
-    
+
     const [filter, setFilter] = useState({ user: '', stand: '' });
 
     const openModal = () => setIsModalOpen(true);
+
+    function openChangeModal (reservation) {
+      setModalMode('change')
+      console.log(stands)
+      console.log(modalMode)
+      console.log(reservation)
+      const selectedStand = stands.find(stand => stand.name === reservation.name)
+      setStandId(selectedStand.id)
+      setDate(reservation.start_time.slice(0, 10))
+      setStartTime(reservation.start_time.slice(11, 16))
+      setDuration(reservation.duration)
+      openModal()
+    }
+
     function closeModal(){
       setStandId(0)
       setDate(currentDate)
       setStartTime('')
       setDuration('')
       setIsModalOpen(false);
+      setModalMode('new')
     } 
 
 
@@ -189,17 +204,22 @@ export default function Planner() {
       );
     }
     )
-
-
+    function func1 () {
+      console.log(userName)
+    }
+    function func2 () {
+      console.log('idi nahui')
+    }
+    
     return (
         <div className="reservations">
            <div className="newReservation">
               <button onClick={openModal} className="newReservation">Зарезервировать стенд</button>
            </div>
           <div className="plannerFilter">
-            <img src={filterLogo} alt="zalupa" className="filterLogo"/>
-            <input type="text" className="reservationFilter" placeholder="user" onChange={e => setFilter({...filter, user: e.target.value})} value={filter.user}/>
-            <input type="text" className="reservationFilter" placeholder="stand" onChange={e => setFilter({...filter, stand: e.target.value})} value={filter.stand}/>
+            <img src={filterLogo} alt="" className="filterLogo"/>
+            <input type="text" className="reservationFilter" placeholder="Пользователь" onChange={e => setFilter({...filter, user: e.target.value})} value={filter.user}/>
+            <input type="text" className="reservationFilter" placeholder="Стенд" onChange={e => setFilter({...filter, stand: e.target.value})} value={filter.stand}/>
             <button onClick={() => setFilter({ user: '', stand: '' })} className="clearFilter">Очистить</button>
           </div>
 
@@ -208,16 +228,15 @@ export default function Planner() {
             {loadingReservations === 'loading' && <p> Loading ...</p>}
                     {loadingReservations === 'error' && <p> бекенд отвалился</p>}
                     {loadingReservations === 'loaded' && <ul>
-                            {filteredReservations.map(reservation => <ReservationCard reservation={reservation} currentUser={userName}></ReservationCard>)}
+                            {filteredReservations.map(reservation => <ReservationCard onClick={userName == reservation.login && (() => openChangeModal(reservation)) || (() => {})} reservation={reservation} currentUser={userName}></ReservationCard>)}
                         </ul>}
           </div>
 
           <Modal isOpen={isModalOpen} onClose={closeModal}>
+            {modalMode == 'new' && 
               <form onSubmit={handleSubmit} className="form-container">
                     <div className="form-head">
-                        {modalMode == 'newReservation' && <>Новое резервирование</>
-                        ||
-                        modalMode == 'changeReservation' && <>Изменить резервирование</>}
+                      Новое резервирование
                     </div>
                   <div className="form-row">
                       <label className="reservationLabel">Стенд</label>
@@ -240,23 +259,49 @@ export default function Planner() {
                       <input type="text" name="duration" className="reservationParam" placeholder="hh:mm" onChange={handleDuration} value={duration}/>
                   </div>
                   <div className="form-row">
-                  {modalMode == 'newReservation' && 
-                  <>
                     <Button style={"reservationAdd"} type={"submit"}> Создать </Button>
                     <Button style={"reservationExit"} onClick={closeModal}> Закрыть </Button>
-                  </>
-                  ||
-                  modalMode == 'changeReservation' &&
-                  <>
-                    <Button style={"reservationAdd"} type={"submit"}> Создать </Button>
-                    <Button style={"reservationExit"} type={"submit"}> Создать </Button>
-                    <Button style={"reservationExit"} onClick={closeModal}> Закрыть </Button>
-                  </>
-                  }
                   </div>
                   <div className="form-row">
                 </div>
             </form>
+            || 
+            modalMode == 'change' && 
+              <form onSubmit={handleSubmit} className="form-container">
+                    <div className="form-head">
+                      Изменить резервирование
+                    </div>
+                  <div className="form-row">
+                      <label className="reservationLabel">Стенд</label>
+                      <select className='reservationParam' onChange={handleStand}>
+                                  {loadingStands === 'loaded' && <>
+                                    {stands.map(stand => standId == stand.id && <option value={stand.id} selected>{stand.name}</option> || <option value={stand.id}>{stand.name}</option>
+                                  )}
+                                  </>}
+                                  {loadingStands === 'error' && <>{<option value="defaultStand" selected>Бекенд отвалился</option>}</>}
+                      </select>
+                  </div>
+                  <div className="form-row">
+                      <label className="reservationLabel">Дата</label>
+                      <input type="text" name="date" className="reservationParam" placeholder={"dd-mm-yyyy"} onChange={handleDate} value={date}/>
+                  </div>
+                  <div className="form-row">
+                      <label className="reservationLabel">Время начала</label>
+                      <input type="text" id="timeInput" className="reservationParam" placeholder="hh:mm" onChange={handleStartTime} value={startTime} />
+                  </div>
+                  <div className="form-row">
+                  <label className="reservationLabel">Длительность</label>
+                      <input type="text" name="duration" className="reservationParam" placeholder="hh:mm" onChange={handleDuration} value={duration}/>
+                  </div>
+                  <div className="form-row">
+                    <Button style={"reservationAdd"} type={"submit"}> Изменить </Button>
+                    <Button style={"reservationExit"} onClick={() => console.log('delete')}> Удалить </Button>
+                    <Button style={"reservationExit"} onClick={closeModal}> Закрыть </Button>
+                  </div>
+                  <div className="form-row">
+                </div>
+            </form>
+            }
         </Modal>
       </div>
     );
