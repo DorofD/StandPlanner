@@ -6,7 +6,7 @@ import { useNotificationContext } from "../../hooks/useNotificationContext";
 import './Planner.css'
 import filterLogo from './filter.png'
 import ReservationCard from "./ReservationCard/ReservationCard";
-import { apiGetReservations, apiAddReservation } from "../../sevices/apiReservations";
+import { apiGetReservations, apiAddReservation, apiDeleteReservation } from "../../sevices/apiReservations";
 import { apiGetStands } from "../../sevices/apiStands";
 
 function getCurrentDateString() {
@@ -33,6 +33,7 @@ export default function Planner() {
     const [modalMode, setModalMode] = useState('new')
 
     
+    const [pickedReservationId, setPickedReservationId] = useState(0);
     const [standId, setStandId] = useState(0);
     const [date, setDate] = useState(currentDate);
     const [startTime, setStartTime] = useState('');
@@ -44,9 +45,7 @@ export default function Planner() {
 
     function openChangeModal (reservation) {
       setModalMode('change')
-      console.log(stands)
-      console.log(modalMode)
-      console.log(reservation)
+      setPickedReservationId(reservation.id)
       const selectedStand = stands.find(stand => stand.name === reservation.name)
       setStandId(selectedStand.id)
       setDate(reservation.start_time.slice(0, 10))
@@ -56,6 +55,7 @@ export default function Planner() {
     }
 
     function closeModal(){
+      setPickedReservationId(0)
       setStandId(0)
       setDate(currentDate)
       setStartTime('')
@@ -142,11 +142,27 @@ export default function Planner() {
         try {
             setLoadingReservations('loading')
             const reservations = await apiGetReservations()
+            console.log(reservations)
             setReservations(reservations)
             setLoadingReservations('loaded')
         } catch (err) {
             setLoadingReservations('error')
         }
+    }
+
+    async function deleteReservation (id) {
+      console.log(id)
+      const response = await apiDeleteReservation(id)
+      if (response.status == 200) {
+        closeModal()
+        setNotificationData({message: 'Резервирование удалено', type: 'success'})
+        toggleNotificationFunc()
+        getReservations()
+    } else {
+        const responseData = response.json()
+        setNotificationData({message: responseData.error, type: 'error'})
+        toggleNotificationFunc()
+      }
     }
 
 
@@ -158,7 +174,6 @@ export default function Planner() {
 
     async function handleSubmit(event) {
       event.preventDefault();
-
       if (standId == 0) {
         setNotificationData({message:'Стенд не выбран', type: 'error'})
         toggleNotificationFunc()
@@ -204,12 +219,6 @@ export default function Planner() {
       );
     }
     )
-    function func1 () {
-      console.log(userName)
-    }
-    function func2 () {
-      console.log('idi nahui')
-    }
     
     return (
         <div className="reservations">
@@ -295,7 +304,7 @@ export default function Planner() {
                   </div>
                   <div className="form-row">
                     <Button style={"reservationAdd"} type={"submit"}> Изменить </Button>
-                    <Button style={"reservationExit"} onClick={() => console.log('delete')}> Удалить </Button>
+                    <Button style={"reservationExit"} onClick={() => deleteReservation(pickedReservationId)}> Удалить </Button>
                     <Button style={"reservationExit"} onClick={closeModal}> Закрыть </Button>
                   </div>
                   <div className="form-row">

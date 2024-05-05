@@ -43,7 +43,6 @@ def reservations():
             pass
         if data['action'] == 'delete':
             reservation_service.delete_reservation(data['reservation_id'])
-            pass
     return jsonify({'success': True}), 200, {'ContentType': 'application/json'}
 
 
@@ -74,7 +73,6 @@ def users():
         return result
     if request.method == 'POST':
         data = request.json
-        print(data)
         if data['action'] == 'add':
             add_user(login=data['login'],
                      role=data['role'], auth_type=data['auth_type'])

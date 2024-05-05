@@ -33,7 +33,6 @@ def check_intersections(stand_id: int, start_time: datetime, end_time: datetime)
                       minutes=temp_parsed_duration.minute)
         if max(start_time, temp_parsed_start_time) < min(end_time, temp_end_time):
             info = get_info_for_failed_intersection_db(reservation['id'])
-            print(info)
             error = IntersectionError(
                 username=info[0]['login'], start_time=info[0]['start_time'])
             raise error
@@ -74,12 +73,16 @@ def add_reservaiton(user_id: int, stand_id: int, start_time: str, duration: str)
 
 def delete_reservation(id: int):
     reservation = get_reservation_db(id)
-    if reservation['status'] == 'active':
+    if reservation[0]['status'] == 'active':
+        print('delete error')
         raise DeleteError()
-    start_job_id = reservation['start_job']
-    end_job_id = reservation['end_job']
-    scheduler.remove_job(start_job_id)
-    scheduler.remove_job(end_job_id)
+    start_job_id = reservation[0]['start_job']
+    end_job_id = reservation[0]['end_job']
+    try:
+        scheduler.remove_job(start_job_id)
+        scheduler.remove_job(end_job_id)
+    except:
+        print("jobs not found")
     delete_reservation_db(id)
 
 

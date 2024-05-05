@@ -19,3 +19,14 @@ export async function apiAddReservation(userId, standId, date, startTime, durati
         })})
     return response
 }
+
+export async function apiDeleteReservation(reservationId) {
+    const response = await fetch('http://127.0.0.1:5000/reservations', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+            action: 'delete',
+            reservation_id: reservationId
+        })})
+    return response
+}
