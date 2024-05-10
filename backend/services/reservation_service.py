@@ -21,6 +21,10 @@ def run_scheduler():
 scheduler = run_scheduler()
 
 
+def get_reservations_for_planner():
+    return get_reservations_for_planner_db()
+
+
 def check_intersections(stand_id: int, start_time: datetime, end_time: datetime):
     reservations = get_reservations_for_check_intersections_db(stand_id)
     for reservation in reservations:
@@ -47,23 +51,35 @@ def change_reservation_status(id: int, status: str):
 
 def add_reservaiton(user_id: int, stand_id: int, start_time: str, duration: str):
     """
-    start_time - ожидается строка в формате '%d-%m-%Y %H:%M' 
+    start_time - ожидается строка в формате '%d-%m-%Y %H:%M' или 'startNow'
     duration - ожидается строка в формате '%H:%M'
     """
-    parsed_start_time = datetime.strptime(start_time, '%d-%m-%Y %H:%M')
+    if start_time == 'startNow':
+        status = 'active'
+        parsed_start_time = datetime.strptime(
+            str(datetime.now().replace(microsecond=0).strftime("%d-%m-%Y %H:%M")), '%d-%m-%Y %H:%M')
+    else:
+        status = 'planned'
+        parsed_start_time = datetime.strptime(start_time, '%d-%m-%Y %H:%M')
+
     parsed_duration = datetime.strptime(duration, '%H:%M').time()
     end_time = parsed_start_time + \
         timedelta(hours=parsed_duration.hour, minutes=parsed_duration.minute)
 
     check_intersections(stand_id, parsed_start_time, end_time)
 
+    time_to_db = f"{str(parsed_start_time)[8:10]}-{str(parsed_start_time)[5:7]}-{str(parsed_start_time)[0:4]} {str(parsed_start_time)[11:16]}"
     last_row_id = add_reservation_db(
-        user_id=user_id, stand_id=stand_id, start_time=start_time, duration=duration, status='planned')['last_row_id']
+        user_id, stand_id, time_to_db, duration, status)['last_row_id']
 
-    start_job = scheduler.add_job(func=change_reservation_status, trigger='date',
-                                  run_date=parsed_start_time, args=[last_row_id, 'active'], misfire_grace_time=30)
-    change_reservation_job_db(
-        id=last_row_id, job_type='start_job', job_id=start_job.id)
+    if start_time == 'startNow':
+        change_reservation_job_db(
+            id=last_row_id, job_type='start_job', job_id='')
+    else:
+        start_job = scheduler.add_job(func=change_reservation_status, trigger='date',
+                                      run_date=parsed_start_time, args=[last_row_id, 'active'], misfire_grace_time=30)
+        change_reservation_job_db(
+            id=last_row_id, job_type='start_job', job_id=start_job.id)
 
     end_job = scheduler.add_job(func=change_reservation_status, trigger='date',
                                 run_date=end_time, args=[last_row_id, 'completed'], misfire_grace_time=30)
@@ -73,26 +89,24 @@ def add_reservaiton(user_id: int, stand_id: int, start_time: str, duration: str)
 
 def delete_reservation(id: int):
     reservation = get_reservation_db(id)
-    if reservation[0]['status'] == 'active':
-        print('delete error')
-        raise DeleteError()
     start_job_id = reservation[0]['start_job']
     end_job_id = reservation[0]['end_job']
-    try:
-        scheduler.remove_job(start_job_id)
-        scheduler.remove_job(end_job_id)
-    except:
-        print("jobs not found")
+    if reservation[0]['status'] == 'active' or not start_job_id:
+        # проверить на реальных джобах, скорректировать обработку ошибок для прода
+        try:
+            scheduler.remove_job(end_job_id)
+        except:
+            print("job not found")
+    else:
+        try:
+            scheduler.remove_job(start_job_id)
+            scheduler.remove_job(end_job_id)
+        except:
+            print("jobs not found")
     delete_reservation_db(id)
-
-
-def get_reservations_for_planner():
-    return get_reservations_for_planner_db()
-
-# create_reservaiton(1, 19, '2024-04-15 23:42', '1:3')
 
 
 # print(scheduler.get_jobs())
 # time.sleep(70)
 # time.sleep(700)
-scheduler.shutdown()
+# scheduler.shutdown()

@@ -7,6 +7,9 @@ export async function apiGetReservations() {
 }
 
 export async function apiAddReservation(userId, standId, date, startTime, duration) {
+    if (startTime !== 'startNow'){
+        startTime = date + ' ' + startTime
+    }
     const response = await fetch('http://127.0.0.1:5000/reservations', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -14,7 +17,7 @@ export async function apiAddReservation(userId, standId, date, startTime, durati
             action: 'add',
             user_id: userId,
             stand_id: standId,
-            start_time: date + ' ' + startTime,
+            start_time: startTime,
             duration: duration
         })})
     return response

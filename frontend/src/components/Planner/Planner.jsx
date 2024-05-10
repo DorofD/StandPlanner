@@ -37,8 +37,9 @@ export default function Planner() {
     const [standId, setStandId] = useState(0);
     const [date, setDate] = useState(currentDate);
     const [startTime, setStartTime] = useState('');
+    const [selectedStart, setSelectedStart] = useState('startNow');
     const [duration, setDuration] = useState('');
-
+    let selectedStartTime = ''
     const [filter, setFilter] = useState({ user: '', stand: '' });
 
     const openModal = () => setIsModalOpen(true);
@@ -61,6 +62,7 @@ export default function Planner() {
       setStartTime('')
       setDuration('')
       setIsModalOpen(false);
+      setSelectedStart('startNow')
       setModalMode('new')
     } 
 
@@ -85,6 +87,12 @@ export default function Planner() {
         setDate(inputValue); 
     }
 
+    const handleCheckboxChange = (event) => {
+      const { name } = event.target;
+      setDate(currentDate)
+      setStartTime('')
+      setSelectedStart(name);
+    };
 
     function handleStartTime(e) {
         let inputValue = e.target.value;
@@ -145,23 +153,32 @@ export default function Planner() {
             console.log(reservations)
             setReservations(reservations)
             setLoadingReservations('loaded')
-        } catch (err) {
+        } catch (error) {
+          if (error instanceof TypeError && error.message === 'Failed to fetch') {
             setLoadingReservations('error')
+          }
         }
     }
 
     async function deleteReservation (id) {
       console.log(id)
-      const response = await apiDeleteReservation(id)
-      if (response.status == 200) {
-        closeModal()
-        setNotificationData({message: 'Резервирование удалено', type: 'success'})
-        toggleNotificationFunc()
-        getReservations()
-    } else {
-        const responseData = response.json()
-        setNotificationData({message: responseData.error, type: 'error'})
-        toggleNotificationFunc()
+      try {
+        const response = await apiDeleteReservation(id)
+        if (response.status == 200) {
+          closeModal()
+          setNotificationData({message: 'Резервирование удалено', type: 'success'})
+          toggleNotificationFunc()
+          getReservations()
+        }else {
+          const responseData = await response.json()
+          setNotificationData({message: responseData.error, type: 'error'})
+          toggleNotificationFunc()
+        }
+      } catch (error) {
+        if (error instanceof TypeError && error.message === 'Failed to fetch') {
+          setNotificationData({message: 'бекенд отвалился', type: 'error'})
+          toggleNotificationFunc()
+        } else {}
       }
     }
 
@@ -169,18 +186,19 @@ export default function Planner() {
     useEffect(() => {
         getStands()
         getReservations()
+        const interval = setInterval(getReservations, 60000);
+        return () => clearInterval(interval);
     }, [])
 
 
-    async function handleSubmit(event) {
-      event.preventDefault();
+    async function addReservation() {
       if (standId == 0) {
         setNotificationData({message:'Стенд не выбран', type: 'error'})
         toggleNotificationFunc()
         return 0
       }
 
-      if (startTime.length < 5) {
+      if (startTime.length < 5 && selectedStart !== 'startNow') {
         setNotificationData({message:'Время начала введено некорректно', type: 'error'})
         toggleNotificationFunc()
         return 0
@@ -191,9 +209,15 @@ export default function Planner() {
         toggleNotificationFunc()
         return 0
       }
+      
+      if (selectedStart == 'startNow') {
+        selectedStartTime = 'startNow'
+      } else {
+        selectedStartTime = startTime
+      }
 
       try {
-        const response = await apiAddReservation(userId, standId, date, startTime, duration)
+        const response = await apiAddReservation(userId, standId, date, selectedStartTime, duration)
         if (response.status == 200) {
             setNotificationData({message: 'Стенд зарезервирован', type: 'success'})
             toggleNotificationFunc()
@@ -204,11 +228,12 @@ export default function Planner() {
             setNotificationData({message: responseData.error, type: 'error long'})
             toggleNotificationFunc()
         }
-        
-        
-    } catch (err) {
-        console.log(err)
-    }
+      } catch (error) {
+        if (error instanceof TypeError && error.message === 'Failed to fetch') {
+          setNotificationData({message: 'бекенд отвалился', type: 'error'})
+          toggleNotificationFunc()
+        } else {}
+      }
     }   
 
 
@@ -243,7 +268,7 @@ export default function Planner() {
 
           <Modal isOpen={isModalOpen} onClose={closeModal}>
             {modalMode == 'new' && 
-              <form onSubmit={handleSubmit} className="form-container">
+                <div>
                     <div className="form-head">
                       Новое резервирование
                     </div>
@@ -257,26 +282,49 @@ export default function Planner() {
                   </div>
                   <div className="form-row">
                       <label className="reservationLabel">Дата</label>
-                      <input type="text" name="date" className="reservationParam" placeholder={"dd-mm-yyyy"} onChange={handleDate} value={date}/>
+                      <input type="text" name="date" className="reservationParam" placeholder="dd-mm-yyyy" onChange={handleDate} value={date} disabled={selectedStart !== 'startLater'}/>
                   </div>
                   <div className="form-row">
                       <label className="reservationLabel">Время начала</label>
-                      <input type="text" id="timeInput" className="reservationParam" placeholder="hh:mm" onChange={handleStartTime} value={startTime} />
+                      <div>
+                        <div>
+                          <input
+                            type="checkbox"
+                            id="startNow"
+                            name="startNow"
+                            checked={selectedStart === 'startNow'}
+                            onChange={handleCheckboxChange}
+                          />
+                          <label htmlFor="startNow">Сейчас</label>
+                        </div>
+
+                        <div>
+                          <input
+                            type="checkbox"
+                            id="startLater"
+                            name="startLater"
+                            checked={selectedStart === 'startLater'}
+                            onChange={handleCheckboxChange}
+                          />
+                          <label htmlFor="startLater">Позже</label>
+                        </div>
+                      </div>
+                      <input type="text" id="timeInput" className="reservationParam" placeholder="hh:mm" onChange={handleStartTime} value={startTime} disabled={selectedStart !== 'startLater'}/>
                   </div>
                   <div className="form-row">
                   <label className="reservationLabel">Длительность</label>
                       <input type="text" name="duration" className="reservationParam" placeholder="hh:mm" onChange={handleDuration} value={duration}/>
                   </div>
                   <div className="form-row">
-                    <Button style={"reservationAdd"} type={"submit"}> Создать </Button>
+                    <Button style={"reservationAdd"} onClick={addReservation}> Создать </Button>
                     <Button style={"reservationExit"} onClick={closeModal}> Закрыть </Button>
                   </div>
                   <div className="form-row">
                 </div>
-            </form>
+                </div>
             || 
             modalMode == 'change' && 
-              <form onSubmit={handleSubmit} className="form-container">
+              <div>
                     <div className="form-head">
                       Изменить резервирование
                     </div>
@@ -292,7 +340,7 @@ export default function Planner() {
                   </div>
                   <div className="form-row">
                       <label className="reservationLabel">Дата</label>
-                      <input type="text" name="date" className="reservationParam" placeholder={"dd-mm-yyyy"} onChange={handleDate} value={date}/>
+                      <input type="text" name="date" className="reservationParam" placeholder="dd-mm-yyyy" onChange={handleDate} value={date}/>
                   </div>
                   <div className="form-row">
                       <label className="reservationLabel">Время начала</label>
@@ -303,13 +351,13 @@ export default function Planner() {
                       <input type="text" name="duration" className="reservationParam" placeholder="hh:mm" onChange={handleDuration} value={duration}/>
                   </div>
                   <div className="form-row">
-                    <Button style={"reservationAdd"} type={"submit"}> Изменить </Button>
+                    <Button style={"reservationAdd"} onClick={() => console.log('change')}> Изменить </Button>
                     <Button style={"reservationExit"} onClick={() => deleteReservation(pickedReservationId)}> Удалить </Button>
                     <Button style={"reservationExit"} onClick={closeModal}> Закрыть </Button>
                   </div>
                   <div className="form-row">
                 </div>
-            </form>
+                </div>
             }
         </Modal>
       </div>

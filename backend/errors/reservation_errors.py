@@ -5,12 +5,3 @@ class IntersectionError(Exception):
 
     def __str__(self):
         return self.message
-
-
-class DeleteError(Exception):
-    def __init__(self):
-        super().__init__()
-        self.message = f"Вы не можете удалить активное резервирование"
-
-    def __str__(self):
-        return self.message

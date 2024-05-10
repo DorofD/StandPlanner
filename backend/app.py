@@ -5,6 +5,8 @@ from services.stand_service import get_stands, add_stand, delete_stand, change_s
 import services.reservation_service as reservation_service
 from errors.reservation_errors import *
 
+import traceback
+
 app = Flask(__name__)
 cors = CORS(app)
 app.config['SECRET_KEY'] = 'dfgjnldfkjgnsladkfjn1488'
@@ -90,10 +92,12 @@ def handle_value_error(error):
     return jsonify({'error': str(error)}), 400
 
 
-@app.errorhandler(DeleteError)
+@app.errorhandler(Exception)
 def handle_value_error(error):
     """Обработка исключений типа ValueError."""
-    return jsonify({'error': str(error)}), 400
+    print(f"ERROR: {error}")
+    traceback.print_exc()
+    return jsonify({'error': f'Непонятная ошибка беке: {error}'}), 500
 
 
 if __name__ == '__main__':
