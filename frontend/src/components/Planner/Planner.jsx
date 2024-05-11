@@ -6,7 +6,7 @@ import { useNotificationContext } from "../../hooks/useNotificationContext";
 import './Planner.css'
 import filterLogo from './filter.png'
 import ReservationCard from "./ReservationCard/ReservationCard";
-import { apiGetReservations, apiAddReservation, apiDeleteReservation } from "../../sevices/apiReservations";
+import { apiGetReservations, apiAddReservation, apiChangeReservation, apiDeleteReservation } from "../../sevices/apiReservations";
 import { apiGetStands } from "../../sevices/apiStands";
 
 function getCurrentDateString() {
@@ -34,6 +34,7 @@ export default function Planner() {
 
     
     const [pickedReservationId, setPickedReservationId] = useState(0);
+    const [pickedReservationStatus, setPickedReservationStatus] = useState('');
     const [standId, setStandId] = useState(0);
     const [date, setDate] = useState(currentDate);
     const [startTime, setStartTime] = useState('');
@@ -47,6 +48,7 @@ export default function Planner() {
     function openChangeModal (reservation) {
       setModalMode('change')
       setPickedReservationId(reservation.id)
+      setPickedReservationStatus(reservation.status)
       const selectedStand = stands.find(stand => stand.name === reservation.name)
       setStandId(selectedStand.id)
       setDate(reservation.start_time.slice(0, 10))
@@ -57,6 +59,7 @@ export default function Planner() {
 
     function closeModal(){
       setPickedReservationId(0)
+      setPickedReservationStatus('')
       setStandId(0)
       setDate(currentDate)
       setStartTime('')
@@ -160,10 +163,9 @@ export default function Planner() {
         }
     }
 
-    async function deleteReservation (id) {
-      console.log(id)
+    async function deleteReservation () {
       try {
-        const response = await apiDeleteReservation(id)
+        const response = await apiDeleteReservation(pickedReservationId)
         if (response.status == 200) {
           closeModal()
           setNotificationData({message: 'Резервирование удалено', type: 'success'})
@@ -235,6 +237,39 @@ export default function Planner() {
         } else {}
       }
     }   
+    async function changeReservation() {
+      
+      if (startTime.length < 5 && selectedStart !== 'startNow') {
+        setNotificationData({message:'Время начала введено некорректно', type: 'error'})
+        toggleNotificationFunc()
+        return 0
+      }
+
+      if (duration.length < 5) {
+        setNotificationData({message:'Длительность введена некорректно', type: 'error'})
+        toggleNotificationFunc()
+        return 0
+      }
+
+      try {
+        const response = await apiChangeReservation(pickedReservationId, standId, date, startTime, duration)
+        if (response.status == 200) {
+            setNotificationData({message: 'Резервирование изменено', type: 'success'})
+            toggleNotificationFunc()
+            closeModal()
+            getReservations()
+        } else {
+            const responseData = await response.json()
+            setNotificationData({message: responseData.error, type: 'error long'})
+            toggleNotificationFunc()
+        }
+      } catch (error) {
+        if (error instanceof TypeError && error.message === 'Failed to fetch') {
+          setNotificationData({message: 'бекенд отвалился', type: 'error'})
+          toggleNotificationFunc()
+        } else {}
+      }
+    }   
 
 
     const filteredReservations = reservations.filter(item => {
@@ -274,7 +309,7 @@ export default function Planner() {
                     </div>
                   <div className="form-row">
                       <label className="reservationLabel">Стенд</label>
-                      <select className='reservationParam' onChange={handleStand}>
+                      <select className='reservationSelect' onChange={handleStand}>
                                   {loadingStands === 'loaded' && <>{<option value="defaultStand" selected>Стенд</option>}
                                     {stands.map(stand =><option value={stand.id}>{stand.name}</option>)}</>}
                                   {loadingStands === 'error' && <>{<option value="defaultStand" selected>Бекенд отвалился</option>}</>}
@@ -286,38 +321,41 @@ export default function Planner() {
                   </div>
                   <div className="form-row">
                       <label className="reservationLabel">Время начала</label>
-                      <div>
-                        <div>
+                        <div className="form-row">
                           <input
                             type="checkbox"
                             id="startNow"
                             name="startNow"
                             checked={selectedStart === 'startNow'}
                             onChange={handleCheckboxChange}
+                            style={{display: 'none'}}
                           />
-                          <label htmlFor="startNow">Сейчас</label>
+                          <label className={selectedStart === 'startNow' && 'startTime selectedStartTime' || 'startTime'} htmlFor="startNow">Сейчас</label>
                         </div>
 
-                        <div>
+                        <div className="form-row">
                           <input
                             type="checkbox"
                             id="startLater"
                             name="startLater"
                             checked={selectedStart === 'startLater'}
                             onChange={handleCheckboxChange}
+                            style={{display: 'none'}}
                           />
-                          <label htmlFor="startLater">Позже</label>
+                          <label className={selectedStart === 'startLater' && 'startTime selectedStartTime' || 'startTime'} htmlFor="startLater">Позже</label>
                         </div>
-                      </div>
                       <input type="text" id="timeInput" className="reservationParam" placeholder="hh:mm" onChange={handleStartTime} value={startTime} disabled={selectedStart !== 'startLater'}/>
                   </div>
                   <div className="form-row">
                   <label className="reservationLabel">Длительность</label>
                       <input type="text" name="duration" className="reservationParam" placeholder="hh:mm" onChange={handleDuration} value={duration}/>
                   </div>
+                  <div className="empty"></div>
                   <div className="form-row">
+                    <div className="empty"></div>
                     <Button style={"reservationAdd"} onClick={addReservation}> Создать </Button>
                     <Button style={"reservationExit"} onClick={closeModal}> Закрыть </Button>
+                    <div className="empty"></div>
                   </div>
                   <div className="form-row">
                 </div>
@@ -330,7 +368,7 @@ export default function Planner() {
                     </div>
                   <div className="form-row">
                       <label className="reservationLabel">Стенд</label>
-                      <select className='reservationParam' onChange={handleStand}>
+                      <select className='reservationSelect' onChange={handleStand} disabled={pickedReservationStatus == 'active' && true || false}>
                                   {loadingStands === 'loaded' && <>
                                     {stands.map(stand => standId == stand.id && <option value={stand.id} selected>{stand.name}</option> || <option value={stand.id}>{stand.name}</option>
                                   )}
@@ -340,19 +378,21 @@ export default function Planner() {
                   </div>
                   <div className="form-row">
                       <label className="reservationLabel">Дата</label>
-                      <input type="text" name="date" className="reservationParam" placeholder="dd-mm-yyyy" onChange={handleDate} value={date}/>
+                      <input type="text" name="date" className="reservationParam" placeholder="dd-mm-yyyy" onChange={handleDate} value={date} disabled={pickedReservationStatus == 'active' && true || false}/>
                   </div>
                   <div className="form-row">
                       <label className="reservationLabel">Время начала</label>
-                      <input type="text" id="timeInput" className="reservationParam" placeholder="hh:mm" onChange={handleStartTime} value={startTime} />
+                      <input type="text" id="timeInput" className="reservationParam" placeholder="hh:mm" onChange={handleStartTime} value={startTime} disabled={pickedReservationStatus == 'active' && true || false}/>
                   </div>
                   <div className="form-row">
                   <label className="reservationLabel">Длительность</label>
                       <input type="text" name="duration" className="reservationParam" placeholder="hh:mm" onChange={handleDuration} value={duration}/>
                   </div>
                   <div className="form-row">
-                    <Button style={"reservationAdd"} onClick={() => console.log('change')}> Изменить </Button>
-                    <Button style={"reservationExit"} onClick={() => deleteReservation(pickedReservationId)}> Удалить </Button>
+                    <Button style={"reservationAdd"} onClick={changeReservation}> Изменить </Button>
+                    <div className="empty"></div>
+                    <Button style={"reservationExit"} onClick={deleteReservation}> Удалить </Button>
+                    <div className="empty"></div>
                     <Button style={"reservationExit"} onClick={closeModal}> Закрыть </Button>
                   </div>
                   <div className="form-row">

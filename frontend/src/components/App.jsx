@@ -9,6 +9,8 @@ import About from "./About/About"
 import Users from "./Users/Users";
 import Bots from "./Bots/Bots";
 import Logs from "./Logs/Logs";
+import Apscheduler from "./Apscheduler/Apscheduler";
+import Feedback from "./Feedback/Feedback";
 import { PrivateRoute } from "./PrivateRoute/PrivateRoute";
 import { useAuthContext } from "../hooks/useAuthContext";
 
@@ -26,8 +28,10 @@ export default function App() {
                                 <Route path="/admin/users" element={<Users />}/>
                                 <Route path="/admin/bots" element={<Bots />}/>
                                 <Route path="/admin/logs" element={<Logs />}/>
+                                <Route path="/admin/apscheduler" element={<Apscheduler />}/>
                             </Route>}
                             <Route path="/about" element={<About />}/>
+                            <Route path="/feedback" element={<Feedback />}/>
                         </Route>
                     </Route>
                 </Routes>

@@ -80,7 +80,11 @@ div.reservationList{
 .form-row {
     display: flex;
     justify-content: space-between;
-    margin-bottom: 10px; /* Расстояние между строками */
+    margin-right: 10px;
+    margin-left: 10px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    padding: 2px;
 }
 
 .form-row label, .form-row input, .form-row select{
@@ -88,7 +92,30 @@ div.reservationList{
     font-size: large;
     align-items: center;
     flex: auto; 
-    margin: 10px 10px;
+}
+
+label.startTime {
+    text-align: center;
+    display: inline-block;
+    border: solid 2px #afafaf;
+    border-radius: 10px;
+    padding: 5px;
+    /* padding-left: 5px;
+    padding-right: 5px; */
+    width: 70px;
+    cursor: pointer;
+    user-select:none;
+}
+
+label.startTime:hover {
+    background-color: #646464;
+    color: #ffffff;
+}
+
+label.selectedStartTime {
+    background-color: #4caf50;
+    color: #ffffff;
+    
 }
 
 .form-head {
@@ -98,7 +125,7 @@ div.reservationList{
 }
 
 .reservationParam {
-    width: 250px;
+    width: 100px;
     padding: 8px;
     border: solid 3px #afafaf;
     border-radius: 10px;
@@ -112,8 +139,32 @@ div.reservationList{
     border: solid 3px #646464;
 }
 
+.reservationSelect {
+    width: 340px;
+    padding: 8px;
+    border: solid 3px #afafaf;
+    border-radius: 10px;
+}
+
+.reservationSelect:focus {
+    border: solid 3px #646464;
+}
+
+.reservationSelect:disabled {
+    /* border: solid 3px #afafaf; */
+    color: black;
+    background-color: #f1f1f1;
+}
+
 .reservationLabel {
-    width: 150px;
+    display: flex;
+    width: 120px;
     padding: 8px;
     vertical-align: middle;
+}
+
+
+div.empty {
+    width: 40px;
+    height: 20px;
 }

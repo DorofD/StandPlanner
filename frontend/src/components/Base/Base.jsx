@@ -39,6 +39,7 @@ export default function Base() {
                         <li> <NavLink to="/admin" >Администрирование</NavLink></li>
                         </>}
                         <li> <NavLink to="/about">О приложении</NavLink></li>
+                        <li> <NavLink to="/feedback">Обратная связь</NavLink></li>
                     </ul>
                 </nav>
             </div>

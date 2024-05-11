@@ -5,3 +5,12 @@ class IntersectionError(Exception):
 
     def __str__(self):
         return self.message
+
+
+class AddReservationError(Exception):
+    def __init__(self, error_message):
+        super().__init__(error_message)
+        self.message = error_message
+
+    def __str__(self):
+        return self.message

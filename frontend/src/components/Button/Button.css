@@ -75,7 +75,7 @@ button.reservationAdd {
     margin: 0 auto;
     text-transform: uppercase;
     background: #4CAF50;
-    width: 150px;
+    width: 120px;
     height: 40px;
     border: 0;
     color: #FFFFFF;
@@ -90,7 +90,7 @@ button.reservationExit{
     margin: 0 auto;
     text-transform: uppercase;
     background: #ff2020;
-    width: 150px;
+    width: 120px;
     height: 40px;
     border: 0;
     color: #FFFFFF;

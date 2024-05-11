@@ -23,6 +23,20 @@ export async function apiAddReservation(userId, standId, date, startTime, durati
     return response
 }
 
+export async function apiChangeReservation(reservationId, standId, date, startTime, duration) {
+    const response = await fetch('http://127.0.0.1:5000/reservations', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+            action: 'change',
+            reservation_id: reservationId,
+            stand_id: standId,
+            start_time: date + ' ' + startTime,
+            duration: duration
+        })})
+    return response
+}
+
 export async function apiDeleteReservation(reservationId) {
     const response = await fetch('http://127.0.0.1:5000/reservations', {
         method: 'POST',

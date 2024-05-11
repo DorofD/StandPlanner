@@ -42,7 +42,8 @@ def reservations():
             reservation_service.add_reservaiton(data['user_id'], data['stand_id'],
                                                 data['start_time'], data['duration'])
         if data['action'] == 'change':
-            pass
+            reservation_service.change_reservation(data['reservation_id'], data['stand_id'],
+                                                   data['start_time'], data['duration'])
         if data['action'] == 'delete':
             reservation_service.delete_reservation(data['reservation_id'])
     return jsonify({'success': True}), 200, {'ContentType': 'application/json'}
@@ -88,13 +89,16 @@ def users():
 
 @app.errorhandler(IntersectionError)
 def handle_value_error(error):
-    """Обработка исключений типа ValueError."""
+    return jsonify({'error': str(error)}), 400
+
+
+@app.errorhandler(AddReservationError)
+def handle_value_error(error):
     return jsonify({'error': str(error)}), 400
 
 
 @app.errorhandler(Exception)
 def handle_value_error(error):
-    """Обработка исключений типа ValueError."""
     print(f"ERROR: {error}")
     traceback.print_exc()
     return jsonify({'error': f'Непонятная ошибка беке: {error}'}), 500
