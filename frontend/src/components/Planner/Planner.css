@@ -4,7 +4,6 @@ div.reservations {
     margin-bottom: 0;
     width: 60%;
     overflow: auto;
-    /* background-color: aqua; */
 }
 
 div.reservations::-webkit-scrollbar {
@@ -46,6 +45,10 @@ div.plannerFilter {
     border: solid 3px #afafaf;
     border-radius: 10px;
     cursor: pointer;
+}
+
+.clearFilter:focus {
+    border: solid 3px #646464;
 }
 
 div.newReservation {

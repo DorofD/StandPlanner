@@ -1,5 +1,5 @@
 export async function apiGetStands() {
-    const response = await fetch('http://127.0.0.1:5000', {
+    const response = await fetch('http://127.0.0.1:5000/stands', {
         method: 'GET',
     })
     const stands = await response.json()

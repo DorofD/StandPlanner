@@ -4,8 +4,8 @@ div.stands-list {
     margin-bottom: 0;
     width: 25%;
     overflow: auto;
-
 }
+
 div.stands-list::-webkit-scrollbar {
     width: 10px;
     background-color: #f1f1f1;

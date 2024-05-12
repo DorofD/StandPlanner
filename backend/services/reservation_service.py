@@ -82,7 +82,7 @@ def add_reservaiton(user_id: int, stand_id: int, start_time: str, duration: str)
         now = datetime.strptime(
             str(datetime.now().replace(microsecond=0).strftime("%d-%m-%Y %H:%M")), '%d-%m-%Y %H:%M')
         if parsed_start_time - now <= timedelta(minutes=5):
-            raise AddReservationError(
+            raise ReservationError(
                 "Запланированное резервирование должно начинаться не ранее 5 минут с момента создания")
     parsed_duration = datetime.strptime(duration, '%H:%M').time()
     end_time = parsed_start_time + \
@@ -119,12 +119,25 @@ def change_reservation(reservation_id: int, stand_id: int, start_time: str, dura
     parsed_start_time = datetime.strptime(start_time, '%d-%m-%Y %H:%M')
     now = datetime.strptime(
         str(datetime.now().replace(microsecond=0).strftime("%d-%m-%Y %H:%M")), '%d-%m-%Y %H:%M')
+
     if parsed_start_time - now <= timedelta(minutes=5) and reservation[0]['status'] != 'active':
-        raise AddReservationError(
+        raise ReservationError(
             "Запланированное резервирование должно начинаться не ранее 5 минут с момента создания")
     parsed_duration = datetime.strptime(duration, '%H:%M').time()
     end_time = parsed_start_time + \
         timedelta(hours=parsed_duration.hour, minutes=parsed_duration.minute)
+
+    if reservation[0]['status'] == 'active':
+        parsed_reservation_start_time = datetime.strptime(
+            reservation[0]['start_time'], '%d-%m-%Y %H:%M')
+        parsed_reservation_duration = datetime.strptime(
+            reservation[0]['duration'], '%H:%M').time()
+        reservation_end_time = parsed_reservation_start_time + \
+            timedelta(hours=parsed_reservation_duration.hour,
+                      minutes=parsed_reservation_duration.minute)
+        if reservation_end_time >= end_time:
+            raise ReservationError(
+                "Резервирование уже началось, вы можете только продлить его или завершить досрочно")
 
     check_intersections(stand_id, parsed_start_time, end_time, reservation_id)
     change_reservation_db(reservation_id, stand_id, start_time, duration)

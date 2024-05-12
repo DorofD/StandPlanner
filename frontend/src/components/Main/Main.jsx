@@ -2,50 +2,78 @@ import React from "react";
 import { useState, useEffect, useContext} from "react";
 import "./Main.css";
 import Button from "../Button/Button";
+import { apiGetStands } from "../../sevices/apiStands";
+import StandCard from "../Stands/StandCard/StandCard";
+import sendIcon from "./send.png"
 import { useAuthContext } from "../../hooks/useAuthContext";
 
 
 export default function Main() {
-    // квадратные скобки - деструктуризация в js
-    // content - первый элемент массива useState
-    // setContent - функция, которая изменяет это значение
-    const [loading, setLoading] = useState('loading')
+    const [loadingStands, setLoadingStands] = useState('loading')
     const [stands, setStands] = useState([])
-    const { isAuthenticated} = useAuthContext()
-    
+    const [pickedStand, setPickedStand] = useState({id: 'default', name: 'Стенд', description: ''})
+
+    const [commentText, setCommentText] = useState('');
 
     async function getStands() {
         try {
-            setLoading('loading')
-            const response = await fetch('http://127.0.0.1:5000', {
-                method: 'GET',
-            })
-            const stands = await response.json()
+            setLoadingStands('loading')
+            const stands = await apiGetStands()
             setStands(stands)
-            setLoading('loaded')
+            setLoadingStands('loaded')
         } catch (err) {
-            setLoading('error')
+            setLoadingStands('error')
         }
     }
-    
-
+    function handleComment (event) {
+        setCommentText(event.target.value)
+    }
     useEffect(() => {
         getStands()
     }, [])
 
     return (
         <>
-            <div className="main">
-                В разработке
-                <br></br>
-                <br></br>
-                {loading === 'loading' && <p> Loading ...</p>}
-                {loading === 'error' && <p> бекенд отвалился</p>}
-                {loading === 'loaded' && <ul>
-                        {stands.map(stand => <li key={stand.id}>{stand.name} | {stand.os} | {stand.state}</li>)}
-                    </ul>}
+            <div className="mainStands">
+                {loadingStands === 'loading' && <p> Loading ...</p>}
+                {loadingStands === 'error' && <p> бекенд отвалился</p>}
+                {loadingStands === 'loaded' && <>
+                        {stands.map(stand =>
+                            <StandCard id={stand.id} 
+                            name={stand.name}
+                            picked={pickedStand['id'] === stand.id && true || false}
+                            onClick={() => setPickedStand(stand)}>
+                            </StandCard>)}
+                        </>}
+            </div>
 
-                <Button onClick={() => getStands()}> Get stands </Button>
+            <div className="mainStandDescription">
+                <h3>{pickedStand.name}</h3>
+                <textarea
+                    placeholder={pickedStand['id'] === 0 && 'Описание стенда' || ''}
+                    className="mainStands"
+                    value={pickedStand['description']}
+                    disabled={true}  ></textarea>
+            </div>
+
+            <div className="mainComments">
+                    <h3>Комментарии</h3>
+                <div className="mainCommentsHead">
+                    <div>
+                        <textarea
+                            className="mainComments"
+                            value={commentText}
+                            onChange={handleComment}
+                            placeholder="Введите комментарий"
+                        />
+                    </div>
+                    <div>
+                        <img src={sendIcon} alt="" className="sendIcon"/>
+                    </div>
+                </div>
+                <div className="mainCommentsList">
+                    комментарии
+                </div>
             </div>
         </>
     );

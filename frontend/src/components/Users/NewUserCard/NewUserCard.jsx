@@ -52,8 +52,8 @@ export default function NewUserCard({id, role, authType, picked = false, onClick
                             </select>
                         <p className="params">Тип авторизации: </p>
                             <select name="authType" id=""> 
-                                {authType === 'ldap' && <option value="ldap" selected >ldap</option> || <option value="ldap">ldap</option>}
-                                {authType === 'local' && <option value="local" selected >local</option> || <option value="local">local</option>}
+                                <option value="ldap">ldap</option>
+                                <option value="local" disabled={true}>local</option>
                             </select> 
                     </div>
                     <div className="NewUserButtons">

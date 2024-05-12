@@ -13,13 +13,6 @@ app.config['SECRET_KEY'] = 'dfgjnldfkjgnsladkfjn1488'
 app.config['CORS_HEADERS'] = 'Content-Type'
 
 
-@app.route('/', methods=(['GET']))
-@cross_origin()
-def index():
-    result = jsonify(get_stands())
-    return result
-
-
 @app.route('/login', methods=(['POST']))
 @cross_origin()
 def login():
@@ -68,6 +61,13 @@ def stands():
     return jsonify({'success': True}), 200, {'ContentType': 'application/json'}
 
 
+@app.route('/comments', methods=(['GET']))
+@cross_origin()
+def index():
+    result = jsonify(get_stands())
+    return result
+
+
 @app.route('/users', methods=(['GET', 'POST']))
 @cross_origin()
 def users():
@@ -92,7 +92,7 @@ def handle_value_error(error):
     return jsonify({'error': str(error)}), 400
 
 
-@app.errorhandler(AddReservationError)
+@app.errorhandler(ReservationError)
 def handle_value_error(error):
     return jsonify({'error': str(error)}), 400
 
@@ -101,7 +101,7 @@ def handle_value_error(error):
 def handle_value_error(error):
     print(f"ERROR: {error}")
     traceback.print_exc()
-    return jsonify({'error': f'Непонятная ошибка беке: {error}'}), 500
+    return jsonify({'error': f'Непонятная ошибка на беке: {error}'}), 500
 
 
 if __name__ == '__main__':
