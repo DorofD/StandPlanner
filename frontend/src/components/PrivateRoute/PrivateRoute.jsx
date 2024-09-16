@@ -7,7 +7,7 @@ import Login from "../Login/Login";
 export const PrivateRoute = () => {
     
     const { isAuthenticated } = useAuthContext();
-    if (!isAuthenticated) {
+    if (isAuthenticated) {
         return <Outlet/>
     } else {
         return <Login/>;

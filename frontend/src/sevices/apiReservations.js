@@ -2,6 +2,7 @@ export async function apiGetReservations() {
     const response = await fetch(`${process.env.BACKEND_URL}/reservations`, {
         method: 'GET',
     })
+    console.log(typeof `${process.env.BACKEND_URL}/reservations`)
     const reservations = await response.json()
     return reservations
 }

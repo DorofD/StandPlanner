@@ -55,6 +55,9 @@ module.exports = {
     }),
     new webpack.DefinePlugin({
       'process.env.BACKEND_URL': JSON.stringify(process.env.BACKEND_URL),
+      'process.env.AUTH_VAR': JSON.stringify(process.env.AUTH_VAR),
+      'process.env.AUTH_USER': JSON.stringify(process.env.AUTH_USER),
+      'process.env.AUTH_ROLE': JSON.stringify(process.env.AUTH_ROLE),
     }),
   ]
 };
