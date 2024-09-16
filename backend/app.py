@@ -4,9 +4,12 @@ from services.user_service import signin, add_user, delete_user, get_users, chan
 from services.stand_service import get_stands, add_stand, delete_stand, change_stand
 import services.reservation_service as reservation_service
 from errors.reservation_errors import *
+from repository.db_model import create_db
 
 import traceback
 
+
+create_db()
 app = Flask(__name__)
 cors = CORS(app)
 app.config['SECRET_KEY'] = 'dfgjnldfkjgnsladkfjn1488'
