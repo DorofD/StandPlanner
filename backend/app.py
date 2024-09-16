@@ -5,13 +5,16 @@ from services.stand_service import get_stands, add_stand, delete_stand, change_s
 import services.reservation_service as reservation_service
 from errors.reservation_errors import *
 from repository.db_model import create_db
-from repository.queries.users import add_user_db
+from repository.queries.users import add_user_db, get_users_db
 
 import traceback
 
-
+# временный костыль, переписать на __init__
 create_db()
-add_user_db('admin', 'local', 'admin', 'admin')
+for user in get_users_db():
+    if user['login'] == 'admin':
+        break
+    add_user_db('admin', 'local', 'admin', 'admin')
 
 app = Flask(__name__)
 cors = CORS(app)
