@@ -1,31 +1,8 @@
-from apscheduler.schedulers.background import BackgroundScheduler
-from apscheduler.executors.pool import ThreadPoolExecutor
 from app.repository.queries.reservations import *
 from app.errors.reservation_errors import *
 from datetime import datetime, time, timedelta
-
-
+from app import scheduler
 import time
-
-# current_time = datetime.now().replace(microsecond=0)
-# print(current_time)
-
-
-def run_scheduler():
-    executors = {'default': ThreadPoolExecutor(1)}
-    scheduler = BackgroundScheduler(executors)
-    scheduler.start()
-    return scheduler
-
-
-scheduler = run_scheduler()
-
-
-def get_scheduler_info(scheduler):
-    print(scheduler.running)
-    for job in scheduler.get_jobs():
-        print(
-            f"ID: {job.id}, Имя: {job.name}, Следующий запуск: {job.next_run_time}, Триггер: {job.trigger}")
 
 
 def get_reservations_for_planner():
@@ -93,6 +70,7 @@ def add_reservaiton(user_id: int, stand_id: int, start_time: str, duration: str)
     time_to_db = f"{str(parsed_start_time)[8:10]}-{str(parsed_start_time)[5:7]}-{str(parsed_start_time)[0:4]} {str(parsed_start_time)[11:16]}"
     last_row_id = add_reservation_db(
         user_id, stand_id, time_to_db, duration, status)['last_row_id']
+    print(last_row_id)
 
     if start_time == 'startNow':
         change_reservation_job_db(
@@ -144,15 +122,9 @@ def change_reservation(reservation_id: int, stand_id: int, start_time: str, dura
 
     start_job_id = reservation[0]['start_job']
     end_job_id = reservation[0]['end_job']
-    try:
-        scheduler.remove_job(start_job_id)
-    except:
-        print("start job not found")
 
-    try:
-        scheduler.remove_job(end_job_id)
-    except:
-        print("end job not found")
+    scheduler.remove_job(start_job_id)
+    scheduler.remove_job(end_job_id)
 
     if reservation[0]['status'] != 'active':
         start_job = scheduler.add_job(func=change_reservation_status, trigger='date',
@@ -172,16 +144,11 @@ def delete_reservation(id: int):
     end_job_id = reservation[0]['end_job']
     if reservation[0]['status'] == 'active' or not start_job_id:
         # проверить на реальных джобах, скорректировать обработку ошибок для прода
-        try:
-            scheduler.remove_job(end_job_id)
-        except:
-            print("job not found")
+        scheduler.remove_job(end_job_id)
     else:
-        try:
-            scheduler.remove_job(start_job_id)
-            scheduler.remove_job(end_job_id)
-        except:
-            print("jobs not found")
+        scheduler.remove_job(start_job_id)
+        scheduler.remove_job(end_job_id)
+
     delete_reservation_db(id)
 
 

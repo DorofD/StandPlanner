@@ -4,6 +4,7 @@ from app.services.user_service import signin, add_user, delete_user, get_users, 
 from app.services.stand_service import get_stands, add_stand, delete_stand, change_stand
 import app.services.reservation_service as reservation_service
 from app.errors.reservation_errors import IntersectionError, ReservationError
+from app import scheduler as app_scheduler
 
 import traceback
 
@@ -84,6 +85,14 @@ def users():
     return jsonify({'success': True}), 200, {'ContentType': 'application/json'}
 
 
+@main.route('/scheduler', methods=(['GET']))
+@cross_origin()
+def scheduler():
+    if request.method == 'GET':
+        result = jsonify(app_scheduler.get_info())
+        return result
+
+
 @main.errorhandler(IntersectionError)
 def handle_value_error(error):
     return jsonify({'error': str(error)}), 400
@@ -99,8 +108,3 @@ def handle_value_error(error):
     print(f"ERROR: {error}")
     traceback.print_exc()
     return jsonify({'error': f'Непонятная ошибка на беке: {error}'}), 500
-
-
-if __name__ == '__main__':
-
-    app.run(host='0.0.0.0', debug=False)

@@ -2,9 +2,15 @@ from flask import Flask
 from flask_cors import CORS
 from app.repository.db_model import create_db
 from app.repository.queries.users import add_user_db, get_users_db
+from app.models.scheduler import Scheduler
+
+scheduler = None
 
 
 def create_app():
+    global scheduler
+    scheduler = Scheduler()
+
     app = Flask(__name__)
     CORS(app)
     app.config['SECRET_KEY'] = 'dfgjnldfkjgnsladkfjn1488'
