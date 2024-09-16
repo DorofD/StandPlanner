@@ -1,4 +1,4 @@
-from repository.queries.base_query import execute_db_query
+from app.repository.queries.base_query import execute_db_query
 
 
 def get_stands_db():

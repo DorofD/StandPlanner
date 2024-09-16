@@ -1,7 +1,7 @@
 from apscheduler.schedulers.background import BackgroundScheduler
 from apscheduler.executors.pool import ThreadPoolExecutor
-from repository.queries.reservations import *
-from errors.reservation_errors import *
+from app.repository.queries.reservations import *
+from app.errors.reservation_errors import *
 from datetime import datetime, time, timedelta
 
 

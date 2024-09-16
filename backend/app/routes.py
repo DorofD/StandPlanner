@@ -1,21 +1,16 @@
-from flask import Flask, request, jsonify
-from flask_cors import CORS, cross_origin
-from services.user_service import signin, add_user, delete_user, get_users, change_user
-from services.stand_service import get_stands, add_stand, delete_stand, change_stand
-import services.reservation_service as reservation_service
-from errors.reservation_errors import *
-from repository.db_model import create_db
-from repository.queries.users import add_user_db, get_users_db
+from flask import Blueprint, request, jsonify
+from flask_cors import cross_origin
+from app.services.user_service import signin, add_user, delete_user, get_users, change_user
+from app.services.stand_service import get_stands, add_stand, delete_stand, change_stand
+import app.services.reservation_service as reservation_service
+from app.errors.reservation_errors import IntersectionError, ReservationError
 
 import traceback
 
-app = Flask(__name__)
-cors = CORS(app)
-app.config['SECRET_KEY'] = 'dfgjnldfkjgnsladkfjn1488'
-app.config['CORS_HEADERS'] = 'Content-Type'
+main = Blueprint('main', __name__)
 
 
-@app.route('/login', methods=(['POST']))
+@main.route('/login', methods=(['POST']))
 @cross_origin()
 def login():
     user = request.json
@@ -25,7 +20,7 @@ def login():
     return jsonify({'success': False}), 401, {'ContentType': 'application/json'}
 
 
-@app.route('/reservations', methods=(['GET', 'POST']))
+@main.route('/reservations', methods=(['GET', 'POST']))
 @cross_origin()
 def reservations():
     if request.method == 'GET':
@@ -44,7 +39,7 @@ def reservations():
     return jsonify({'success': True}), 200, {'ContentType': 'application/json'}
 
 
-@app.route('/stands', methods=(['GET', 'POST']))
+@main.route('/stands', methods=(['GET', 'POST']))
 @cross_origin()
 def stands():
     if request.method == 'GET':
@@ -63,14 +58,14 @@ def stands():
     return jsonify({'success': True}), 200, {'ContentType': 'application/json'}
 
 
-@app.route('/comments', methods=(['GET']))
+@main.route('/comments', methods=(['GET']))
 @cross_origin()
 def index():
     result = jsonify(get_stands())
     return result
 
 
-@app.route('/users', methods=(['GET', 'POST']))
+@main.route('/users', methods=(['GET', 'POST']))
 @cross_origin()
 def users():
     if request.method == 'GET':
@@ -89,17 +84,17 @@ def users():
     return jsonify({'success': True}), 200, {'ContentType': 'application/json'}
 
 
-@app.errorhandler(IntersectionError)
+@main.errorhandler(IntersectionError)
 def handle_value_error(error):
     return jsonify({'error': str(error)}), 400
 
 
-@app.errorhandler(ReservationError)
+@main.errorhandler(ReservationError)
 def handle_value_error(error):
     return jsonify({'error': str(error)}), 400
 
 
-@app.errorhandler(Exception)
+@main.errorhandler(Exception)
 def handle_value_error(error):
     print(f"ERROR: {error}")
     traceback.print_exc()
@@ -107,11 +102,5 @@ def handle_value_error(error):
 
 
 if __name__ == '__main__':
-    add_user_db('admin', 'local', 'admin', 'admin')
-    # временный костыль, переписать на __init__
-    create_db()
-    for user in get_users_db():
-        if user['login'] == 'admin':
-            break
-        add_user_db('admin', 'local', 'admin', 'admin')
+
     app.run(host='0.0.0.0', debug=False)
