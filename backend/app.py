@@ -5,11 +5,14 @@ from services.stand_service import get_stands, add_stand, delete_stand, change_s
 import services.reservation_service as reservation_service
 from errors.reservation_errors import *
 from repository.db_model import create_db
+from repository.queries.users import add_user_db
 
 import traceback
 
 
 create_db()
+add_user_db('admin', 'local', 'admin', 'admin')
+
 app = Flask(__name__)
 cors = CORS(app)
 app.config['SECRET_KEY'] = 'dfgjnldfkjgnsladkfjn1488'
