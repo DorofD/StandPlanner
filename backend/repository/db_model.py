@@ -2,7 +2,7 @@ import sqlite3
 
 
 def create_db():
-    conn = sqlite3.connect('database.db')
+    conn = sqlite3.connect('./database/database.db')
     query = """
             CREATE TABLE IF NOT EXISTS "users" (
                 "id"	INTEGER NOT NULL UNIQUE,
