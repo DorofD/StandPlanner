@@ -8,13 +8,6 @@ from repository.db_model import create_db
 from repository.queries.users import add_user_db, get_users_db
 
 import traceback
-add_user_db('admin', 'local', 'admin', 'admin')
-# временный костыль, переписать на __init__
-create_db()
-for user in get_users_db():
-    if user['login'] == 'admin':
-        break
-    add_user_db('admin', 'local', 'admin', 'admin')
 
 app = Flask(__name__)
 cors = CORS(app)
@@ -114,4 +107,11 @@ def handle_value_error(error):
 
 
 if __name__ == '__main__':
+    add_user_db('admin', 'local', 'admin', 'admin')
+    # временный костыль, переписать на __init__
+    create_db()
+    for user in get_users_db():
+        if user['login'] == 'admin':
+            break
+        add_user_db('admin', 'local', 'admin', 'admin')
     app.run(host='0.0.0.0', debug=False)

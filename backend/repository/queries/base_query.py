@@ -4,7 +4,7 @@ import sqlite3
 # по умолчанию возвращает список словарей в формате [{'field_1':'значение', 'field_2':'значение'}, ...]
 # если last_row_id=False, возвращает словарь в формате {'last_row_id': id}
 def execute_db_query(query, value_array=0, last_row_id=False):
-    conn = sqlite3.connect('database.db')
+    conn = sqlite3.connect('./database/database.db')
     conn.row_factory = sqlite3.Row
     cursor = conn.cursor()
     if not value_array:
