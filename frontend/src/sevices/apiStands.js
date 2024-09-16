@@ -1,5 +1,5 @@
 export async function apiGetStands() {
-    const response = await fetch('http://127.0.0.1:5000/stands', {
+    const response = await fetch(`${process.env.BACKEND_URL}/stands`, {
         method: 'GET',
     })
     const stands = await response.json()
@@ -7,7 +7,7 @@ export async function apiGetStands() {
 }
 
 export async function apiAddStand(name, description) {
-    const response = await fetch('http://127.0.0.1:5000/stands', {
+    const response = await fetch(`${process.env.BACKEND_URL}/stands`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -20,7 +20,7 @@ export async function apiAddStand(name, description) {
 }
 
 export async function apiChangeStand(id, name, description) {
-    const response = await fetch('http://127.0.0.1:5000/stands', {
+    const response = await fetch(`${process.env.BACKEND_URL}/stands`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -34,7 +34,7 @@ export async function apiChangeStand(id, name, description) {
 }
 
 export async function apiDeleteStand(id) {
-    const response = await fetch('http://127.0.0.1:5000/stands', {
+    const response = await fetch(`${process.env.BACKEND_URL}/stands`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

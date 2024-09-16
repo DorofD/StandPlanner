@@ -1,25 +1,26 @@
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const path = require("path");
+const webpack = require('webpack');
+const dotenv = require('dotenv');
+
+dotenv.config();
 
 module.exports = {
   entry: "./src/index.js",
   mode: "development",
   output: {
-    // filename: "./main.js",
     path: path.resolve(__dirname, "./dist"),
-      filename: "js/[name].[hash].js",
-      clean: true,
-      publicPath: "/",
+    filename: "js/[name].[hash].js",
+    clean: true,
+    publicPath: "/",
   },
   devServer: {
-    static: { 
-        directory: path.join(__dirname, "public"),
-      },
+    static: {
+      directory: path.join(__dirname, "public"),
+    },
     historyApiFallback: true,
     port: 9000,
-
   },
-
   module: {
     rules: [
       {
@@ -43,14 +44,17 @@ module.exports = {
         use: ["file-loader"]
       },
     ]
-  }, 
-
+  },
   resolve: {
     extensions: ['', '.js', '.jsx'],
   },
-  
   plugins: [
-    new HtmlWebpackPlugin({template: path.join(__dirname, "public", "index.html"),
-    inject: "body",})
+    new HtmlWebpackPlugin({
+      template: path.join(__dirname, "public", "index.html"),
+      inject: "body",
+    }),
+    new webpack.DefinePlugin({
+      'process.env.BACKEND_URL': JSON.stringify(process.env.BACKEND_URL),
+    }),
   ]
 };

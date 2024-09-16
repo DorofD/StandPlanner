@@ -1,5 +1,5 @@
 export async function apiGetReservations() {
-    const response = await fetch('http://127.0.0.1:5000/reservations', {
+    const response = await fetch(`${process.env.BACKEND_URL}/reservations`, {
         method: 'GET',
     })
     const reservations = await response.json()
@@ -10,7 +10,7 @@ export async function apiAddReservation(userId, standId, date, startTime, durati
     if (startTime !== 'startNow'){
         startTime = date + ' ' + startTime
     }
-    const response = await fetch('http://127.0.0.1:5000/reservations', {
+    const response = await fetch(`${process.env.BACKEND_URL}/reservations`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -24,7 +24,7 @@ export async function apiAddReservation(userId, standId, date, startTime, durati
 }
 
 export async function apiChangeReservation(reservationId, standId, date, startTime, duration) {
-    const response = await fetch('http://127.0.0.1:5000/reservations', {
+    const response = await fetch(`${process.env.BACKEND_URL}/reservations`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -38,7 +38,7 @@ export async function apiChangeReservation(reservationId, standId, date, startTi
 }
 
 export async function apiDeleteReservation(reservationId) {
-    const response = await fetch('http://127.0.0.1:5000/reservations', {
+    const response = await fetch(`${process.env.BACKEND_URL}/reservations`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
