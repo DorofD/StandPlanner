@@ -3,7 +3,7 @@ import { useState } from "react";
 import Button from "../../Button/Button"
 import "./UserCard.css";
 import { useNotificationContext } from "../../../hooks/useNotificationContext";
-import { apiDeleteUser, apiChangeUser } from "../../../sevices/apiUsers"
+import { apiDeleteUser, apiChangeUser } from "../../../services/apiUsers"
 
 export default function UserCard({id, login, role, authType, picked = false, onClick, onSubmitFunc}) {
 

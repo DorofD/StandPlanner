@@ -1,5 +1,5 @@
 import React, { Component, useState, useEffect } from "react";
-import { apiGetSchedulerInfo } from "../../sevices/apiScheduler";
+import { apiGetSchedulerInfo } from "../../services/apiScheduler";
 
 export default function Apscheduler() {
     const [schedulerInfo, setSchedulerInfo] = useState([])

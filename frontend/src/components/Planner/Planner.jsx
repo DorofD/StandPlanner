@@ -6,8 +6,8 @@ import { useNotificationContext } from "../../hooks/useNotificationContext";
 import './Planner.css'
 import filterLogo from './filter.png'
 import ReservationCard from "./ReservationCard/ReservationCard";
-import { apiGetReservations, apiAddReservation, apiChangeReservation, apiDeleteReservation } from "../../sevices/apiReservations";
-import { apiGetStands } from "../../sevices/apiStands";
+import { apiGetReservations, apiAddReservation, apiChangeReservation, apiDeleteReservation } from "../../services/apiReservations";
+import { apiGetStands } from "../../services/apiStands";
 
 function getCurrentDateString() {
     const now = new Date();

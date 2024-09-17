@@ -3,7 +3,7 @@ import Button from "../Button/Button";
 import StandCard from "./StandCard/StandCard";
 import "./Stands.css"
 import { useNotificationContext } from "../../hooks/useNotificationContext";
-import { apiGetStands, apiAddStand, apiChangeStand, apiDeleteStand } from "../../sevices/apiStands";
+import { apiGetStands, apiAddStand, apiChangeStand, apiDeleteStand } from "../../services/apiStands";
 
 export default function Stands() {
     const [stands, setStands] = useState([])

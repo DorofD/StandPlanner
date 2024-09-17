@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import Button from "../../Button/Button"
 import { useNotificationContext } from "../../../hooks/useNotificationContext";
 import "./NewUserCard.css";
-import { apiAddUser} from "../../../sevices/apiUsers"
+import { apiAddUser} from "../../../services/apiUsers"
 
 export default function NewUserCard({id, role, authType, picked = false, onClick, onSubmitFunc}) {
     const { notificationData, setNotificationData, toggleNotificationFunc, notificationToggle } = useNotificationContext();

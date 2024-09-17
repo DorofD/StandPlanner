@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import "./Users.css";
 import UserCard from "./UserCard/UserCard";
 import NewUserCard from "./NewUserCard/NewUserCard";
-import { apiGetUsers } from "../../sevices/apiUsers";
+import { apiGetUsers } from "../../services/apiUsers";
 
 export default function Users() {
     const [users, setUsers] = useState([])

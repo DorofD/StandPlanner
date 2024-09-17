@@ -2,7 +2,7 @@ import React from "react";
 import { useState, useEffect, useContext} from "react";
 import "./Main.css";
 import Button from "../Button/Button";
-import { apiGetStands } from "../../sevices/apiStands";
+import { apiGetStands } from "../../services/apiStands";
 import StandCard from "../Stands/StandCard/StandCard";
 import sendIcon from "./send.png"
 import { useAuthContext } from "../../hooks/useAuthContext";

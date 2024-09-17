@@ -5,7 +5,7 @@ import Button from "../Button/Button";
 import { useAuthContext } from "../../hooks/useAuthContext";
 import { useNotificationContext } from "../../hooks/useNotificationContext";
 import { useNavigate } from 'react-router-dom';
-import { apiAuth } from "../../sevices/apiLogin";
+import { apiAuth } from "../../services/apiLogin";
 
 export default function Login() {
     const { notificationData, setNotificationData, toggleNotificationFunc, notificationToggle } = useNotificationContext();
