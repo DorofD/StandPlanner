@@ -1,12 +1,14 @@
 services:
   backend:
     image: dso-gitlab.kraftway.ru:5005/infrastructure/others/standplanner/backend
+    #image: sp-backend:latest
     volumes:
       - ./data:/app/data
     ports:
       - 5000:5000
-    
-  frontend: 
-    image: dso-gitlab.kraftway.ru:5005/infrastructure/others/standplanner/backend
+
+  frontend:
+    image: dso-gitlab.kraftway.ru:5005/infrastructure/others/standplanner/frontend
+    #image: sp-frontend:latest
     ports:
       - 80:80
