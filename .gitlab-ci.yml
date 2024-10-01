@@ -17,10 +17,10 @@ build_backend:
     - docker image push dso-gitlab.kraftway.ru:5005/infrastructure/others/standplanner/backend
   tags:
     - sp-build
-  rules:
-    - changes:
-      - backend/**/*
-      - docker/**/*
+  # rules:
+  #   - changes:
+  #     - backend/**/*
+  #     - docker/**/*
 
 build_frontend:
   stage: build
@@ -37,10 +37,10 @@ build_frontend:
     - docker image push dso-gitlab.kraftway.ru:5005/infrastructure/others/standplanner/frontend
   tags:
     - sp-build
-  rules:
-    - changes:
-      - frontend/**/*
-      - docker/**/*
+  # rules:
+  #   - changes:
+  #     - frontend/**/*
+  #     - docker/**/*
 
 deploy:
   stage: deploy
@@ -51,9 +51,9 @@ deploy:
     - docker compose up -d
   tags:
     - sp-deploy
-  rules:
-    - changes:
-        - backend/**/*
-        - frontend/**/*
-        - docker/**/*
+  # rules:
+  #   - changes:
+  #       - backend/**/*
+  #       - frontend/**/*
+  #       - docker/**/*
 
