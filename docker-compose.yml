@@ -1,14 +1,12 @@
 services:
   backend:
-    build:
-      context: .
-      dockerfile: docker/Dockerfile.backend
+    image: dso-gitlab.kraftway.ru:5005/infrastructure/others/standplanner/backend
     volumes:
-      - ./data:/data
+      - ./data:/app/data
     ports:
       - 5000:5000
     
   frontend: 
-    build:
-      context: .
-      dockerfile: docker/Dockerfile.frontend
+    image: dso-gitlab.kraftway.ru:5005/infrastructure/others/standplanner/backend
+    ports:
+      - 80:80

@@ -1,0 +1,59 @@
+stages:
+  - build
+  - deploy
+
+build_backend:
+  stage: build
+  image: docker:latest
+  services:
+    - docker:dind
+  variables:
+    DOCKER_DRIVER: overlay2
+  script:
+    - cp $ENV_BACKEND ./backend/.env
+    - docker build . -f ./docker/Dockerfile.backend -t sp-backend:latest
+    - docker tag sp-backend:latest dso-gitlab.kraftway.ru:5005/infrastructure/others/standplanner/backend:latest
+    - echo $REGISTRY_TOKEN | docker login dso-gitlab.kraftway.ru:5005 -u edorofeev --password-stdin
+    - docker image push dso-gitlab.kraftway.ru:5005/infrastructure/others/standplanner/backend
+  tags:
+    - sp-build
+  rules:
+    - changes:
+      - backend/**/*
+      - docker/**/*
+
+build_frontend:
+  stage: build
+  image: docker:latest
+  services:
+    - docker:dind
+  variables:
+    DOCKER_DRIVER: overlay2
+  script:
+    - cp $ENV_FRONTEND ./frontend/.env
+    - docker build . -f ./docker/Dockerfile.frontend -t sp-frontend:latest
+    - docker tag sp-frontend:latest dso-gitlab.kraftway.ru:5005/infrastructure/others/standplanner/frontend:latest
+    - echo $REGISTRY_TOKEN | docker login dso-gitlab.kraftway.ru:5005 -u edorofeev --password-stdin
+    - docker image push dso-gitlab.kraftway.ru:5005/infrastructure/others/standplanner/frontend
+  tags:
+    - sp-build
+  rules:
+    - changes:
+      - frontend/**/*
+      - docker/**/*
+
+deploy:
+  stage: deploy
+  script:
+    - cd /www
+    - echo $REGISTRY_TOKEN | docker login dso-gitlab.kraftway.ru:5005 -u edorofeev --password-stdin
+    - docker compose pull
+    - docker compose up -d
+  tags:
+    - sp-deploy
+  rules:
+    - changes:
+        - backend/**/*
+        - frontend/**/*
+        - docker/**/*
+
