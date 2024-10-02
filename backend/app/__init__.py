@@ -18,9 +18,8 @@ def create_app():
     from app.routes import main as main_blueprint
     app.register_blueprint(main_blueprint)
     create_db()
-    for user in get_users_db():
-        if user['login'] == 'admin':
-            break
+    users = get_users_db()
+    if not users:
         add_user_db('admin', 'local', 'admin', 'admin')
 
     return app
