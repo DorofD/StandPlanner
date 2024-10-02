@@ -1,0 +1,12 @@
+services:
+  backend:
+    image: sp-backend:latest
+    volumes:
+      - ./data:/app/data
+    ports:
+      - 5000:5000
+
+  frontend:
+    image: sp-frontend:latest
+    ports:
+      - 80:80
