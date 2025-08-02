@@ -162,6 +162,37 @@ button.clearFilter {
     border-radius: 10px;
 }
 
+button.logsDownload {
+    user-select: none;
+    font-family: Arial;
+    font-size: 15px;
+    display: inline;
+    margin: 0 auto;
+    text-transform: uppercase;
+    background: #c0c0c0;
+    width: 100px;
+    height: 30px;
+    color: #000000;
+    border-radius: 10px;
+    margin-left: 10px;
+}
+
+button.logsCardClose {
+    text-align: center;
+    user-select: none;
+    font-family: Arial;
+    font-size: 16px;
+    display: inline;
+    margin: 0 auto;
+    margin-left: 20px;
+    text-transform: uppercase;
+    background: #ffbbbb;
+    width: 40px;
+    height: 20px;
+    color: #000000;
+    border-radius: 10px;
+}
+
 button:hover {
     background-color: #6e8399e3;
     color: white;

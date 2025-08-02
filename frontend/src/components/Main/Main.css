@@ -32,17 +32,6 @@ textarea.mainStands {
     color: black;
 }
 
-textarea.mainStands::-webkit-scrollbar, div.mainStands::-webkit-scrollbar {
-    width: 10px;
-    background-color: #f1f1f1;
-    margin: 40px;
-    border-radius: 10px;
-}
-
-textarea.mainStands::-webkit-scrollbar-thumb, div.mainStands::-webkit-scrollbar-thumb {
-    background-color: #afafaf;
-}
-
 div.mainCommentsHead {
     background-color: aqua;
     display: flex;
@@ -64,7 +53,7 @@ textarea.mainComments {
     border: solid 4px #afafaf;
     border-radius: 10px;
     color: black;
-    
+
 }
 
 textarea.mainComments:focus {

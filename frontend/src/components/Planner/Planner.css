@@ -6,16 +6,6 @@ div.reservations {
     overflow: auto;
 }
 
-div.reservations::-webkit-scrollbar {
-    width: 10px;
-    background-color: #f1f1f1;
-    margin: 40px;
-}
-
-div.reservations::-webkit-scrollbar-thumb {
-    background-color: #afafaf;
-}
-
 div.plannerFilter {
     margin: 10px;
 }
