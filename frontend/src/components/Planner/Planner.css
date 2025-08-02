@@ -36,21 +36,6 @@ div.plannerFilter {
     border-radius: 10px;
 }
 
-.clearFilter {
-    font-family: Arial;
-    font-size: medium;
-    width: 100px;
-    padding: 8px;
-    margin-left: 10px;
-    border: solid 3px #afafaf;
-    border-radius: 10px;
-    cursor: pointer;
-}
-
-.clearFilter:focus {
-    border: solid 3px #646464;
-}
-
 div.newReservation {
     text-align: center;
     margin: 10px;
@@ -71,7 +56,7 @@ button.newReservation:focus {
     border: solid 3px #646464;
 }
 
-div.reservationList{
+div.reservationList {
     margin: 10px;
 }
 
@@ -79,7 +64,7 @@ div.reservationList{
     display: flex;
     flex-direction: column;
 }
-  
+
 .form-row {
     display: flex;
     justify-content: space-between;
@@ -90,11 +75,13 @@ div.reservationList{
     padding: 2px;
 }
 
-.form-row label, .form-row input, .form-row select{
+.form-row label,
+.form-row input,
+.form-row select {
     font-family: Arial;
     font-size: large;
     align-items: center;
-    flex: auto; 
+    flex: auto;
 }
 
 label.startTime {
@@ -107,7 +94,7 @@ label.startTime {
     padding-right: 5px; */
     width: 70px;
     cursor: pointer;
-    user-select:none;
+    user-select: none;
 }
 
 label.startTime:hover {
@@ -118,7 +105,7 @@ label.startTime:hover {
 label.selectedStartTime {
     background-color: #4caf50;
     color: #ffffff;
-    
+
 }
 
 .form-head {

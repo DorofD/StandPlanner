@@ -23,11 +23,15 @@ def add_user_db(login: str, auth_type: str, role: str,  password: str = ''):
     return execute_db_query(query)
 
 
-def change_user_db(id: int, role: str):
-    query = f"""
-            UPDATE users SET role = '{role}'
-            WHERE id = '{id}'
-            """
+def change_user_db(id: int, changes: dict):
+
+    query = "UPDATE users SET "
+    updates = []
+    for column, value in changes.items():
+        updates.append(f"{column} = '{value}'")
+    query += ", ".join(updates)
+    query += f" WHERE id = '{id}';"
+
     return execute_db_query(query)
 
 
@@ -37,8 +41,3 @@ def delete_user_db(id: int):
             WHERE id = '{id}'
             """
     return execute_db_query(query)
-
-
-# print(get_user_db('edorofeev'))
-# print(get_users_db())
-# print(add_user_db('user8', 'local', 'user', 'user'))

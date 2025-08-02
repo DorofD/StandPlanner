@@ -4,10 +4,10 @@ import "./About.css";
 
 export default function About() {
     return (
-        <div>
+        <div className="aboutMain">
             <br />
             Ознакомиться с работой сервиса можно в документации
-      </div>
+        </div>
     );
-  
+
 }

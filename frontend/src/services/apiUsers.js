@@ -1,40 +1,45 @@
+import { authFetch } from './authFetch';
+
 export async function apiGetUsers() {
-    const response = await fetch(`${process.env.BACKEND_URL}/users`, {
+    const response = await authFetch(`${process.env.BACKEND_URL}/users`, {
         method: 'GET',
     })
     return response
 }
 
-export async function apiAddUser(login, role, authType) {
-    const response = await fetch(`${process.env.BACKEND_URL}/users`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    action: 'add',
-                    login: login,
-                    role: role, 
-                    auth_type: authType
-                })
+export async function apiAddUser(login, role, authType, password) {
+    const response = await authFetch(`${process.env.BACKEND_URL}/users`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+            action: 'add',
+            login: login,
+            role: role,
+            auth_type: authType,
+            password: password
+        })
     })
     return response
 }
 
-export async function apiChangeUser(id, selectedRole) {
-    const response = await fetch(`${process.env.BACKEND_URL}/users`, {
+export async function apiChangeUser(id, login, role, auth_type, password) {
+    const response = await authFetch(`${process.env.BACKEND_URL}/users`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
             action: 'change',
             id: id,
-            role: selectedRole
-
+            login: login,
+            role: role,
+            auth_type: auth_type,
+            password: password
         })
     })
     return response
 }
 
 export async function apiDeleteUser(id) {
-    const response = await fetch(`${process.env.BACKEND_URL}/users`, {
+    const response = await authFetch(`${process.env.BACKEND_URL}/users`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

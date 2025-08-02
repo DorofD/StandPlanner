@@ -1,5 +1,7 @@
+import { authFetch } from './authFetch';
+
 export async function apiGetReservations() {
-    const response = await fetch(`${process.env.BACKEND_URL}/reservations`, {
+    const response = await authFetch(`${process.env.BACKEND_URL}/reservations`, {
         method: 'GET',
     })
     console.log(typeof `${process.env.BACKEND_URL}/reservations`)
@@ -8,10 +10,10 @@ export async function apiGetReservations() {
 }
 
 export async function apiAddReservation(userId, standId, date, startTime, duration) {
-    if (startTime !== 'startNow'){
+    if (startTime !== 'startNow') {
         startTime = date + ' ' + startTime
     }
-    const response = await fetch(`${process.env.BACKEND_URL}/reservations`, {
+    const response = await authFetch(`${process.env.BACKEND_URL}/reservations`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -20,12 +22,13 @@ export async function apiAddReservation(userId, standId, date, startTime, durati
             stand_id: standId,
             start_time: startTime,
             duration: duration
-        })})
+        })
+    })
     return response
 }
 
 export async function apiChangeReservation(reservationId, standId, date, startTime, duration) {
-    const response = await fetch(`${process.env.BACKEND_URL}/reservations`, {
+    const response = await authFetch(`${process.env.BACKEND_URL}/reservations`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -34,17 +37,19 @@ export async function apiChangeReservation(reservationId, standId, date, startTi
             stand_id: standId,
             start_time: date + ' ' + startTime,
             duration: duration
-        })})
+        })
+    })
     return response
 }
 
 export async function apiDeleteReservation(reservationId) {
-    const response = await fetch(`${process.env.BACKEND_URL}/reservations`, {
+    const response = await authFetch(`${process.env.BACKEND_URL}/reservations`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
             action: 'delete',
             reservation_id: reservationId
-        })})
+        })
+    })
     return response
 }

@@ -1,9 +1,7 @@
 from flask import Blueprint, request, jsonify
-from flask_cors import cross_origin
-from app.services.user_service import signin, add_user, delete_user, get_users, change_user
+# from flask_cors import cross_origin
 from app.services.stand_service import get_stands, add_stand, delete_stand, change_stand
 import app.services.reservation_service as reservation_service
-from app.errors.reservation_errors import IntersectionError, ReservationError
 from app import scheduler as app_scheduler
 
 import traceback
@@ -11,18 +9,8 @@ import traceback
 main = Blueprint('main', __name__)
 
 
-@main.route('/login', methods=(['POST']))
-@cross_origin()
-def login():
-    user = request.json
-    auth_result = signin(user['login'], user['password'])
-    if auth_result:
-        return jsonify({'success': True, 'body': auth_result}), 200, {'ContentType': 'application/json'}
-    return jsonify({'success': False}), 401, {'ContentType': 'application/json'}
-
-
 @main.route('/reservations', methods=(['GET', 'POST']))
-@cross_origin()
+# @cross_origin()
 def reservations():
     if request.method == 'GET':
         reservations = reservation_service.get_reservations_for_planner()
@@ -41,7 +29,7 @@ def reservations():
 
 
 @main.route('/stands', methods=(['GET', 'POST']))
-@cross_origin()
+# @cross_origin()
 def stands():
     if request.method == 'GET':
         result = jsonify(get_stands())
@@ -60,51 +48,15 @@ def stands():
 
 
 @main.route('/comments', methods=(['GET']))
-@cross_origin()
+# @cross_origin()
 def index():
     result = jsonify(get_stands())
     return result
 
 
-@main.route('/users', methods=(['GET', 'POST']))
-@cross_origin()
-def users():
-    if request.method == 'GET':
-        result = jsonify(get_users())
-        return result
-    if request.method == 'POST':
-        data = request.json
-        if data['action'] == 'add':
-            add_user(login=data['login'],
-                     role=data['role'], auth_type=data['auth_type'])
-        if data['action'] == 'change':
-            change_user(id=data['id'], role=data['role'])
-        if data['action'] == 'delete':
-            delete_user(id=data['id'])
-
-    return jsonify({'success': True}), 200, {'ContentType': 'application/json'}
-
-
 @main.route('/scheduler', methods=(['GET']))
-@cross_origin()
+# @cross_origin()
 def scheduler():
     if request.method == 'GET':
         result = jsonify(app_scheduler.get_info())
         return result
-
-
-@main.errorhandler(IntersectionError)
-def handle_value_error(error):
-    return jsonify({'error': str(error)}), 400
-
-
-@main.errorhandler(ReservationError)
-def handle_value_error(error):
-    return jsonify({'error': str(error)}), 400
-
-
-@main.errorhandler(Exception)
-def handle_value_error(error):
-    print(f"ERROR: {error}")
-    traceback.print_exc()
-    return jsonify({'error': f'Непонятная ошибка на беке: {error}'}), 500

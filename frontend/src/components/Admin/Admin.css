@@ -4,20 +4,10 @@ div.admin-sidebar {
     display: inline-flex;
     align-items: stretch;
     height: 100%;
-    width: 12%;
+    width: 15%;
 }
 
-@media (width < 1280px){
-    div.admin-sidebar {
-        width: 20%;
-    }
-}
 
-@media (width < 980px){
-    div.admin-sidebar {
-        width: 30%;
-    }
-}
 
 div.admin-content {
     display: flex;
@@ -25,18 +15,12 @@ div.admin-content {
     width: 60%;
 }
 
-@media (width < 980px){
-    div.admin-content {
-        width: 100%;
-    }
-}
-
 nav.admin-sidebar {
     width: 100%;
 }
 
 
-ul {
+ul.admin {
     list-style-type: none;
     margin: 0;
     padding: 0;
@@ -44,23 +28,37 @@ ul {
 
 }
 
-li a {
+.adminHref {
     display: inline-block;
-    color: #000;
     padding-top: 8%;
+    color: #000;
     padding-bottom: 8%;
     padding-left: 10%;
     text-decoration: none;
     width: 100%;
     box-sizing: border-box;
+    user-select: none;
 }
 
-li a:hover {
-    background-color: #555;
+.adminHref:hover {
+    background-color: #6e8399e3;
     color: white;
 }
 
-.active {
+.activeAdminHref {
     background-color: #4CAF50;
+    display: inline-block;
+    padding-top: 8%;
+    color: white;
+    padding-bottom: 8%;
+    padding-left: 10%;
+    text-decoration: none;
+    width: 100%;
+    box-sizing: border-box;
+    user-select: none;
+}
+
+.activeAdminHref:hover {
+    background-color: #6e8399e3;
     color: white;
 }

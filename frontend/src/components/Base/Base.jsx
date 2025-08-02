@@ -1,49 +1,68 @@
-import React, { Component, useState, useEffect} from "react";
+import React, { Component, useState, useEffect } from "react";
 import "./Base.css";
-import { NavLink as NavLinkBase, Outlet } from "react-router-dom";
+import { NavLink as NavLinkBase, Outlet, useLocation } from "react-router-dom";
 import Button from "../Button/Button";
 import Notification from "../Notification/Notification";
 import { useNotificationContext } from "../../hooks/useNotificationContext";
 import { useAuthContext } from "../../hooks/useAuthContext";
 
-const NavLink = React.forwardRef((props, ref) => (
-  <NavLinkBase
-    ref={ref}
-    {...props}
-    className={props.activeClassName}
-  />
-));
+const NavLink = React.forwardRef((props, ref) => {
+    return (
+        <NavLinkBase
+            ref={ref}
+            {...props}
+        />
+    );
+});
 
 
 export default function Base() {
-    const { isAuthenticated, toogleAuth} = useAuthContext()
-    const {userName, userRole} = useAuthContext()
-    const {notificationData} = useNotificationContext()
+    const { isAuthenticated, toogleAuth } = useAuthContext();
+    const { userName, userRole, accessToken } = useAuthContext();
+    const { notificationData } = useNotificationContext();
+    const location = useLocation();
 
 
     return (
         <>
-            <div className="header" id="modal-root">
+            <div className="baseHeader" id="modal-root">
                 {/* <span className="header">{now.toLocaleTimeString()}</span> */}
                 {userName}
-                <Button style={"logout"} type={"submit"} onClick={toogleAuth}> Выйти </Button> 
+                <Button style={"logout"} type={"submit"} onClick={toogleAuth}> Выйти </Button>
             </div>
-            <div className="sidebar">
-                <nav className="sidebar">
-                <Notification data={notificationData}/>
-                    <ul>
-                        <li> <NavLink to="/" >Главная</NavLink></li>
-                        <li> <NavLink to="/planner" >Планировщик</NavLink></li>
-                        {userRole === 'admin' && <>
-                        <li> <NavLink to="/stands" >Стенды</NavLink></li>
-                        <li> <NavLink to="/admin" >Администрирование</NavLink></li>
-                        </>}
-                        <li> <NavLink to="/about">О приложении</NavLink></li>
-                        <li> <NavLink to="/feedback">Обратная связь</NavLink></li>
+            <div className="baseSidebar">
+                <nav className="baseSidebar">
+                    <Notification data={notificationData} />
+                    <ul className="base">
+                        <li>
+                            <NavLink to="/" className={({ isActive }) => isActive ? 'activeBaseHref' : 'baseHref'}>
+                                Главная
+                            </NavLink>
+                        </li>
+                        <li>
+                            <NavLink to="/planner" className={({ isActive }) => isActive ? 'activeBaseHref' : 'baseHref'}>
+                                Планировщик
+                            </NavLink>
+                        </li>
+                        {userRole === 'admin' && (<>
+                            <li>
+                                <NavLink to="/stands" className={({ isActive }) => isActive ? 'activeBaseHref' : 'baseHref'}>
+                                    Стенды
+                                </NavLink>
+                            </li>
+                            <li>
+                                <NavLink to="/admin" className={({ isActive }) => isActive ? 'activeBaseHref' : 'baseHref'}>
+                                    Администрирование
+                                </NavLink>
+                            </li>
+                        </>)}
+                        <NavLink to="/about" className={({ isActive }) => isActive ? 'activeBaseHref' : 'baseHref'}>
+                            О приложении
+                        </NavLink>
                     </ul>
                 </nav>
             </div>
-            <div className="content">
+            <div className="baseContent">
                 <Outlet />
             </div>
         </>

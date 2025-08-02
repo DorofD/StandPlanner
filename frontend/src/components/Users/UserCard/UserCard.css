@@ -1,63 +1,53 @@
 .userCard {
-    display: block;
+    vertical-align: middle;
     padding: 10px;
     cursor: pointer;
     user-select: none;
     border: solid 3px #afafaf;
     border-radius: 10px;
     margin: 20px;
-    box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2), 0 5px 5px 0 rgba(0, 0, 0, 0.24);
-    height: 80px;
+    height: 50px;
 }
 
+.userCardPicked {
+    vertical-align: middle;
+    padding: 10px;
+    cursor: pointer;
+    user-select: none;
+    border: solid 3px rgb(34, 34, 34);
+    border-radius: 10px;
+    margin: 20px;
+    height: 50px;
+    background-color: #e4e4e4;
+}
 
 .userCard:hover {
-    padding: 10px;
     background-color: #f1f1f1;
     border: solid 3px #474747;
 }
 
-.userCardPicked {
-    display: flex;
-    padding: 10px;
-    cursor: pointer;
-    user-select: none;
-    border: solid 3px #7c7c7c;
-    border-radius: 10px;
-    margin: 10px;
-    /* background-color: #f0fff1; */
-    margin: 20px;
-    height: 80px;
+.userCardPicked:hover {
+    background-color: #f1f1f1;
+    border: solid 3px #474747;
 }
 
-div.userContent {
-    display: block;
-    width: 75%;
-}
 
-div.userButtons {
-    display: block;
-    width: 25%;
-    align-items: center;
-}
-
-@media (width < 1000px){
-    div.userContent {
-        width: 70%;
-    }
-    div.userButton {
-        width: 30%;
-    }
-}
-
-p.login {
-    font-size: 22px;
+p.userName {
+    font-size: 20px;
     font-weight: 600;
     margin-top: 0;
-    margin-bottom: 20px;
+    margin-bottom: 0px;
+    text-align: left;
+    padding-bottom: 8px;
 }
 
-p.params {
+div.componentStatus {
+    display: block;
+    width: 100%;
+    text-align: left;
+}
+
+p.componentStatusFaded {
     display: inline;
-    color: rgba(0, 0, 0, 0.5);
+    color: rgba(0, 0, 0, 0.61);
 }
