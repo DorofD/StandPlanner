@@ -9,13 +9,11 @@ from datetime import timedelta
 from dotenv import load_dotenv
 
 
-from app.models.scheduler import Scheduler
+from app.classes.scheduler import Scheduler
 from app.repository.db_model import create_db
 from app.services.api_services.users import add_user_db, get_users
 from app.errors.reservation_errors import IntersectionError, ReservationError
 scheduler = None
-
-# origins=["http://172.19.117.170:9000"],
 
 
 def create_app():

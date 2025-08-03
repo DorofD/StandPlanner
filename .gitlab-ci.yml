@@ -1,6 +1,9 @@
 stages:
   - build
   - deploy
+  
+.if-ci-commit-tag: &if-ci-commit-tag
+  if: $CI_COMMIT_TAG
 
 build_backend:
   stage: build
@@ -18,9 +21,10 @@ build_backend:
   tags:
     - sp-build
   rules:
-    - changes:
-      - backend/**/*
-      - docker/**/*
+    - *if-ci-commit-tag
+    # - changes:
+    #   - backend/**/*
+    #   - docker/**/*
 
 build_frontend:
   stage: build
@@ -38,9 +42,10 @@ build_frontend:
   tags:
     - sp-build
   rules:
-    - changes:
-      - frontend/**/*
-      - docker/**/*
+    - *if-ci-commit-tag
+    # - changes:
+    #   - frontend/**/*
+    #   - docker/**/*
 
 deploy:
   stage: deploy
@@ -52,8 +57,9 @@ deploy:
   tags:
     - sp-deploy
   rules:
-    - changes:
-        - backend/**/*
-        - frontend/**/*
-        - docker/**/*
+    - *if-ci-commit-tag
+    # - changes:
+    #     - backend/**/*
+    #     - frontend/**/*
+    #     - docker/**/*
 

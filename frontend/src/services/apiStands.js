@@ -1,11 +1,19 @@
 import { authFetch } from './authFetch';
 
 export async function apiGetStands() {
-    const response = await authFetch(`${process.env.BACKEND_URL}/stands`, {
+    const response = await authFetch(`${process.env.BACKEND_URL}/stands?action=get_list`, {
         method: 'GET',
     })
     const stands = await response.json()
     return stands
+}
+
+export async function apiGetStand(id) {
+    const response = await authFetch(`${process.env.BACKEND_URL}/stands?action=get_stand&stand_id=${id}`, {
+        method: 'GET',
+    })
+    const stand = await response.json()
+    return stand
 }
 
 export async function apiAddStand(name, description) {

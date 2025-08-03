@@ -20,7 +20,9 @@ def create_db():
             CREATE TABLE IF NOT EXISTS "stands" (
                 "id"	INTEGER NOT NULL UNIQUE,
                 "name"	TEXT NOT NULL UNIQUE,
+                "creation_method"	TEXT NOT NULL CHECK("creation_method" IN ('manual', 'confluence_page_id')),
                 "description"	TEXT,
+                "html_layout"	TEXT,
                 PRIMARY KEY("id" AUTOINCREMENT)
             );
             """
@@ -55,6 +57,20 @@ def create_db():
                     FOREIGN KEY("user_id") REFERENCES "users"("id"),
                     FOREIGN KEY("stand_id") REFERENCES "stands"("id"),
                     PRIMARY KEY("id" AUTOINCREMENT)
+                );
+            """
+    cursor = conn.cursor()
+    cursor.execute(query)
+
+    query = """
+            CREATE TABLE IF NOT EXISTS "confluence_sources" (
+                    "id"	INTEGER NOT NULL UNIQUE,
+                    "type"	TEXT NOT NULL CHECK("type" IN ('page_id')),
+                    "value"	TEXT NOT NULL,
+                    "description"	TEXT,
+                    "stand_id"	INTEGER,
+                    PRIMARY KEY("id" AUTOINCREMENT),
+                    FOREIGN KEY("stand_id") REFERENCES "stands"("id")
                 );
             """
     cursor = conn.cursor()

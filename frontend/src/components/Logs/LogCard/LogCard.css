@@ -51,7 +51,7 @@ p.logDatetime {
     overflow: hidden;
     text-overflow: ellipsis;
     display: -webkit-box;
-    -webkit-line-clamp: 1;
+    line-clamp: 1;
     /* Показывать только одну строку */
     -webkit-box-orient: vertical;
     transition: -webkit-line-clamp 0.3s ease;
@@ -65,6 +65,6 @@ p.logDatetime {
     display: -webkit-box;
     -webkit-box-orient: vertical;
     transition: -webkit-line-clamp 0.3s ease;
-    -webkit-line-clamp: unset;
+    line-clamp: unset;
     /* Убирает ограничение по строкам при наведении */
 }

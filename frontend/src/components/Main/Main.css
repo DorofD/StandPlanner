@@ -7,9 +7,38 @@ div.mainStands {
 
 div.mainStandDescription {
     /* background-color: rgb(207, 252, 102); */
-    height: 100%;
+    height: 99%;
     width: 35%;
     text-align: center;
+}
+
+div.mainStandLayout {
+    /* background-color: rgb(207, 252, 102); */
+    height: 70%;
+    width: 70%;
+    overflow-wrap: break-word;
+    overflow: auto;
+    text-align: center;
+    /*  */
+    padding: 5px;
+    margin: 10px;
+    border: solid 4px #afafaf;
+    border-radius: 10px;
+    color: black;
+}
+
+div.mainStandLayout ul,
+div.mainStandLayout li {
+    text-align: left;
+    overflow: auto;
+}
+
+table {
+    font-size: medium;
+    height: 100%;
+    width: 50%;
+    overflow-wrap: break-word;
+    overflow: auto;
 }
 
 div.mainComments {
