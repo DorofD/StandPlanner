@@ -1,5 +1,5 @@
 from flask import Blueprint, request, jsonify
-from app.services.api_services.users import get_users, add_user, delete_user, change_user
+from app.services.users import get_users, add_user, delete_user, change_user
 from flask_jwt_extended import jwt_required
 from app.routes import role_required
 

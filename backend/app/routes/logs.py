@@ -1,5 +1,5 @@
-from flask import Blueprint, request, current_app, jsonify, send_file, abort
-from app.services.api_services.logs import get_logs
+from flask import Blueprint, request, jsonify, send_file, abort
+from app.services.logs import get_logs
 from flask_jwt_extended import jwt_required
 
 logs_bp = Blueprint('logs', __name__)

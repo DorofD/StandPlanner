@@ -8,7 +8,7 @@
     z-index: 2000;
 }
 
-.modalAccept {
+div.acceptModal {
     border: solid 4px #afafaf;
     border-radius: 10px;
     position: fixed;
@@ -17,4 +17,21 @@
     transform: translate(-50%, -50%);
     background-color: rgb(255, 255, 255);
     z-index: 2001;
+    height: 100px;
+    width: 250px;
+}
+
+div.acceptModalButtons {
+    /* display: inline; */
+    align-content: center;
+    width: 100%;
+    height: 50%;
+    text-align: center;
+}
+
+div.acceptModalText {
+    text-align: center;
+    margin: 10px;
+    /* width: 100%;
+    height: 50%; */
 }

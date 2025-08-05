@@ -9,9 +9,9 @@ from datetime import timedelta
 from dotenv import load_dotenv
 
 
-from app.classes.scheduler import Scheduler
+from app.domain.scheduler import Scheduler
 from app.repository.db_model import create_db
-from app.services.api_services.users import add_user_db, get_users
+from app.services.users import add_user, get_users
 from app.errors.reservation_errors import IntersectionError, ReservationError
 scheduler = None
 
@@ -82,6 +82,6 @@ def create_app():
     create_db()
     users = get_users()
     if not users:
-        add_user_db('admin', 'local', 'admin', 'admin')
+        add_user('admin', 'local', 'admin', 'admin')
 
     return app

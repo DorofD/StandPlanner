@@ -2,7 +2,7 @@ import os
 from dotenv import load_dotenv
 from flask import Blueprint, current_app, request, jsonify, make_response
 from flask_jwt_extended import create_access_token, create_refresh_token, set_refresh_cookies, jwt_required, get_jwt_identity, get_jwt
-from app.services.api_services.users import signin
+from app.services.users import signin
 
 login_bp = Blueprint('login', __name__)
 

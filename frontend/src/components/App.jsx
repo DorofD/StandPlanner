@@ -11,6 +11,7 @@ import Bots from "./Bots/Bots";
 import Logs from "./Logs/Logs";
 import Apscheduler from "./Apscheduler/Apscheduler";
 import Login from "./Login/Login";
+import Sources from "./Sources/Sources";
 import { PrivateRoute } from "./PrivateRoute/PrivateRoute";
 import { useAuthContext } from "../hooks/useAuthContext";
 
@@ -27,6 +28,7 @@ export default function App() {
                         <Route path="/stands" element={<Stands />} />
                         {userRole === 'admin' && <Route path="/admin" element={<Admin />}>
                             <Route path="/admin/users" element={<Users />} />
+                            <Route path="/admin/sources" element={<Sources />} />
                             <Route path="/admin/bots" element={<Bots />} />
                             <Route path="/admin/logs" element={<Logs />} />
                             <Route path="/admin/apscheduler" element={<Apscheduler />} />

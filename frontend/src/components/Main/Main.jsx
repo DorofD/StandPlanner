@@ -11,7 +11,7 @@ import { useAuthContext } from "../../hooks/useAuthContext";
 export default function Main() {
     const [loadingStands, setLoadingStands] = useState('loading')
     const [stands, setStands] = useState([])
-    const [pickedStand, setPickedStand] = useState({ id: 'default', name: 'Стенд', creation_method: '' })
+    const [pickedStand, setPickedStand] = useState({ id: 'default', name: 'Стенд', source_type: '' })
     const [standInfo, setStandInfo] = useState({ description: '', html_layout: '' })
 
     const [commentText, setCommentText] = useState('');

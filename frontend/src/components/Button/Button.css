@@ -193,6 +193,122 @@ button.logsCardClose {
     border-radius: 10px;
 }
 
+button.sourcesSetType {
+    user-select: none;
+    font-family: Arial;
+    font-size: 18px;
+    margin: 12px;
+    background: #c0c0c0;
+    width: 240px;
+    height: 30px;
+    color: #000000;
+    border-radius: 10px;
+}
+
+button.sourcesSetTypeActive {
+    user-select: none;
+    font-family: Arial;
+    font-size: 18px;
+    margin: 12px;
+    background: #4CAF50;
+    width: 240px;
+    height: 30px;
+    color: #ffffff;
+    border-radius: 10px;
+
+}
+
+button.sourcesCardDelete {
+    text-align: center;
+    user-select: none;
+    font-family: Arial;
+    font-size: 15px;
+    display: inline;
+    margin: 0 auto;
+    margin-left: 20px;
+    text-transform: uppercase;
+    background: #ffbbbb;
+    width: 100px;
+    height: 24px;
+    color: #000000;
+    border-radius: 10px;
+}
+
+button.sourcesCardClose {
+    text-align: center;
+    user-select: none;
+    font-family: Arial;
+    font-size: 15px;
+    display: inline;
+    margin: 0 auto;
+    margin-left: 20px;
+    text-transform: uppercase;
+    background: #c0c0c0;
+    width: 100px;
+    height: 24px;
+    color: #000000;
+    border-radius: 10px;
+}
+
+
+button.modalAccept {
+    user-select: none;
+    font-family: Arial;
+    font-size: 15px;
+    display: inline;
+    margin-right: 20px;
+    text-transform: uppercase;
+    background: #4CAF50;
+    width: 80px;
+    height: 30px;
+    color: #FFFFFF;
+    border-radius: 10px;
+}
+
+button.modalReject {
+    user-select: none;
+    font-family: Arial;
+    font-size: 15px;
+    display: inline;
+    margin-left: 20px;
+    text-transform: uppercase;
+    background: #ff2020;
+    width: 80px;
+    height: 30px;
+    color: #FFFFFF;
+    border-radius: 10px;
+}
+
+button.showHint {
+    user-select: none;
+    font-family: Arial;
+    font-size: 22px;
+    display: inline;
+    margin: 0 auto;
+    margin-left: 20px;
+    text-transform: uppercase;
+    background: #c0c0c0;
+    width: 25px;
+    height: 25px;
+    color: #000000;
+    border-radius: 10px;
+}
+
+button.showHintActivated {
+    user-select: none;
+    font-family: Arial;
+    font-size: 22px;
+    display: inline;
+    margin: 0 auto;
+    margin-left: 20px;
+    text-transform: uppercase;
+    background: #4CAF50;
+    width: 25px;
+    height: 25px;
+    color: #ffffff;
+    border-radius: 10px;
+}
+
 button:hover {
     background-color: #6e8399e3;
     color: white;

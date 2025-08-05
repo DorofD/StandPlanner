@@ -2,7 +2,7 @@ from apscheduler.schedulers.background import BackgroundScheduler
 from apscheduler.executors.pool import ThreadPoolExecutor
 
 
-class Scheduler:
+class Scheduler():
     def __init__(self):
         executors = {'default': ThreadPoolExecutor(1)}
         self.scheduler = BackgroundScheduler(executors)

@@ -1,0 +1,77 @@
+div.sourcesSetType {
+    height: 100%;
+    width: 40%;
+    overflow: auto;
+    text-align: center;
+}
+
+div.sourcesMenu {
+    height: 100%;
+    width: 70%;
+    overflow: auto;
+    text-align: center;
+}
+
+div.sourcesNewSource {
+    border: solid 4px #afafaf;
+    margin: 10px;
+    padding: 10px;
+    border-radius: 10px;
+    height: 180px;
+}
+
+div.sourcesNewSourceTextareas {
+    text-align: left;
+}
+
+p.sourcesNewSource {
+    margin: 5px;
+    margin-bottom: 10px;
+}
+
+textarea.sourcesNewSourcePageId {
+    font-family: Arial;
+    font-size: 20px;
+    width: 30%;
+    height: 30px;
+    resize: none;
+    border: solid 3px #afafaf;
+    border-radius: 10px;
+    margin: 4px;
+}
+
+textarea.sourcesNewSourceDescription {
+    font-family: Arial;
+    font-size: 20px;
+    width: 80%;
+    height: 30px;
+    resize: none;
+    border: solid 3px #afafaf;
+    border-radius: 10px;
+    margin: 4px;
+    margin-bottom: 8px;
+}
+
+
+.hintBox {
+    margin-top: 10px;
+    padding: 15px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.hintBox h3 {
+    margin-top: 0;
+}
+
+.hintBox p {
+    margin-bottom: 10px;
+    text-indent: 2em;
+    text-align: justify;
+}
+
+.hintBox strong {
+    color: #1d691f;
+}
