@@ -2,10 +2,54 @@
     box-sizing: inherit;
 }
 
+
 button {
     border: 0;
     cursor: pointer;
     user-select: none;
+}
+
+button.standartNeutral {
+    user-select: none;
+    font-family: Arial;
+    font-size: 15px;
+    text-transform: uppercase;
+    background: #c0c0c0;
+    width: auto;
+    height: auto;
+    color: #000000;
+    border-radius: 10px;
+    /* top right bottom left*/
+    padding: 7px 15px 7px 15px;
+}
+
+button.standartAccept {
+    user-select: none;
+    font-family: Arial;
+    font-size: 15px;
+    text-transform: uppercase;
+    background: #4CAF50;
+    width: auto;
+    height: auto;
+    color: #FFFFFF;
+    border-radius: 10px;
+    /* top right bottom left*/
+    padding: 7px 15px 7px 15px;
+}
+
+
+button.standartReject {
+    user-select: none;
+    font-family: Arial;
+    font-size: 15px;
+    text-transform: uppercase;
+    background: #ff2020;
+    width: auto;
+    height: auto;
+    color: #FFFFFF;
+    border-radius: 10px;
+    /* top right bottom left*/
+    padding: 7px 15px 7px 15px;
 }
 
 button.login {
@@ -26,95 +70,6 @@ button.logout {
     font-size: large;
     display: inline-block;
     text-align: center;
-}
-
-
-button.userChange {
-    font-family: Arial;
-    font-size: medium;
-    margin: 0 auto;
-    display: block;
-    text-transform: uppercase;
-    background: #4caf50;
-    width: 150px;
-    border: 0;
-    padding: 10px;
-    color: #FFFFFF;
-    cursor: pointer;
-    border-radius: 10px;
-    margin-bottom: 6px;
-}
-
-button.createUser {
-    user-select: none;
-    font-family: Arial;
-    font-size: 15px;
-    /* display: block; */
-    margin: 0 auto;
-    text-transform: uppercase;
-    background: #c0c0c0;
-    width: 230px;
-    height: 30px;
-    color: #000000;
-    border-radius: 10px;
-}
-
-button.projectAccept {
-    user-select: none;
-    font-family: Arial;
-    font-size: 15px;
-    display: block;
-    margin: 0 auto;
-    text-transform: uppercase;
-    background: #4CAF50;
-    width: 8em;
-    height: 2em;
-    color: #FFFFFF;
-    border-radius: 10px;
-}
-
-button.projectReject {
-    user-select: none;
-    font-family: Arial;
-    font-size: 15px;
-    display: block;
-    margin: 0 auto;
-    text-transform: uppercase;
-    background: #ff2020;
-    width: 100px;
-    height: 30px;
-    color: #FFFFFF;
-    border-radius: 10px;
-}
-
-button.projectClose {
-    user-select: none;
-    font-family: Arial;
-    font-size: 15px;
-    display: block;
-    margin: 0 auto;
-    text-transform: uppercase;
-    background: #c0c0c0;
-    width: 8em;
-    height: 2em;
-    color: #000000;
-    border-radius: 10px;
-}
-
-button.userDelete {
-    font-family: Arial;
-    font-size: medium;
-    margin: 0 auto;
-    display: block;
-    text-transform: uppercase;
-    background: #ff2020;
-    width: 150px;
-    border: 0;
-    padding: 10px;
-    color: #FFFFFF;
-    cursor: pointer;
-    border-radius: 10px;
-    margin-top: 10px;
 }
 
 button.reservationAdd {
@@ -147,36 +102,6 @@ button.reservationExit {
     border-radius: 10px;
 }
 
-button.clearFilter {
-    user-select: none;
-    font-family: Arial;
-    font-size: 15px;
-    display: inline;
-    margin: 0 auto;
-    margin-left: 20px;
-    text-transform: uppercase;
-    background: #c0c0c0;
-    width: 8em;
-    height: 2em;
-    color: #000000;
-    border-radius: 10px;
-}
-
-button.logsDownload {
-    user-select: none;
-    font-family: Arial;
-    font-size: 15px;
-    display: inline;
-    margin: 0 auto;
-    text-transform: uppercase;
-    background: #c0c0c0;
-    width: 100px;
-    height: 30px;
-    color: #000000;
-    border-radius: 10px;
-    margin-left: 10px;
-}
-
 button.logsCardClose {
     text-align: center;
     user-select: none;
@@ -199,7 +124,8 @@ button.sourcesSetType {
     font-size: 18px;
     margin: 12px;
     background: #c0c0c0;
-    width: 240px;
+    /* width: 260px; */
+    width: 70%;
     height: 30px;
     color: #000000;
     border-radius: 10px;
@@ -211,7 +137,8 @@ button.sourcesSetTypeActive {
     font-size: 18px;
     margin: 12px;
     background: #4CAF50;
-    width: 240px;
+    /* width: 260px; */
+    width: 70%;
     height: 30px;
     color: #ffffff;
     border-radius: 10px;
@@ -255,8 +182,8 @@ button.modalAccept {
     user-select: none;
     font-family: Arial;
     font-size: 15px;
-    display: inline;
-    margin-right: 20px;
+    /* display: inline; */
+    /* margin-right: 20px; */
     text-transform: uppercase;
     background: #4CAF50;
     width: 80px;
@@ -269,8 +196,8 @@ button.modalReject {
     user-select: none;
     font-family: Arial;
     font-size: 15px;
-    display: inline;
-    margin-left: 20px;
+    /* display: inline; */
+    /* margin-left: 20px; */
     text-transform: uppercase;
     background: #ff2020;
     width: 80px;

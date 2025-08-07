@@ -13,22 +13,27 @@ class ManualSource():
 
 class ConfluencePageIdSource():
     """
-    Обрабатываемый тип источников:
-        confluence_page_id - добавление стенда автоматически по результатам поиска указанной страницы
-        Правила обработки:
+    Тип источника (ресурса) - confluence_page_id
+        confluence_page_id - добавление и обновление стенда автоматически по результатам поиска страницы с указанным pageId
+        Особенности:
             источник привязан к одному стенду
-            вручную можно менять только description
-            необходима актуализация данных на основе version страницы
-        Статусы:
-        new - ресурс только создан
-        error - не удалось обработать источник, тело ошибки будет добавлено в конец description
-        data_success - данные успешно получены, но стенд не создан
-        stand_success - стенд успешно создан
-        outdate - при проверке не совпали версии ресурса и страницы в Confluence, нужно обновление
-        updated - успешно прошел последнюю проверку
+            вручную можно менять только description источника и стендов
+            данные актуализируются и обновляются на основе verion страницы
+    Статусы ресурсов:
+        Статусы могут быть конечными либо промежуточными.
+        Ресурсам с промежуточным статусом требуется последующая обработка и получение конечного статуса
 
-
-
+    Существующие статусы:
+        new (промежуточный)- ресурс только создан и не обрабатывался ранее
+        data_success (промежуточный) - данные успешно получены, но стенд пока не создавался
+        stand_success (промежуточный) - стенд успешно создан, после проверки ресурс будет готов к работе
+        outdate (промежуточный) - при проверке не совпали версии ресурса и целевой страницы в Confluence, нужно обновление
+        updated (конечный) - успешно прошел последнюю проверку
+        error (конечный)- не удалось обработать источник, тело ошибки будет добавлено в конец description
+    Порядок получения статусов:
+        1) При создании ресурса - new > data_success > stand_success > updated
+        2) При актуализации ресурса - updated > updated или updated > outdate > updated
+        3) Если на любом этапе обработки происходит ошибка - ресурс получает статус error и пояснение ошибки добавляется в конец описания (поле description)
     """
 
     def __init__(self, source_note):
@@ -54,6 +59,8 @@ class ConfluencePageIdSource():
 
     def process_source_dispatcher(self):
         """
+        Точка входа обработки ресурсов. 
+        За один вызов обрабатывает ресурс ОДИН раз. Для получения конечного статуса необходимо вызвать несколько раз
         Вернёт {fields_to_update: {}, stand_data: {}}
         сначала нужно обновить все поля из fields_to_update 
         затем обновить поля стенда из stand_data, либо создать стенд
@@ -76,14 +83,14 @@ class ConfluencePageIdSource():
         self.stand_data['description'] = [
             f"Created by confluence_page_id source {self.source['value']}\n\nConfluence link should be: \n{self.confluence.base_url.replace('/rest/api', '')}/pages/viewpage.action?pageId={self.source['value']}"]
 
-    def get_page_data(self):
+    def _get_page_data(self):
         """Вернёт {'success': True, 'title': str, 'version': str, 'layout': str}, если 'success': False, добавится ключ 'error'"""
         try:
             return self.confluence.get_page_data(self.source['value'])
         except Exception as e:
             return {'success': False, 'error': f'Unknown error when get_page_data: {e}'}
 
-    def get_page_version(self):
+    def _get_page_version(self):
         """Вернёт {'success': True, 'version': str 'when_number'} если 'success': False, добавится ключ 'error'"""
         try:
             return self.confluence.get_page_version(self.source['value'])

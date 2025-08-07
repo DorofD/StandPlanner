@@ -10,9 +10,10 @@ div.admin-sidebar {
 
 
 div.admin-content {
-    display: flex;
+    display: inline-flex;
+    align-items: stretch;
     height: 100%;
-    width: 60%;
+    width: 85%;
 }
 
 nav.admin-sidebar {

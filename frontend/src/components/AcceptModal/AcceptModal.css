@@ -9,6 +9,7 @@
 }
 
 div.acceptModal {
+    box-sizing: border-box;
     border: solid 4px #afafaf;
     border-radius: 10px;
     position: fixed;
@@ -17,21 +18,21 @@ div.acceptModal {
     transform: translate(-50%, -50%);
     background-color: rgb(255, 255, 255);
     z-index: 2001;
-    height: 100px;
-    width: 250px;
+    width: auto;
+    height: auto;
 }
 
 div.acceptModalButtons {
-    /* display: inline; */
-    align-content: center;
-    width: 100%;
-    height: 50%;
-    text-align: center;
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 15%;
+    margin: 10px;
 }
 
 div.acceptModalText {
+    box-sizing: border-box;
     text-align: center;
     margin: 10px;
-    /* width: 100%;
-    height: 50%; */
 }

@@ -140,8 +140,8 @@ export default function Stands() {
                     onChange={changeStandDescription}></textarea>
                 {pickedStand['id'] === 0 && <Button style={'userChange'} onClick={addStand}>Добавить</Button>}
                 {(pickedStand['id'] != 0 && pickedStand['id'] != 'default') && <>
-                    <Button style={'userChange'} onClick={changeStand}>Изменить</Button>
-                    <Button style={'userDelete'} onClick={handleClick}>Удалить</Button>
+                    <Button style={'standartNeutral'} onClick={changeStand}>Изменить</Button>
+                    <Button style={'standartReject'} onClick={handleClick}>Удалить</Button>
                 </>
                 }
             </div>

@@ -24,15 +24,11 @@ class DBUsers():
                 """
         return execute_db_query(query)
 
-    def change_user(self, id: int, changes: dict):
-
-        query = "UPDATE {self.table_name} SET "
-        updates = []
-        for column, value in changes.items():
-            updates.append(f"{column} = '{value}'")
-        query += ", ".join(updates)
-        query += f" WHERE id = '{id}';"
-
+    def update_user_field(self, id: int, field: str, value: str):
+        query = f"""
+                UPDATE users SET {field} = '{value}' 
+                WHERE id = '{id}'
+                """
         return execute_db_query(query)
 
     def delete_user(self, id: int):

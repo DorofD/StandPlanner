@@ -36,7 +36,7 @@ class DBStands():
                 """
         return execute_db_query(query)
 
-    def update_stand_value(self, id: int, field: str, value: str):
+    def update_stand_field(self, id: int, field: str, value: str):
         """Можно менять значения полей name, description, html_layout"""
         query = f"""
                 UPDATE {self.table_name} SET {field} = '{value}' 

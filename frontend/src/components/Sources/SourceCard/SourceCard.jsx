@@ -12,6 +12,12 @@ export default function SourceCard({ id, value, version, description, status, pi
     return (
         <>
             <div id={id} className={picked} onClick={onClick1}>
+                {picked === "sourceCardPicked" && <>
+                    <div className="sourceCardButtons">
+                        <Button style={"sourcesCardDelete"} onClick={(e) => { e.stopPropagation(); onClick3(); }}>Удалить</Button>
+                        <Button style={"sourcesCardClose"} onClick={(e) => { e.stopPropagation(); onClick2(); }}>Закрыть</Button>
+                    </div>
+                </>}
                 <div className="sourceCardTop">
                     <p className="sourceCardValueFaded">Page ID: </p>{value}
                     <p className="sourceCardVersionFaded">Версия: </p>{version}
@@ -22,10 +28,6 @@ export default function SourceCard({ id, value, version, description, status, pi
                 {picked === "sourceCardPicked" && <>
                     <div className="sourceCardMiddle">
                         <p className="sourceCardStatusFaded">Описание: </p>{description}
-                    </div>
-                    <div className="sourceCardButtons">
-                        <Button style={"sourcesCardDelete"} onClick={(e) => { e.stopPropagation(); onClick3(); }}>Удалить</Button>
-                        <Button style={"sourcesCardClose"} onClick={(e) => { e.stopPropagation(); onClick2(); }}>Закрыть</Button>
                     </div>
                 </>}
 

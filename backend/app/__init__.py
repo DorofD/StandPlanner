@@ -67,7 +67,14 @@ def create_app():
 
     app.logger.handlers = []
     app.logger.addHandler(handler)
-    app.logger.setLevel(logging.INFO)
+
+    log_level = os.environ['LOG_LEVEL'].lower()
+    if log_level == 'info':
+        app.logger.setLevel(logging.INFO)
+    elif log_level == 'debug':
+        app.logger.setLevel(logging.DEBUG)
+    else:
+        app.logger.setLevel(logging.INFO)
 
     from app.routes.base_routes import main as main_blueprint
     from app.routes.login import login_bp

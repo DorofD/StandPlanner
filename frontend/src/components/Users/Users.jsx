@@ -3,11 +3,11 @@ import { useState, useEffect } from "react";
 import "./Users.css";
 import UserCard from "./UserCard/UserCard";
 import Button from "../Button/Button";
+import Filter from "../Filter/Filter";
 import { apiGetUsers, apiAddUser, apiChangeUser, apiDeleteUser } from "../../services/apiUsers";
 import { useNotificationContext } from "../../hooks/useNotificationContext";
 import Modal from "../Modal/Modal";
 import AcceptModal from "../AcceptModal/AcceptModal";
-import filterLogo from './filter.png'
 import Loader from "../Loader/Loader";
 
 export default function Users() {
@@ -26,6 +26,7 @@ export default function Users() {
 
     const [actionFunction, setActionFunction] = useState(null);
     const [filterUsers, setFilterUsers] = useState({ login: '', role: '', auth_type: '' });
+    const [additionalText, setAdditionalText] = useState([]);
 
     const openAcceptModalWithAction = (action) => {
         setActionFunction(() => action);
@@ -40,6 +41,7 @@ export default function Users() {
     function closeChangeModal() {
         setIsChangeModalOpen(false);
         setChangedUser({ id: '', login: '', auth_type: '', role: '', password: '', confirmPassword: '' })
+        setAdditionalText([])
     }
 
     function closeAcceptModal() {
@@ -104,27 +106,55 @@ export default function Users() {
         }
     }
 
-    async function changeUser() {
 
+    function validateChanges() {
+        let changesDict = {}
+        let textList = []
+        if (changedUser.role !== pickedUser.role) {
+            changesDict.role = changedUser.role
+            textList.push(`Роль: ${pickedUser.role} => ${changedUser.role}`)
+        }
+        if (changedUser.login !== pickedUser.login) {
+            changesDict.login = changedUser.login
+            textList.push(`Логин: ${pickedUser.login} => ${changedUser.login}`)
+        }
         if (changedUser.password != changedUser.confirmPassword) {
             setNotificationData({ message: 'Пароли не совпадают', type: 'error' })
             toggleNotificationFunc()
-            closeAcceptModal()
+            return false
+        }
+        if (changedUser.password) {
+            changesDict.password = changedUser.password
+            textList.push(`Новый пароль`)
+        }
+        if (Object.keys(changesDict).length === 0) {
+            setNotificationData({ message: 'Вы ничего не изменили', type: 'error' })
+            toggleNotificationFunc()
+            setAdditionalText([])
             return false
         }
 
-        const response = await apiChangeUser(changedUser.id, changedUser.login, changedUser.role, changedUser.auth_type, changedUser.password)
+        textList.unshift("Следующие изменения будут применены:")
+        setAdditionalText(textList)
+        console.log(changesDict)
+        openAcceptModalWithAction(() => changeUser(changesDict))
+    }
+
+    async function changeUser(changesDict) {
+        const response = await apiChangeUser(pickedUser.id, changesDict)
         if (response.status == 200) {
             getUsers()
             closeAcceptModal()
             closeChangeModal()
             setNotificationData({ message: 'Пользователь изменен', type: 'success' })
             toggleNotificationFunc()
+            setAdditionalText([])
 
         } else {
             closeAcceptModal()
             setNotificationData({ message: 'Не удалось изменить пользователя', type: 'error' })
             toggleNotificationFunc()
+            setAdditionalText([])
         }
     }
 
@@ -162,18 +192,15 @@ export default function Users() {
         <div className="users">
             <div className="usersHeader">
                 <Button
-                    style={'createUser'}
+                    style={'standartNeutral'}
                     onClick={() => { setPickedUser({ id: 0, login: '', role: '' }); setIsAddModalOpen(true) }}>Добавить пользователя
                 </Button>
             </div>
-
-            <div className="usersFilterContainer">
-                <img src={filterLogo} alt="" className="filterLogo" />
-                <input type="text" className="usersFilter" placeholder="Пользователь" onChange={e => setFilterUsers({ ...filterUsers, login: e.target.value })} value={filterUsers.login} />
-                <input type="text" className="usersFilter" placeholder="Роль" onChange={e => setFilterUsers({ ...filterUsers, role: e.target.value })} value={filterUsers.role} />
-                <input type="text" className="usersFilter" placeholder="Авторизация" onChange={e => setFilterUsers({ ...filterUsers, auth_type: e.target.value })} value={filterUsers.auth_type} />
-                <button onClick={() => setFilterUsers({ login: '', role: '', auth_type: '' })} className="clearFilter">Очистить</button>
-            </div>
+            <Filter onClick={() => setFilterUsers({ login: '', role: '', auth_type: '' })}>
+                <input type="text" className="filter" placeholder="Пользователь" onChange={e => setFilterUsers({ ...filterUsers, login: e.target.value })} value={filterUsers.login} />
+                <input type="text" className="filter" placeholder="Роль" onChange={e => setFilterUsers({ ...filterUsers, role: e.target.value })} value={filterUsers.role} />
+                <input type="text" className="filter" placeholder="Авторизация" onChange={e => setFilterUsers({ ...filterUsers, auth_type: e.target.value })} value={filterUsers.auth_type} />
+            </Filter>
 
             {loading === 'loading' && <Loader />}
             {loading === 'error' && <p> бекенд отвалился</p>}
@@ -185,7 +212,7 @@ export default function Users() {
                         authType={user.auth_type}
                         role={user.role}
                         picked={pickedUser.id === user.id && true || false}
-                        onClick={() => { setPickedUser(user); setChangedUser({ id: user.id, login: user.login, auth_type: user.auth_type, role: user.role, password: '', confirmPassword: '' }); setIsChangeModalOpen(true) }}>
+                        onClick={() => { setPickedUser(user); setChangedUser({ id: user.id, login: user.login, role: user.role, password: '', confirmPassword: '' }); setAdditionalText([]); setIsChangeModalOpen(true) }}>
                     </UserCard>
                 )}
             </>}
@@ -216,8 +243,8 @@ export default function Users() {
                     </div>
 
                     <div className="addModalUsersButtons">
-                        <Button style={"projectAccept"} onClick={() => addUser()}> Добавить </Button>
-                        <Button style={"projectClose"} onClick={closeAddModal}> Закрыть </Button>
+                        <Button style={"standartAccept"} onClick={() => addUser()}> Добавить </Button>
+                        <Button style={"standartNeutral"} onClick={closeAddModal}> Закрыть </Button>
                     </div>
                 </div>
             </Modal>
@@ -233,37 +260,42 @@ export default function Users() {
                         <div className="addModalUsersParamsValues">
                             <input type="text" className="addModalUsers" placeholder="Имя пользователя" onChange={e => setChangedUser({ ...changedUser, login: e.target.value })} value={changedUser.login} />
                             <select className="addModalUsers" name="" id="" onChange={e => setChangedUser({ ...changedUser, role: e.target.value })}>
-                                <option value="" disabled selected hidden>Роль</option>
-                                <option value="admin">admin</option>
-                                <option value="user">user</option>
+                                <option value="" disabled={true}>Роль</option>
+                                <option value="admin" selected={changedUser.role === 'admin' && true || false}>admin</option>
+                                <option value="user" selected={changedUser.role === 'user' && true || false}>user</option>
                             </select>
                             <select className="addModalUsers" disabled={true} name="" id="">
-                                <option value="" disabled selected hidden>{changedUser.auth_type}</option>
+                                <option value="" disabled selected hidden>{pickedUser.auth_type}</option>
                             </select>
-                            <input type="password" disabled={changedUser.auth_type !== 'local'} className="addModalUsers" placeholder="Новый пароль" onChange={e => setChangedUser({ ...changedUser, password: e.target.value })} value={changedUser.password} />
-                            <input type="password" disabled={changedUser.auth_type !== 'local'} className="addModalUsers" placeholder="Подтвердите пароль" onChange={e => setChangedUser({ ...changedUser, confirmPassword: e.target.value })} value={changedUser.confirmPassword} />
+                            <input type="password" disabled={pickedUser.auth_type !== 'local'} className="addModalUsers" placeholder="Новый пароль" onChange={e => setChangedUser({ ...changedUser, password: e.target.value })} value={changedUser.password} />
+                            <input type="password" disabled={pickedUser.auth_type !== 'local'} className="addModalUsers" placeholder="Подтвердите пароль" onChange={e => setChangedUser({ ...changedUser, confirmPassword: e.target.value })} value={changedUser.confirmPassword} />
                         </div>
                     </div>
 
                     <div className="addModalUsersButtons">
-                        <Button style={"projectAccept"} onClick={() => openAcceptModalWithAction(changeUser)}> Изменить </Button>
-                        <Button style={"projectReject"} onClick={() => openAcceptModalWithAction(deleteUser)}> Удалить </Button>
-                        <Button style={"projectClose"} onClick={closeChangeModal}> Закрыть </Button>
+                        <Button style={"standartAccept"} onClick={() => { validateChanges() }}> Изменить </Button>
+                        <Button style={"standartReject"} onClick={() => openAcceptModalWithAction(deleteUser)}> Удалить </Button>
+                        <Button style={"standartNeutral"} onClick={closeChangeModal}> Закрыть </Button>
                     </div>
                 </div>
-            </Modal>
+            </Modal >
 
             <AcceptModal isOpen={isAcceptModalOpen} onClose={closeAcceptModal}>
-                <div className="acceptModalUsers">
-                    <div className="acceptModalUsersText">
-                        Вы уверены?
+                <div className="acceptModal">
+                    <div className="acceptModalText">
+                        {additionalText && <>
+                            {additionalText.map(note =>
+                                <p>{note}</p>
+                            )}
+                        </>}
+                        <p>Вы уверены?</p>
                     </div>
-                    <div className="acceptModalUsersButtons">
-                        <Button style={"projectAccept"} onClick={() => { actionFunction(); closeAcceptModal(); }}> Да </Button>
-                        <Button style={"projectReject"} onClick={closeAcceptModal}> Нет </Button>
+                    <div className="acceptModalButtons">
+                        <Button style={"modalAccept"} onClick={() => { actionFunction(); closeAcceptModal(); }}> Да </Button>
+                        <Button style={"modalReject"} onClick={closeAcceptModal}> Нет </Button>
                     </div>
                 </div>
             </AcceptModal>
-        </div>
+        </div >
     );
 }

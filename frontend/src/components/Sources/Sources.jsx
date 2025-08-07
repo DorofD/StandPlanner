@@ -111,9 +111,6 @@ export default function Sources() {
                 className={selectedType == 'confluence_page_id' ? "sourcesSetTypeActive" : "sourcesSetType"}>
                 Confluence Page Id
             </button>
-        </div>
-        <div className="sourcesMenu">
-            {loading === 'start' && <p> Выберите тип источника</p>}
             {showHint &&
                 <div className="hintBox">
                     <p>
@@ -152,6 +149,9 @@ export default function Sources() {
                     </p>
                 </div>
             }
+        </div>
+        <div className="sourcesMenu">
+            {loading === 'start' && <p> Выберите тип источника</p>}
             {loading === 'loading' && <p> Loading ...</p>}
             {loading === 'error' && <p> бекенд отвалился</p>}
             {loading === 'loaded' && selectedType === 'manual' && <>
@@ -184,7 +184,7 @@ export default function Sources() {
                         </textarea>
                     </div>
 
-                    <Button style={"projectAccept"} onClick={() => { setNewSource({ ...newSource, source_type: 'confluence_page_id' }); addSource() }}> Добавить </Button>
+                    <Button style={"standartAccept"} onClick={() => { setNewSource({ ...newSource, source_type: 'confluence_page_id' }); addSource() }}> Добавить </Button>
                 </div>
                 {sources.length === 0 && <p> Источников с таким типом не найдено</p>}
                 {sources.length > 0 && <>
@@ -205,7 +205,8 @@ export default function Sources() {
         <AcceptModal isOpen={isAcceptModalOpen} onClose={closeAcceptModal}>
             <div className="acceptModal">
                 <div className="acceptModalText">
-                    Вы уверены?
+                    <p>Источник будет удалён</p>
+                    <p>Вы уверены?</p>
                 </div>
                 <div className="acceptModalButtons">
                     <Button style={"modalAccept"} onClick={() => { actionFunction(); closeAcceptModal(); }}> Да </Button>

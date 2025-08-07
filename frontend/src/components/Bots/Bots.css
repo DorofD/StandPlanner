@@ -1,0 +1,38 @@
+div.botsMain {
+    height: 100%;
+    width: 100%;
+    display: flex;
+    background-color: aqua;
+}
+
+div.botsSection {
+    height: 100%;
+    width: 60%;
+    background-color: blue;
+}
+
+div.botsSection2 {
+    height: 100%;
+    width: 40%;
+    background-color: rgb(255, 0, 76);
+}
+
+div.logsFilterContainer1 {
+    text-align: center;
+    height: 5%;
+    width: 100%;
+    /* padding: 20px; */
+    background-color: bisque;
+}
+
+div.logsNotes1 {
+    box-sizing: border-box;
+    overflow: auto;
+    height: 95%;
+    /* height: auto; */
+    width: 100%;
+    border-top: solid 3px #afafaf;
+
+    border-bottom: solid 3px #afafaf;
+
+}

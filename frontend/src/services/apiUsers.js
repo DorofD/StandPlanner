@@ -22,17 +22,14 @@ export async function apiAddUser(login, role, authType, password) {
     return response
 }
 
-export async function apiChangeUser(id, login, role, auth_type, password) {
+export async function apiChangeUser(id, chanesDict) {
     const response = await authFetch(`${process.env.BACKEND_URL}/users`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
             action: 'change',
-            id: id,
-            login: login,
-            role: role,
-            auth_type: auth_type,
-            password: password
+            fields_to_update: chanesDict,
+            id: id
         })
     })
     return response

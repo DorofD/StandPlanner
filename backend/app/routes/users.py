@@ -20,8 +20,7 @@ def users():
             add_user(data['login'], data['auth_type'],
                      data['role'], data['password'])
         if data['action'] == 'change':
-            change_user(data['id'], data['login'], data['role'],
-                        data['auth_type'], data['password'])
+            change_user(data['id'], data['fields_to_update'])
         if data['action'] == 'delete':
             delete_user(id=data['id'])
 

@@ -23,15 +23,18 @@ def add_user(login: str, auth_type: str, role: str, password: str):
             f'Received unknown auth type when adding a user: {auth_type}')
 
 
-def change_user(id: int, login: str, role: str, auth_type: str, password: str):
-    if auth_type == 'local':
-        if password:
-            changes = {'login': login, 'role': role, 'password': password}
-        else:
-            changes = {'login': login, 'role': role}
-    else:
-        changes = {'login': login, 'role': role}
-    DBUsers().change_user(id, changes)
+def change_user(id: int, fields_to_update: list):
+    if 'auth_type' in fields_to_update:
+        raise Exception("Forbidden to change auth_type")
+    if 'id' in fields_to_update:
+        raise Exception("Forbidden to change user id")
+    if 'role' in fields_to_update:
+        if fields_to_update['role'] != 'admin' and fields_to_update['role'] != 'user':
+            raise Exception(f"Invalid role: {fields_to_update['role']}")
+    for field_name in fields_to_update:
+        DBUsers().update_user_field(
+            id, field_name, fields_to_update[field_name])
+    return True
 
 
 def delete_user(id: int):

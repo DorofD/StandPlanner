@@ -1,0 +1,46 @@
+div.filterContainer {
+    box-sizing: border-box;
+    height: 10%;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16px
+}
+
+div.filterLogo {
+    display: inline;
+}
+
+img.filterLogo {
+    width: 30px;
+    vertical-align: middle;
+}
+
+input.filter {
+    font-family: Arial;
+    font-size: large;
+    width: 20%;
+    padding: 4px;
+    border: solid 3px #afafaf;
+    border-radius: 10px;
+}
+
+select.filter {
+    font-family: Arial;
+    font-size: large;
+    width: 20%;
+    padding: 4px;
+    border: solid 3px #afafaf;
+    background-color: white;
+    border-radius: 10px;
+}
+
+select.filter:focus {
+    border: solid 3px #646464;
+}
+
+select.filter:hover {
+    border: solid 3px #646464;
+    cursor: pointer;
+}

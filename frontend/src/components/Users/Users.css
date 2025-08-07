@@ -11,8 +11,8 @@ div.usersHeader {
 
 div.addModalUsers {
     padding: 5px;
-    width: 380px;
-    height: 350px;
+    width: 385px;
+    height: 355px;
     text-align: center;
 
 }
@@ -59,80 +59,18 @@ select.addModalUsers {
     padding: 4px;
     border: solid 3px #afafaf;
     border-radius: 10px;
+    background-color: #ffffff;
 }
 
-select.addModalUsers:focus {
-    border: solid 3px #646464;
-}
-
-select.addModalUsers:hover {
-    border: solid 3px #646464;
-    cursor: pointer;
+select.addModalUsers:disabled {
+    background-color: #f1f1f1;
 }
 
 div.addModalUsersButtons {
+    box-sizing: border-box;
     display: flex;
-    justify-content: center;
     align-items: center;
-}
-
-
-div.usersFilterContainer {
-    text-align: center;
-}
-
-div.filterLogo {
-    display: inline;
-}
-
-img.filterLogo {
-    width: 30px;
-    vertical-align: middle;
-}
-
-input.usersFilter {
-    font-family: Arial;
-    font-size: large;
-    width: 130px;
-    padding: 4px;
-    margin-left: 10px;
-    margin-bottom: 15px;
-    border: solid 3px #afafaf;
-    border-radius: 10px;
-}
-
-div.acceptModalUsers {
-    padding: 5px;
-    width: 350px;
-    height: 80px;
-
-}
-
-div.acceptModalUsersName {
-    display: flex;
     justify-content: center;
-    align-items: center;
-    margin-bottom: 10px;
-}
-
-div.acceptModalUsersButtons {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-div.acceptModalUsersButtons {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-div.acceptModalUsersText {
-    font-family: Arial;
-    font-size: 20px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-top: 10px;
-    margin-bottom: 10px;
+    gap: 6%;
+    margin: 10px;
 }
