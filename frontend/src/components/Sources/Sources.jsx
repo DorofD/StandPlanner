@@ -191,9 +191,11 @@ export default function Sources() {
                     {sources.map(source =>
                         <SourceCard id={source.id}
                             value={source.value}
+                            version={source.version === '' && "Отсутствует" || source.version}
                             description={source.description}
                             status={source.status}
                             picked={pickedSource.id === source.id && true || false}
+                            last_update={source.last_update === 'never' && "Отсутствует" || source.last_update}
                             onClick1={() => { setPickedSource(source); console.log(1) }}
                             onClick2={() => { setPickedSource({ id: '' }); }}
                             onClick3={() => openAcceptModalWithAction(deleteSource)}

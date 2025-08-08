@@ -62,7 +62,7 @@ def sources():
         if data['action'] == 'add':
             add_source(data['source_note'])
         if data['action'] == 'process_one':
-            process_source(data['source_type'], data['source_note'])
+            process_source(data['source_type'], data['note_id'])
     # if data['action'] == 'change':
     #     if 'name' in data:
     #         change_stand(id=data['id'], name=data['name'])

@@ -7,7 +7,7 @@ class DBSourcesConfluencePageId():
 
     def add_source(self, value, description=''):
         query = f"""
-                INSERT INTO {self.table_name} ('value', 'version', 'description', 'status', 'stand_id') VALUES('{value}', '', '{description}', 'new', '');
+                INSERT INTO {self.table_name} ('value', 'version', 'description', 'status', 'stand_id', 'last_update') VALUES('{value}', '', '{description}', 'new', '', 'never');
                 """
         return execute_db_query(query)
 

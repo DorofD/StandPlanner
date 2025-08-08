@@ -13,7 +13,7 @@ def get_reservations_for_planner_db():
             SELECT reservations.id, users.login, stands.name, reservations.start_time, reservations.duration, reservations.status FROM reservations
             JOIN users ON reservations.user_id=users.id
             JOIN stands ON reservations.stand_id=stands.id
-            WHERE status = 'planned' OR status = 'active'
+            WHERE reservations.status = 'planned' OR reservations.status = 'active'
             """
     return execute_db_query(query)
 

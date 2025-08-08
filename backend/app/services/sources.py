@@ -20,73 +20,98 @@ def add_source(source_note):
     raise Exception('Unknown source_type')
 
 
-def process_source(source_type, source_note):
+def process_source(source_type, source_note_id):
     if source_type == 'confluence_page_id':
         # обработка ресурса по правилам соответствующего типа ресурсов
         # на выходе отдаст обновленные данные ресурса и стенда (при наличии обновлений для стенда), которые необходимо записать в бд
-        current_app.logger.info(f"Source")
-        current_app.logger.debug(f"Source")
-        pass
+        current_app.logger.debug(
+            f"Calling handler for {source_type} with id {source_note_id}")
+        result = handle_confluence_page_id(source_note_id)
+        return result
 
 
-def handle_confluence_page_id(source_note):
+def handle_confluence_page_id(source_id):
     """
     Передает ресурс обработчику соответствующего типа ресурсов, полученные данные записывает записывает в БД
     Доводит обрабатываемый ресурс до конечного статуса (updated или error)
     """
+    db_source = DBSourcesConfluencePageId()
+    db_stands = DBStands()
+    processed_note = db_source.get_source(source_id)
     source_type = 'confluence_page_id'
-    # вызов обработчика
-    if source_note['status'] == 'updated':
+    if processed_note['status'] == 'updated':
         step_number = 3
     else:
-        step_number = 6
+        step_number = 5
 
     count = 0
     while count < step_number:
+        processed_note = db_source.get_source(source_id)
+        current_app.logger.debug(
+            f"Start iteration number: {count}, processed_note: status {processed_note['status']}, pageId {processed_note['value']}")
+        if processed_note['status'] == 'updated' and count != 0:
+            current_app.logger.debug(f"First check worked, returning True")
+            return True
+        if processed_note['status'] == 'error':
+            current_app.logger.debug(f"Second check worked, returning False")
+            return False
         count += 1
         process_result = ConfluencePageIdSource(
-            source_note).process_source_dispatcher()
-
-        if process_result['fields_to_update']:
-            db_source = DBSourcesConfluencePageId()
+            processed_note).process_source_dispatcher()
+        current_app.logger.debug(
+            f"Get proccess_result, result is: {process_result['success']}")
+        if 'fields_to_update' in process_result:
             updated_fields = process_result['fields_to_update']
             for field_name in updated_fields:
                 db_source.update_source_field(
-                    source_note['id'], field_name, updated_fields[field_name])
-        if process_result['stand_data']:
-            db_stands = DBStands()
+                    processed_note['id'], field_name, updated_fields[field_name])
+        if 'stand_data' in process_result:
             stand_data = process_result['stand_data']
-            if not source_note['stand_id']:
+            if not processed_note['stand_id']:
                 try:
-                    db_stands.add_stand[stand_data['name'], source_type,
-                                        stand_data['description'], stand_data['html_layout']]
+                    db_stands.add_stand[stand_data['name'], source_type, stand_data['status'],
+                                        stand_data['description'], stand_data['html_layout'], stand_data['last_update']]
                     stand_id = db_stands.get_stand_id_by_name(
                         stand_data['name'])
                     if not stand_id:
                         raise Exception(
                             'stand_id not found after stand creation')
-                    db_source.set_source_stand_id(source_note['id'], stand_id)
+                    db_source.set_source_stand_id(
+                        processed_note['id'], stand_id)
                     db_source.update_source_field(
-                        source_note['id'], 'status', 'stand_success')
+                        processed_note['id'], 'status', 'stand_success')
                 except Exception as e:
+                    current_app.logger.error(
+                        f"Source processing error: Unknown error when creating stand: {e}")
                     db_source.update_source_field(
-                        source_note['id'], 'status', 'error')
-                    current_description = db_source.get_source(source_note['id'])[
+                        processed_note['id'], 'status', 'error')
+                    current_description = db_source.get_source(processed_note['id'])[
                         0]['description']
                     db_source.update_source_field(
-                        source_note['id'], 'description', current_description + f"||| Unknown error when creating stand: {e}")
+                        processed_note['id'], 'description', current_description + f"||| Unknown error when creating stand: {e}")
+                    break
             else:
                 try:
                     for field_name in stand_data:
-                        db_stands.update_stand_field(
-                            source_note['stand_id'], field_name, stand_data[field_name])
+                        if field_name != 'add_to_description':
+                            db_stands.update_stand_field(
+                                processed_note['stand_id'], field_name, stand_data[field_name])
+                        else:
+                            db_stands.add_text_to_stand_description(
+                                processed_note['stand_id'], stand_data[field_name])
                 except Exception as e:
+                    current_app.logger.error(
+                        f"Source processing error: Unknown error when updating stand: {e}")
                     db_source.update_source_field(
-                        source_note['id'], 'status', 'error')
-                    current_description = db_source.get_source(source_note['id'])[
+                        processed_note['id'], 'status', 'error')
+                    current_description = db_source.get_source(processed_note['id'])[
                         0]['description']
                     db_source.update_source_field(
-                        source_note['id'], 'description', current_description + f"||| Unknown error when updating stand: {e}")
+                        processed_note['id'], 'description', current_description + f"||| Unknown error when updating stand: {e}")
+                    break
+    current_app.logger.debug(
+        f"Enter out of cycle, something goes wrong, return False")
+    return False
 
 
 def process_all_sources():

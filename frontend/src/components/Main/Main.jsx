@@ -7,7 +7,6 @@ import StandCard from "../Stands/StandCard/StandCard";
 import sendIcon from "./send.png"
 import { useAuthContext } from "../../hooks/useAuthContext";
 
-
 export default function Main() {
     const [loadingStands, setLoadingStands] = useState('loading')
     const [stands, setStands] = useState([])
@@ -47,6 +46,7 @@ export default function Main() {
 
     return (
         <>
+            {/* <ColorSchemeSelector></ColorSchemeSelector> */}
             <div className="mainStands">
                 {loadingStands === 'loading' && <p> Loading ...</p>}
                 {loadingStands === 'error' && <p> бекенд отвалился</p>}

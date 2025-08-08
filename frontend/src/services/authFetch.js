@@ -46,5 +46,9 @@ export async function authFetch(url, options = {}) {
         console.log('Forbidden, check your role')
         throw new Error('Forbidden, check your role');
     }
+    if (response.status === 500) {
+        console.log('Backend problem')
+        throw new Error('Backend has problem');
+    }
     return response;
 }

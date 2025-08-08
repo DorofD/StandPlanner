@@ -157,9 +157,7 @@ export default function Planner() {
       setReservations(reservations)
       setLoadingReservations('loaded')
     } catch (error) {
-      if (error instanceof TypeError && error.message === 'Failed to fetch') {
-        setLoadingReservations('error')
-      }
+      setLoadingReservations('error')
     }
   }
 

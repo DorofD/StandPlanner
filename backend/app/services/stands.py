@@ -10,7 +10,8 @@ def get_stand(id):
 
 
 def add_stand(name: str, description: str):
-    DBStands().add_stand(name=name, source_type='manual', description=description)
+    DBStands().add_stand(name=name, source_type='manual',
+                         status='unknown', description=description)
 
 
 def delete_stand(id: int):

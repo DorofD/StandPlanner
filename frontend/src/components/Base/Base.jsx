@@ -5,6 +5,8 @@ import Button from "../Button/Button";
 import Notification from "../Notification/Notification";
 import { useNotificationContext } from "../../hooks/useNotificationContext";
 import { useAuthContext } from "../../hooks/useAuthContext";
+import { useColorScheme } from "../../contexts/ColorSchemeContext";
+import ColorSchemeSelector from "../ColorSchemeSelector/ColorSchemeSelector";
 
 const NavLink = React.forwardRef((props, ref) => {
     return (
@@ -26,7 +28,7 @@ export default function Base() {
     return (
         <>
             <div className="baseHeader" id="modal-root">
-                {/* <span className="header">{now.toLocaleTimeString()}</span> */}
+                <ColorSchemeSelector></ColorSchemeSelector>
                 {userName}
                 <Button style={"logout"} type={"submit"} onClick={toogleAuth}> Выйти </Button>
             </div>

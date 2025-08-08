@@ -1,7 +1,46 @@
 .sourceCard {
     padding: 10px;
     cursor: pointer;
-    /* user-select: none; */
+    border: solid 2px #b0b6b8;
+    border-radius: 12px;
+    margin: 10px;
+    height: 55px;
+    background-color: #f5f7fa;
+}
+
+.sourceCard:hover {
+    background-color: #e9f5ee;
+    /* border-color: #6e8399e3; */
+    background-color: var(--hover-color);
+}
+
+.sourceCardPicked {
+    box-sizing: border-box;
+    padding: 10px;
+    cursor: pointer;
+    border: 3px solid #357a38;
+    border-radius: 12px;
+    margin: 10px;
+    height: auto;
+    background-color: #f2f7f4;
+    position: relative;
+}
+
+.sourceCardPicked::after {
+    content: '';
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    width: 16px;
+    height: 16px;
+    background-size: contain;
+}
+
+
+
+/* .sourceCard {
+    padding: 10px;
+    cursor: pointer;
     border: solid 3px #afafaf;
     border-radius: 10px;
     margin: 10px;
@@ -9,20 +48,19 @@
 }
 
 .sourceCardPicked {
+    box-sizing: border-box;
     padding: 10px;
     cursor: pointer;
-    /* user-select: none; */
-    border: solid 3px #464646;
+    border:  4px #464646;
     border-radius: 10px;
     margin: 10px;
     height: auto;
-    background-color: #e4e4e4;
 }
 
 .sourceCard:hover {
     background-color: #f1f1f1;
     border: solid 3px #474747;
-}
+} */
 
 
 p.sourceCardName {
@@ -55,6 +93,7 @@ div.sourceCardStatus {
 p.sourceCardStatusFaded {
     display: inline;
     color: rgba(0, 0, 0, 0.61);
+    margin-left: 20px;
 }
 
 p.sourceCardValueFaded {
@@ -65,7 +104,6 @@ p.sourceCardValueFaded {
 p.sourceCardVersionFaded {
     display: inline;
     color: rgba(0, 0, 0, 0.61);
-    margin-left: 20px;
 }
 
 div.sourceCardButtons {

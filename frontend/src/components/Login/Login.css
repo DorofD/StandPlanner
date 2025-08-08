@@ -36,5 +36,6 @@ div.error {
   margin: 15px 0 0;
   padding: 15px;
   color: white;
-  background-color: #6e8399e3;
+  /* background-color: #6e8399e3; */
+  background-color: var(--hover-color);
 }

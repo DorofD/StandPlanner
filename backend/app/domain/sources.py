@@ -1,4 +1,5 @@
 from app.domain.confluence_api import ConfluenceAPI
+from datetime import datetime
 
 
 class ManualSource():
@@ -45,7 +46,7 @@ class ConfluencePageIdSource():
 
     def validate_source(self):
         fields = ['id', 'value', 'version',
-                  'description', 'status', 'stand_id']
+                  'description', 'status', 'stand_id', 'last_update']
         for field in fields:
             try:
                 self.source[field]
@@ -56,6 +57,11 @@ class ConfluencePageIdSource():
             if not self.source['field']:
                 raise Exception(
                     f"Invalid source confluence_page_id, empty field: {field}")
+        for status in ['data_success', 'stand_success', 'updated']:
+            if self.source['status'] == status and not self.source['stand_id']:
+                self.fields_to_update['status'] = 'error'
+                self.fields_to_update['description'] = f"{self.source['description']} ||| Source with status '{status}' must have linked stand, but source with pageId={self.source['value']} has an empty stand_id field"
+                return {'fields_to_update': self.fields_to_update, 'success': False}
 
     def process_source_dispatcher(self):
         """
@@ -69,9 +75,17 @@ class ConfluencePageIdSource():
         self.validate_source()
         if self.source['status'] == 'new':
             return self._process_new()
+        if self.source['status'] == 'data_success':
+            return self._process_data_success()
+        if self.source['status'] == 'stand_success':
+            return self._process_updated()
+        if self.source['status'] == 'updated':
+            return self._process_updated()
+        if self.source['status'] == 'error':
+            return self._process_error()
 
     def _process_new(self):
-        page_data = self.get_page_data()
+        page_data = self._get_page_data()
         if not page_data['success']:
             self.fields_to_update['status'] = 'error'
             self.fields_to_update['description'] = f"{self.source['description']} ||| {page_data['error']}"
@@ -80,8 +94,65 @@ class ConfluencePageIdSource():
         self.fields_to_update['version'] = page_data['version']
         self.stand_data['html_layout'] = page_data['layout']
         self.stand_data['name'] = page_data['title']
-        self.stand_data['description'] = [
-            f"Created by confluence_page_id source {self.source['value']}\n\nConfluence link should be: \n{self.confluence.base_url.replace('/rest/api', '')}/pages/viewpage.action?pageId={self.source['value']}"]
+        self.stand_data['status'] = 'unknown'
+        self.stand_data[
+            'description'] = f"Created by confluence_page_id source {self.source['value']}\n\nConfluence link should be: \n{self.confluence.base_url.replace('/rest/api', '')}/pages/viewpage.action?pageId={self.source['value']}"
+        return {'fields_to_update': self.fields_to_update, 'stand_data': self.stand_data, 'success': True}
+
+    def _process_data_success(self):
+        if self.source['stand_id']:
+            self.fields_to_update['status'] = 'stand_success'
+            return {'fields_to_update': self.fields_to_update, 'success': True}
+
+    def _process_updated(self):
+        versions_match = self._compare_page_versions()
+        if versions_match['success']:
+            self.fields_to_update['status'] = 'updated'
+            now = datetime.now()
+            formatted_now = now.strftime("%H:%M-%d.%m.%Y")
+            self.fields_to_update['last_update'] = formatted_now
+            self.stand_data['last_update'] = formatted_now
+            return {'fields_to_update': self.fields_to_update, 'stand_data': self.stand_data, 'success': True}
+        elif 'error' in versions_match:
+            self.fields_to_update['status'] = 'error'
+            self.fields_to_update['description'] = f"{self.source['description']} ||| Error when processing source with status 'stand_success' {versions_match['error']}"
+            self.stand_data['last_update'] = 'error'
+            self.stand_data[
+                'add_to_description'] = f"||| !Updating for source failed, stand and source data may be outdated, check the source with pageId {self.source['value']}"
+            return {'fields_to_update': self.fields_to_update, 'stand_data': self.stand_data, 'success': False}
+        elif 'outdated' in versions_match:
+            page_data = self._get_page_data()
+            if not page_data['success']:
+                self.fields_to_update['status'] = 'error'
+                self.fields_to_update['description'] = f"{self.source['description']} ||| Error when updating: {page_data['error']}"
+                self.stand_data[
+                    'add_to_description'] = f"||| !Updating for source failed, stand and source data may be outdated, check the source with pageId {self.source['value']}"
+                self.stand_data['last_update'] = 'error'
+                return {'fields_to_update': self.fields_to_update, 'stand_data': self.stand_data, 'success': False}
+            now = datetime.now()
+            formatted_now = now.strftime("%H:%M-%d.%m.%Y")
+            self.fields_to_update['last_update'] = formatted_now
+            self.fields_to_update['status'] = 'updated'
+            self.fields_to_update['version'] = page_data['version']
+            self.stand_data['last_update'] = formatted_now
+            self.stand_data['html_layout'] = page_data['layout']
+            self.stand_data['name'] = page_data['title']
+            self.stand_data['last_update'] = 'error'
+            return {'fields_to_update': self.fields_to_update, 'stand_data': self.stand_data, 'success': True}
+
+    def _process_error(self):
+        pass
+
+    def _compare_page_versions(self):
+        local_version = self.source['version']
+        confluence_version = self._get_page_version()
+        if not confluence_version['success']:
+            error_text = f"Error when try to actualize data: {confluence_version['error']}"
+            return {'success': False, 'error': error_text}
+        if local_version == confluence_version:
+            return {'success': True, 'outdated': False}
+        else:
+            return {'success': False, 'outdated': True}
 
     def _get_page_data(self):
         """Вернёт {'success': True, 'title': str, 'version': str, 'layout': str}, если 'success': False, добавится ключ 'error'"""

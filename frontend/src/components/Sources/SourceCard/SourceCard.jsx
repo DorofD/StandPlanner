@@ -3,7 +3,7 @@ import Button from "../../Button/Button";
 import "./SourceCard.css";
 
 
-export default function SourceCard({ id, value, version, description, status, picked = false, onClick1, onClick2, onClick3 }) {
+export default function SourceCard({ id, value, version, description, status, picked = false, last_update, onClick1, onClick2, onClick3 }) {
     if (!picked) {
         picked = "sourceCard"
     } else {
@@ -20,10 +20,11 @@ export default function SourceCard({ id, value, version, description, status, pi
                 </>}
                 <div className="sourceCardTop">
                     <p className="sourceCardValueFaded">Page ID: </p>{value}
-                    <p className="sourceCardVersionFaded">Версия: </p>{version}
+                    <p className="sourceCardStatusFaded">Статус: </p>{status}
                 </div>
                 <div className="sourceCardMiddle">
-                    <p className="sourceCardStatusFaded">Статус: </p>{status}
+                    <p className="sourceCardVersionFaded">Версия: </p>{version}
+                    <p className="sourceCardStatusFaded">Последнее обновление: </p>{last_update}
                 </div>
                 {picked === "sourceCardPicked" && <>
                     <div className="sourceCardMiddle">

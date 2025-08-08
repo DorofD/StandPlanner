@@ -1,0 +1,49 @@
+:root {
+    --accent-color: #4CAF50;
+    color: var(--text-main-color);
+}
+
+/* .accent {
+    color: var(--accent-color);
+    color: var(--navbar-color);
+    color: var(--hover-color);
+} */
+
+/* const mainScheme = {
+    accent: "#4CAF50",
+    hover: "#6e8399e3",
+    navbar: "#f1f1f1",
+    mainBackground: "#ffffff",
+    reject: "#F44336",
+    warning: "#FFC107",
+    info: "#2196F3",
+    textMain: "#000000",
+    textSecondary: "#6e8399",
+    disabled: "#b0b6b8"
+}
+
+const darkColorScheme = {
+    accent: "#3D8A52",
+    hover: "#3b4659",
+    navbar: "#23272F",
+    mainBackground: "#181A20",
+    reject: "#B55454",
+    warning: "#E2B86B",
+    info: "#4C80CF",
+    textMain: "#F3F3F3",
+    textSecondary: "#A0A4AD",
+    disabled: "#444950"
+};
+
+const softLightColorScheme = {
+    accent: "#5CB174",   // Мягкий зелёный
+    hover: "#dbe4ee",   // Светло-серый с голубым оттенком
+    navbar: "#f7f9fa",   // Очень светлый серо-голубой
+    mainBackground: "#f5f6fa", // Ещё более светлый фон
+    reject: "#E57373",   // Приглушённый красный
+    warning: "#FFD580",   // Светлый жёлтый/янтарный
+    info: "#64A6FF",   // Нежно-голубой
+    textMain: "#23272F",   // Очень тёмно-серый (почти чёрный)
+    textSecondary: "#7a869a", // Серо-голубой для второстепенного текста
+    disabled: "#cfd8dc"    // Светло-серый для неактивных элементов
+}; */

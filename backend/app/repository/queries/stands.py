@@ -7,7 +7,7 @@ class DBStands():
 
     def get_stands_list(self):
         query = f"""
-                SELECT id, name, source_type FROM {self.table_name}
+                SELECT id, name, source_type, status, last_update FROM {self.table_name}
                 """
         return execute_db_query(query)
 
@@ -30,9 +30,9 @@ class DBStands():
         else:
             return False
 
-    def add_stand(self, name: str, source_type: str, description: str = '', html_layout: str = ''):
+    def add_stand(self, name: str, source_type: str, status: str = 'unknown', description: str = '', html_layout: str = '', last_update: str = ''):
         query = f"""
-                INSERT INTO {self.table_name} ('name', 'source_type', 'description', 'html_layout') VALUES('{name}', '{source_type}', '{description}', '{html_layout}');
+                INSERT INTO {self.table_name} ('name', 'source_type', 'status', 'description', 'html_layout', 'last_update') VALUES('{name}', '{source_type}', '{status}', '{description}', '{html_layout}', '{last_update}');
                 """
         return execute_db_query(query)
 
@@ -40,6 +40,15 @@ class DBStands():
         """Можно менять значения полей name, description, html_layout"""
         query = f"""
                 UPDATE {self.table_name} SET {field} = '{value}' 
+                WHERE id = '{id}'
+                """
+        return execute_db_query(query)
+
+    def add_text_to_stand_description(self, id, adding_text):
+        """Можно менять значения полей name, description, html_layout"""
+        query = f"""
+                UPDATE {self.table_name}
+                SET description = description || '{adding_text}' 
                 WHERE id = '{id}'
                 """
         return execute_db_query(query)

@@ -21,8 +21,10 @@ def create_db():
                 "id"	INTEGER NOT NULL UNIQUE,
                 "name"	TEXT NOT NULL UNIQUE,
                 "source_type"	TEXT NOT NULL CHECK("source_type" IN ('manual', 'confluence_page_id')),
+                "status"	TEXT NOT NULL CHECK("status" IN ('free', 'busy', 'maintenance', 'unknown', 'error')),
                 "description"	TEXT,
                 "html_layout"	TEXT,
+                "last_update"	TEXT,
                 PRIMARY KEY("id" AUTOINCREMENT)
             );
             """
@@ -70,6 +72,7 @@ def create_db():
                 "description"	TEXT,
                 "status"	TEXT,
                 "stand_id"	INTEGER,
+                "last_update"	TEXT,
                 PRIMARY KEY("id" AUTOINCREMENT),
                 FOREIGN KEY("stand_id") REFERENCES "stands"("id")
                 );
