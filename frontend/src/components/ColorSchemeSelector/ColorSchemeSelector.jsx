@@ -1,10 +1,12 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import "./ColorSchemeSelector.css"
-import { useColorScheme } from "../../contexts/ColorSchemeContext";
+import { useColorScheme } from "../../hooks/useColorThemeContext";
 
 export default function ColorSchemeSelector() {
     const { colorSchemeNumber, setColorSchemeNumber } = useColorScheme();
     const { colorScheme, setColorScheme } = useColorScheme();
+    const [localSchemeNumber, setLocalSchemeNumber] = useState()
+
     const mainScheme = {
         accent: "#4CAF50",
         hover: "#6e8399e3",
@@ -32,22 +34,34 @@ export default function ColorSchemeSelector() {
     };
 
     const softLightColorScheme = {
-        accent: "#FFB74D",   // Мягкий зелёный
-        hover: "#dbe4ee",   // Светло-серый с голубым оттенком
-        navbar: "#f7f9fa",   // Очень светлый серо-голубой
-        mainBackground: "#f5f6fa", // Ещё более светлый фон
-        reject: "#E57373",   // Приглушённый красный
-        warning: "#FFD580",   // Светлый жёлтый/янтарный
-        info: "#64A6FF",   // Нежно-голубой
-        textMain: "#23272F",   // Очень тёмно-серый (почти чёрный)
-        textSecondary: "#7a869a", // Серо-голубой для второстепенного текста
-        disabled: "#cfd8dc"    // Светло-серый для неактивных элементов
+        accent: "#FFB74D",
+        hover: "#dbe4ee",
+        navbar: "#f7f9fa",
+        mainBackground: "#f5f6fa",
+        reject: "#E57373",
+        warning: "#FFD580",
+        info: "#64A6FF",
+        textMain: "#23272F",
+        textSecondary: "#7a869a",
+        disabled: "#cfd8dc"
     };
+
+    useEffect(() => {
+        const saved = localStorage.getItem("colorSchemeNumber");
+        if (saved) setLocalSchemeNumber(saved);
+    }, []);
+
     return (
         <div className="colorSchemeIcons">
-            <div className={colorSchemeNumber == 'schema1' && "colorCircle active" || "colorCircle"} onClick={() => { setColorSchemeNumber('schema1'); setColorScheme(mainScheme) }} ></div>
+            {/* <div className={colorSchemeNumber == 'schema1' && "colorCircle active" || "colorCircle"} onClick={() => { setColorSchemeNumber('schema1'); setColorScheme(mainScheme) }} ></div>
             <div className={colorSchemeNumber == 'schema2' && "colorCircle active" || "colorCircle"} onClick={() => { setColorSchemeNumber('schema2'); setColorScheme(darkColorScheme) }} ></div>
-            <div className={colorSchemeNumber == 'schema3' && "colorCircle active" || "colorCircle"} onClick={() => { setColorSchemeNumber('schema3'); setColorScheme(softLightColorScheme) }} ></div>
+            <div className={colorSchemeNumber == 'schema3' && "colorCircle active" || "colorCircle"} onClick={() => { setColorSchemeNumber('schema3'); setColorScheme(softLightColorScheme) }} ></div> */}
+            {/* <div className={colorSchemeNumber == 'schema1' && "colorCircle active" || "colorCircle"} onClick={() => setColorSchemeNumber('schema1')} ></div>
+            <div className={colorSchemeNumber == 'schema2' && "colorCircle active" || "colorCircle"} onClick={() => setColorSchemeNumber('schema2')} ></div>
+            <div className={colorSchemeNumber == 'schema3' && "colorCircle active" || "colorCircle"} onClick={() => setColorSchemeNumber('schema3')} ></div> */}
+            <div className={localSchemeNumber == 'schema1' && "colorCircle active" || "colorCircle"} onClick={() => { setColorScheme(mainScheme); localStorage.setItem("colorSchemeNumber", 'schema1'); setLocalSchemeNumber('schema1') }} ></div>
+            <div className={localSchemeNumber == 'schema2' && "colorCircle active" || "colorCircle"} onClick={() => { setColorScheme(darkColorScheme); localStorage.setItem("colorSchemeNumber", 'schema2'); setLocalSchemeNumber('schema2') }} ></div>
+            <div className={localSchemeNumber == 'schema3' && "colorCircle active" || "colorCircle"} onClick={() => { setColorScheme(softLightColorScheme); localStorage.setItem("colorSchemeNumber", 'schema3'); setLocalSchemeNumber('schema3') }} ></div>
         </div>
     );
 }

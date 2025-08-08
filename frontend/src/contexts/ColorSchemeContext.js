@@ -1,10 +1,8 @@
 import React, { createContext, useState, useEffect, useContext } from "react";
 
-const ColorSchemeContext = createContext();
+export const ColorSchemeContext = createContext();
 
-export function ColorSchemeProvider({ children }) {
-    const [colorSchemeNumber, setColorSchemeNumber] = useState(1)
-    const [colorScheme, setColorScheme] = useState(mainScheme);
+export const ColorSchemeProvider = ({ children }) => {
 
     const mainScheme = {
         accent: "#4CAF50",
@@ -20,8 +18,8 @@ export function ColorSchemeProvider({ children }) {
     }
 
     const darkColorScheme = {
-        accent: "#3D8A52",
-        hover: "#3b4659",
+        accent: "#aa3213",
+        hover: "#e06d50",
         navbar: "#23272F",
         mainBackground: "#181A20",
         reject: "#B55454",
@@ -33,7 +31,7 @@ export function ColorSchemeProvider({ children }) {
     };
 
     const softLightColorScheme = {
-        accent: "#5CB174",
+        accent: "#FFB74D",
         hover: "#dbe4ee",
         navbar: "#f7f9fa",
         mainBackground: "#f5f6fa",
@@ -45,21 +43,49 @@ export function ColorSchemeProvider({ children }) {
         disabled: "#cfd8dc"
     };
 
+    const getInitialScheme = () => {
+        const saved = localStorage.getItem("colorSchemeNumber") || "schema1";
+        if (saved === "schema1") return mainScheme;
+        if (saved === "schema2") return darkColorScheme;
+        if (saved === "schema3") return softLightColorScheme;
+        return mainScheme;
+    };
 
-    useEffect(() => {
-        console.log('use effect 1')
-        const saved = localStorage.getItem("colorSchemeNumber");
-        if (saved) setColorSchemeNumber(saved);
-        console.log(saved)
-        if (colorSchemeNumber === 'schema1') setColorScheme(mainScheme);
-        if (colorSchemeNumber === 'schema2') setColorScheme(darkColorScheme);
-        if (colorSchemeNumber === 'schema3') setColorScheme(softLightColorScheme);
-    }, [colorSchemeNumber]);
+    const [colorScheme, setColorScheme] = useState(getInitialScheme);
+    // const [colorSchemeNumber, setColorSchemeNumber] = useState(getInitialSchemeNumber);
+
+    const [colorSchemeNumber, setColorSchemeNumber] = useState()
+    // const [colorScheme, setColorScheme] = useState({
+    //     accent: "#4CAF50",
+    //     hover: "#6e8399e3",
+    //     navbar: "#f1f1f1",
+    //     mainBackground: "#ffffff",
+    //     reject: "#F44336",
+    //     warning: "#FFC107",
+    //     info: "#2196F3",
+    //     textMain: "#000000",
+    //     textSecondary: "#6e8399",
+    //     disabled: "#b0b6b8"
+    // });
+
+
+
+    // useEffect(() => {
+    //     console.log('use effect 1')
+    //     const saved = localStorage.getItem("colorSchemeNumber");
+    //     if (saved) setColorSchemeNumber(saved);
+    //     console.log(saved)
+    //     { colorSchemeNumber === 'schema1' || setColorScheme(mainScheme) };
+    //     { colorSchemeNumber === 'schema2' || setColorScheme(darkColorScheme) };
+    //     { colorSchemeNumber === 'schema3' || setColorScheme(softLightColorScheme) };
+    // }, []);
 
 
     useEffect(() => {
         console.log('use effect 2')
         console.log('setting colors')
+        // const saved = localStorage.getItem("colorSchemeNumber");
+        // if (saved) setColorSchemeNumber(saved);
         document.documentElement.style.setProperty('--accent-color', colorScheme.accent);
         document.documentElement.style.setProperty('--hover-color', colorScheme.hover);
         document.documentElement.style.setProperty('--navbar-color', colorScheme.navbar);
@@ -70,7 +96,8 @@ export function ColorSchemeProvider({ children }) {
         document.documentElement.style.setProperty('--text-main-color', colorScheme.textMain);
         document.documentElement.style.setProperty('--text-secondary-color', colorScheme.textSecondary);
         document.documentElement.style.setProperty('--disabled-color', colorScheme.disabled);
-        localStorage.setItem("colorSchemeNumber", colorSchemeNumber);
+        { colorSchemeNumber }
+        // localStorage.setItem("colorSchemeNumber", colorSchemeNumber);
     }, [colorScheme]);
 
     return (
@@ -78,10 +105,6 @@ export function ColorSchemeProvider({ children }) {
             {children}
         </ColorSchemeContext.Provider>
     );
-}
-
-export function useColorScheme() {
-    return useContext(ColorSchemeContext);
 }
 
 
