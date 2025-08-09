@@ -2,7 +2,7 @@ import React, { Component, useState, useEffect } from "react";
 import "./Sources.css";
 import SourceCard from "./SourceCard/SourceCard";
 import Button from "../Button/Button";
-import { apiGetSources, apiAddSource, apiDeleteSource } from "../../services/apiSources";
+import { apiGetSources, apiAddSource, apiDeleteSource, apiActualizeSource } from "../../services/apiSources";
 import { useAuthContext } from "../../hooks/useAuthContext";
 import { useNotificationContext } from "../../hooks/useNotificationContext";
 import AcceptModal from "../AcceptModal/AcceptModal";
@@ -20,6 +20,7 @@ export default function Sources() {
     const [actionFunction, setActionFunction] = useState(null);
     const [isAcceptModalOpen, setIsAcceptModalOpen] = useState(false);
     const [showHint, setShowHint] = useState(false);
+    const [serverResponse, setServerResponse] = useState([]);
 
     const openAcceptModalWithAction = (action) => {
         setActionFunction(() => action);
@@ -63,12 +64,36 @@ export default function Sources() {
             }
         } catch (error) {
 
-            setNotificationData({ message: `Проблема с бекендом: ${err}`, type: 'error' })
+            setNotificationData({ message: `Проблема с бекендом: ${error}`, type: 'error' })
             toggleNotificationFunc()
             setNewSource({ value: '', description: '', source_type: selectedType })
         }
     }
+    async function actualizeSource() {
+        const response = await apiActualizeSource(selectedType, pickedSource.id)
+            .then(response => response.json())
+            .then(data => {
+                console.log(data.success);
+                if (data.success) {
+                    setNotificationData({ message: `Ответ от сервера: ${data.message}`, type: 'success' })
+                    toggleNotificationFunc()
+                } else {
+                    setNotificationData({ message: `Ответ от сервера: ${data.message}`, type: 'error long' })
+                    toggleNotificationFunc()
+                }
+                setPickedSource({ id: '' })
+                setNewSource({ value: '', description: '', source_type: selectedType })
+                getSources(selectedType)
 
+            })
+            .catch(error => {
+                console.log('Error:', error)
+                setPickedSource({ id: '' })
+                setNewSource({ value: '', description: '', source_type: selectedType })
+                setNotificationData({ message: `Проблема с бекендом: ${error}`, type: 'error long' })
+                toggleNotificationFunc()
+            });
+    }
     async function deleteSource() {
 
         const response = await apiDeleteSource(selectedType, pickedSource.id)
@@ -184,8 +209,13 @@ export default function Sources() {
                         </textarea>
                     </div>
 
-                    <Button style={"standartAccept"} onClick={() => { setNewSource({ ...newSource, source_type: 'confluence_page_id' }); addSource() }}> Добавить </Button>
+                    <Button style={"standartNeutral"} onClick={() => { setNewSource({ ...newSource, source_type: 'confluence_page_id' }); addSource() }}> Добавить </Button>
                 </div>
+                {serverResponse.length > 0 && <>{serverResponse.map(note =>
+                    <p>{note}</p>
+                )
+
+                } </>}
                 {sources.length === 0 && <p> Источников с таким типом не найдено</p>}
                 {sources.length > 0 && <>
                     {sources.map(source =>
@@ -199,6 +229,7 @@ export default function Sources() {
                             onClick1={() => { setPickedSource(source); console.log(1) }}
                             onClick2={() => { setPickedSource({ id: '' }); }}
                             onClick3={() => openAcceptModalWithAction(deleteSource)}
+                            onClick4={() => actualizeSource()}
                         ></SourceCard>
                     )}
                 </>}

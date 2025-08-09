@@ -6,7 +6,7 @@ def get_stands():
 
 
 def get_stand(id):
-    return DBStands().get_stand(id)[0]
+    return DBStands().get_stand(id)
 
 
 def add_stand(name: str, description: str):

@@ -24,3 +24,12 @@ def execute_db_query(query, value_array=0, last_row_id=False):
     conn.commit()
     conn.close()
     return result
+
+
+def execute_parametrized_query(query, params):
+    """Принимает параметризованный запрос и параметры, возвращает lastrowid"""
+    with sqlite3.connect('./data/database.db') as conn:
+        cur = conn.cursor()
+        cur.execute(query, params)
+        conn.commit()
+        return cur.lastrowid

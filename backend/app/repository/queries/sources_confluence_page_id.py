@@ -14,33 +14,45 @@ class DBSourcesConfluencePageId():
     def update_source_field(self, id: int, field_name: str, value: str):
         query = f"""
                 UPDATE {self.table_name} SET {field_name} = '{value}' 
-                WHERE id = '{id}'
+                WHERE id = {id};
+                """
+        return execute_db_query(query)
+
+    def add_text_to_source_description(self, id, adding_text):
+        query = f"""
+                UPDATE {self.table_name}
+                SET description = description || '{adding_text}' 
+                WHERE id = {id};
                 """
         return execute_db_query(query)
 
     def set_source_stand_id(self, id, stand_id):
         query = f"""
                 UPDATE {self.table_name} SET stand_id = '{stand_id}' 
-                WHERE id = '{id}'
+                WHERE id = {id};
                 """
         return execute_db_query(query)
 
     def get_all_sources(self):
         query = f"""
-                SELECT * FROM {self.table_name}
+                SELECT * FROM {self.table_name};
                 """
         return execute_db_query(query)
 
     def get_source(self, id):
         query = f"""
                 SELECT * FROM {self.table_name}
-                WHERE id = '{id}'
+                WHERE id = {id};
                 """
-        return execute_db_query(query)
+        result = execute_db_query(query)
+        if result:
+            return result[0]
+        else:
+            return False
 
     def delete_source(self, id: int):
         query = f"""
                 DELETE FROM {self.table_name}
-                WHERE id = '{id}'
+                WHERE id = {id};
                 """
         return execute_db_query(query)

@@ -10,7 +10,7 @@ class ConfluenceAPI:
         self.base_url = os.environ['CONFLUENCE_BASE_URL']
         self.headers = {
             "Accept": "application/json",
-            "Authorization": f"Bearer {os.environ['CONFLUENCE_API_TOKEN ']}"
+            "Authorization": f"Bearer {os.environ['CONFLUENCE_API_TOKEN']}"
         }
 
     def _request_get(self, api_path):

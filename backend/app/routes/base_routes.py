@@ -62,7 +62,11 @@ def sources():
         if data['action'] == 'add':
             add_source(data['source_note'])
         if data['action'] == 'process_one':
-            process_source(data['source_type'], data['note_id'])
+            # print(data)
+            if process_source(data['source_type'], data['source_id']):
+                return jsonify({'success': True, 'message': 'Source has ben successfully processed'}), 200, {'ContentType': 'application/json'}
+            else:
+                return jsonify({'success': False, 'message': 'Something going wrong, check source description and service logs'}), 200, {'ContentType': 'application/json'}
     # if data['action'] == 'change':
     #     if 'name' in data:
     #         change_stand(id=data['id'], name=data['name'])

@@ -29,6 +29,7 @@ export default function Base() {
         <>
             <div className="baseHeader" id="modal-root">
                 <ColorSchemeSelector></ColorSchemeSelector>
+                <div className="baseEmptyDiv"></div>
                 {userName}
                 <Button style={"logout"} type={"submit"} onClick={toogleAuth}> Выйти </Button>
             </div>

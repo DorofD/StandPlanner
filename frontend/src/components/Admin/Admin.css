@@ -1,5 +1,5 @@
 div.admin-sidebar {
-    background-color: #f1f1f1;
+    /* background-color: #f1f1f1; */
     background-color: var(--navbar-color);
     float: left;
     display: inline-flex;
@@ -47,7 +47,7 @@ ul.admin {
     /* background-color: #6e8399e3; */
     background-color: var(--hover-color);
     /* color: #ffffff; */
-    color: var(--main-background-color);
+    color: var(--text-hovered-color);
 }
 
 .activeAdminHref {
@@ -56,7 +56,7 @@ ul.admin {
     display: inline-block;
     padding-top: 8%;
     /* color: #ffffff; */
-    color: var(--main-background-color);
+    color: var(--text-hovered-color);
     padding-bottom: 8%;
     padding-left: 10%;
     text-decoration: none;
@@ -67,7 +67,7 @@ ul.admin {
 
 .activeAdminHref:hover {
     /* background-color: #6e8399e3; */
-    background-color: var(--hover-color);
+    /* background-color: var(--hover-color); */
     /* color: #ffffff; */
-    color: var(--main-background-color);
+    color: var(--text-hovered-color);
 }

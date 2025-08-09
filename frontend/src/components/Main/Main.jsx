@@ -59,47 +59,22 @@ export default function Main() {
                         </StandCard>)}
                 </>}
             </div>
+            <div className="mainRightContainer">
 
-            {/* <div className="mainStandDescription">
-                <h3>{pickedStand.name}</h3>
-                <h3>{standInfo.name}</h3>
-                <textarea
-                    placeholder={pickedStand['id'] === 0 && 'Описание стенда' || ''}
-                    className="mainStands"
-                    value={standInfo.description || ''}
-                    disabled={true}  ></textarea>
-            </div> */}
-
-            <div className="mainStandLayout">
-                <h3>{pickedStand.name}</h3>
-                <h3>{standInfo.name}</h3>
-                {standInfo.html_layout && (
-                    <div
-                        dangerouslySetInnerHTML={{ __html: standInfo.html_layout }}
-                    />
-                )}
-            </div>
-            <>{console.log(pickedStand)}</>
-            <>{console.log(standInfo.html_layout)}</>
-            {/* <div className="mainComments">
-                <h3>Комментарии</h3>
-                <div className="mainCommentsHead">
-                    <div>
-                        <textarea
-                            className="mainComments"
-                            value={commentText}
-                            onChange={handleComment}
-                            placeholder="Введите комментарий"
+                <div className="mainStandLayout">
+                    {standInfo.html_layout && (
+                        <div
+                            dangerouslySetInnerHTML={{ __html: standInfo.html_layout }}
                         />
-                    </div>
-                    <div>
-                        <img src={sendIcon} alt="" className="sendIcon" />
-                    </div>
+                    )}
                 </div>
-                <div className="mainCommentsList">
-                    комментарии
+
+                <div className="mainStandDescription">
+                    {standInfo.description && (standInfo.description) || <></>}
+
                 </div>
-            </div> */}
+            </div>
+
         </>
     );
 }

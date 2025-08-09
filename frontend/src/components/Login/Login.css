@@ -2,12 +2,14 @@ div.login {
   width: 360px;
   padding: 8% 0 0;
   margin: auto;
+  background-color: var(--main-background-color);
 }
 
 form.login {
   position: relative;
   z-index: 1;
-  background: #FFFFFF;
+  /* background: #FFFFFF; */
+  background-color: var(--main-background-color);
   max-width: 360px;
   margin: 0 auto 100px;
   padding: 45px;
@@ -15,9 +17,15 @@ form.login {
   box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2), 0 5px 5px 0 rgba(0, 0, 0, 0.24);
 }
 
+input.login {
+  color: var(--text-main-color);
+  background-color: var(--main-background-color);
+}
+
 form.login input {
   outline: 0;
-  background: #f1f1f1;
+  /* background: #f1f1f1; */
+  background-color: var(--navbar-color);
   width: 100%;
   border: 0;
   margin: 0 0 15px;
@@ -27,7 +35,8 @@ form.login input {
 }
 
 div.loading {
-  background-color: #f1f1f1;
+  /* background-color: #f1f1f1; */
+  background-color: var(--navbar-color);
   margin: 15px 0 0;
   padding: 15px;
 }
@@ -35,7 +44,8 @@ div.loading {
 div.error {
   margin: 15px 0 0;
   padding: 15px;
-  color: white;
+  /* color: #ffffff; */
+  color: var(--text-hovered-color);
   /* background-color: #6e8399e3; */
   background-color: var(--hover-color);
 }

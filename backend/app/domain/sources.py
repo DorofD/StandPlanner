@@ -54,7 +54,7 @@ class ConfluencePageIdSource():
                 raise Exception(
                     f"Invalid source confluence_page_id, missing field: {field}")
         for field in ['id', 'value', 'status']:
-            if not self.source['field']:
+            if not self.source[field]:
                 raise Exception(
                     f"Invalid source confluence_page_id, empty field: {field}")
         for status in ['data_success', 'stand_success', 'updated']:
@@ -95,8 +95,9 @@ class ConfluencePageIdSource():
         self.stand_data['html_layout'] = page_data['layout']
         self.stand_data['name'] = page_data['title']
         self.stand_data['status'] = 'unknown'
-        self.stand_data[
-            'description'] = f"Created by confluence_page_id source {self.source['value']}\n\nConfluence link should be: \n{self.confluence.base_url.replace('/rest/api', '')}/pages/viewpage.action?pageId={self.source['value']}"
+        self.stand_data['description'] = f"""Created by confluence_page_id source {self.source['value']}\n\nConfluence 
+                                            link should be: \n{self.confluence.base_url.replace('/rest/api', '')}/pages/viewpage.action?pageId={self.source['value']}
+                                        """
         return {'fields_to_update': self.fields_to_update, 'stand_data': self.stand_data, 'success': True}
 
     def _process_data_success(self):
@@ -141,7 +142,11 @@ class ConfluencePageIdSource():
             return {'fields_to_update': self.fields_to_update, 'stand_data': self.stand_data, 'success': True}
 
     def _process_error(self):
-        pass
+        # дописать моменты по сложным случаям, реализовать сборщик мусора
+        if self.source['stand_id'] == '':
+            return self._process_new()
+        else:
+            return self._process_updated()
 
     def _compare_page_versions(self):
         local_version = self.source['version']

@@ -3,7 +3,7 @@ import Button from "../../Button/Button";
 import "./SourceCard.css";
 
 
-export default function SourceCard({ id, value, version, description, status, picked = false, last_update, onClick1, onClick2, onClick3 }) {
+export default function SourceCard({ id, value, version, description, status, picked = false, last_update, onClick1, onClick2, onClick3, onClick4 }) {
     if (!picked) {
         picked = "sourceCard"
     } else {
@@ -14,8 +14,8 @@ export default function SourceCard({ id, value, version, description, status, pi
             <div id={id} className={picked} onClick={onClick1}>
                 {picked === "sourceCardPicked" && <>
                     <div className="sourceCardButtons">
-                        <Button style={"sourcesCardDelete"} onClick={(e) => { e.stopPropagation(); onClick3(); }}>Удалить</Button>
-                        <Button style={"sourcesCardClose"} onClick={(e) => { e.stopPropagation(); onClick2(); }}>Закрыть</Button>
+                        <Button style={"standartNeutral"} onClick={(e) => { e.stopPropagation(); onClick4(); }}>Обновить данные</Button>
+                        <Button style={"standartNeutral"} onClick={(e) => { e.stopPropagation(); onClick2(); }}>Закрыть</Button>
                     </div>
                 </>}
                 <div className="sourceCardTop">
@@ -29,6 +29,9 @@ export default function SourceCard({ id, value, version, description, status, pi
                 {picked === "sourceCardPicked" && <>
                     <div className="sourceCardMiddle">
                         <p className="sourceCardStatusFaded">Описание: </p>{description}
+                    </div>
+                    <div className="sourceCardButtons">
+                        <Button style={"standartReject soft"} onClick={(e) => { e.stopPropagation(); onClick3(); }}>Удалить</Button>
                     </div>
                 </>}
 

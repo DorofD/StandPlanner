@@ -14,6 +14,7 @@ import Login from "./Login/Login";
 import Sources from "./Sources/Sources";
 import { PrivateRoute } from "./PrivateRoute/PrivateRoute";
 import { useAuthContext } from "../hooks/useAuthContext";
+import "./App.css"
 
 export default function App() {
     const { userRole } = useAuthContext()

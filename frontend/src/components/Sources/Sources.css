@@ -13,7 +13,7 @@ div.sourcesMenu {
 }
 
 div.sourcesNewSource {
-    border: solid 4px #afafaf;
+    border: solid 4px var(--border-color);
     margin: 10px;
     padding: 10px;
     border-radius: 10px;
@@ -35,7 +35,7 @@ textarea.sourcesNewSourcePageId {
     width: 30%;
     height: 30px;
     resize: none;
-    border: solid 3px #afafaf;
+    border: solid 3px var(--border-color);
     border-radius: 10px;
     margin: 4px;
 }
@@ -46,7 +46,7 @@ textarea.sourcesNewSourceDescription {
     width: 80%;
     height: 30px;
     resize: none;
-    border: solid 3px #afafaf;
+    border: solid 3px var(--border-color);
     border-radius: 10px;
     margin: 4px;
     margin-bottom: 8px;
@@ -56,9 +56,9 @@ textarea.sourcesNewSourceDescription {
 .hintBox {
     margin-top: 10px;
     padding: 15px;
-    border: 1px solid #ddd;
+    border: solid 2px var(--border-color);
     border-radius: 5px;
-    background-color: #f9f9f9;
+    background-color: var(--main-background-color);
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
@@ -70,8 +70,4 @@ textarea.sourcesNewSourceDescription {
     margin-bottom: 10px;
     text-indent: 2em;
     text-align: justify;
-}
-
-.hintBox strong {
-    color: #1d691f;
 }

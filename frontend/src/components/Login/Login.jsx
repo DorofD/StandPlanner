@@ -60,8 +60,8 @@ export default function Login() {
         <>
             <div className="login">
                 <form className="login" onSubmit={getAuth}>
-                    <input type="text" name="username" placeholder="username" />
-                    <input type="password" name="password" placeholder="password" autoComplete="on" />
+                    <input className="login" type="text" name="username" placeholder="username" />
+                    <input className="login" type="password" name="password" placeholder="password" autoComplete="on" />
                     <Button style={"login"} type={"submit"}> Войти</Button>
 
                     {status === 'loading' && <div className="loading"> Ожидайте </div>}

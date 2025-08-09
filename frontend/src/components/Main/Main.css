@@ -7,15 +7,15 @@ div.mainStands {
 
 div.mainStandDescription {
     /* background-color: rgb(207, 252, 102); */
-    height: 99%;
-    width: 35%;
+    height: 10%;
+    width: 70%;
     text-align: center;
 }
 
 div.mainStandLayout {
     /* background-color: rgb(207, 252, 102); */
     height: 70%;
-    width: 70%;
+    width: 90%;
     overflow-wrap: break-word;
     overflow: auto;
     text-align: center;
@@ -91,4 +91,9 @@ textarea.mainComments:focus {
 .sendIcon {
     width: 35px;
     height: 40px;
+}
+
+div.mainRightContainer {
+    display: block;
+    width: 100%;
 }
