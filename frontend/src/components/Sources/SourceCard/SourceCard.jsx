@@ -4,16 +4,12 @@ import "./SourceCard.css";
 
 
 export default function SourceCard({ id, value, version, description, status, picked = false, last_update, onClick1, onClick2, onClick3, onClick4 }) {
-    if (!picked) {
-        picked = "sourceCard"
-    } else {
-        picked = "sourceCardPicked"
-    }
+
     return (
         <>
-            <div id={id} className={picked} onClick={onClick1}>
-                {picked === "sourceCardPicked" && <>
-                    <div className="sourceCardButtons">
+            <div id={id} className={!picked && "card source" || "card source picked"} onClick={onClick1}>
+                {picked && <>
+                    <div className="sourceCardButtons header">
                         <Button style={"standartNeutral"} onClick={(e) => { e.stopPropagation(); onClick4(); }}>Обновить данные</Button>
                         <Button style={"standartNeutral"} onClick={(e) => { e.stopPropagation(); onClick2(); }}>Закрыть</Button>
                     </div>
@@ -23,15 +19,17 @@ export default function SourceCard({ id, value, version, description, status, pi
                     <p className="sourceCardStatusFaded">Статус: </p>{status}
                 </div>
                 <div className="sourceCardMiddle">
-                    <p className="sourceCardVersionFaded">Версия: </p>{version}
-                    <p className="sourceCardStatusFaded">Последнее обновление: </p>{last_update}
+                    <p className="sourceCardUpdateFaded">Последнее обновление: </p>{last_update}
                 </div>
-                {picked === "sourceCardPicked" && <>
+                {picked && <>
                     <div className="sourceCardMiddle">
-                        <p className="sourceCardStatusFaded">Описание: </p>{description}
+                        <p className="sourceCardVersionFaded">Версия: </p>{version}
+                    </div>
+                    <div className="sourceCardMiddle">
+                        <p className="sourceCardVersionFaded">Описание: </p>{description}
                     </div>
                     <div className="sourceCardButtons">
-                        <Button style={"standartReject soft"} onClick={(e) => { e.stopPropagation(); onClick3(); }}>Удалить</Button>
+                        <button onClick={(e) => { e.stopPropagation(); onClick3(); }}>Удалить</button>
                     </div>
                 </>}
 

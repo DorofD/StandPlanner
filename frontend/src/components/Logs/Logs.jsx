@@ -104,7 +104,7 @@ export default function Logs() {
                     <Filter onClick={() => setFilterLogs({ datetime: '', status: '', note: '' })}>
                         <input type="text" className="filter" placeholder="Время" onChange={e => setFilterLogs({ ...filterLogs, datetime: e.target.value })} value={filterLogs.datetime} />
                         <select className='filter' onChange={e => setFilterLogs({ ...filterLogs, status: e.target.value })}>
-                            {loadingLogs === 'loaded' && <>{<option value="" selected={filterLogs.status === '' && true || false}>Статус</option>}
+                            {loadingLogs === 'loaded' && <>{<option className='' value="" selected={filterLogs.status === '' && true || false}>All </option>}
                                 {logLevels.map((level, index) => <option id={index} value={level}>{level}</option>)}</>}
                             {loadingLogs === 'error' && <>{<option value="" selected={filterLogs.status === '' && true || false}>Бекенд отвалился</option>}</>}
                         </select>
@@ -150,8 +150,8 @@ export default function Logs() {
                         <p className="logsCount">Размер файла базы данных: {dbFileSize}</p>
                     </div>
                     <div className="logsActions">
-                        <Button style={"standartNeutral"} onClick={() => getLogsFile()}>Скачать файл</Button>
-                        <Button style={"standartNeutral"} onClick={() => openAcceptModalWithAction(clearLogs)}>Очистить логи</Button>
+                        <button onClick={() => getLogsFile()}>Скачать файл</button>
+                        <button onClick={() => openAcceptModalWithAction(clearLogs)}>Очистить логи</button>
                     </div>
                 </div>
             </div>
@@ -162,8 +162,8 @@ export default function Logs() {
                         <p>Вы уверены?</p>
                     </div>
                     <div className="acceptModalButtons">
-                        <Button style={"modalAccept"} onClick={() => { actionFunction(); closeAcceptModal(); }}> Да </Button>
-                        <Button style={"modalReject"} onClick={closeAcceptModal}> Нет </Button>
+                        <button className={"positive acceptModal"} onClick={() => { actionFunction(); closeAcceptModal(); }}> Да </button>
+                        <button className={"critical acceptModal"} onClick={closeAcceptModal}> Нет </button>
                     </div>
                 </div>
             </AcceptModal>

@@ -1,0 +1,24 @@
+[data-theme="light-orange"] {
+    --accent-color: #ff9027;
+    --hover-color: #6e8399e3;
+    --navbar-color: #ffe8d1;
+    --main-background-color: #f9f6f2;
+    --neutral-button-color: #c0c0c0;
+    --critical-color: #e57373;
+    --warning-color: #ffe29a;
+    --text-main-color: #433524;
+    --text-hover-color: #ffffff;
+    --text-secondary-color: #a68a6d;
+    --text-button-color: #ffffff;
+    --text-button-active-color: #ffffff;
+    --disabled-color: #e0d4c1;
+    --border-color: #e8dac9;
+    --border-picked-color: #ffb066;
+    --card-background-color: #fff7ef;
+    --card-background-hover-color: #ffe7cc;
+    --card-background-picked-color: #fcf2e8;
+    --scrollbar-thumb-color: #ffe3ba;
+    --scrollbar-thumb-hover-color: #ffcf91;
+    --scrollbar-thumb-active-color: #ffb066;
+    --strong-text-color: #a04d00;
+}

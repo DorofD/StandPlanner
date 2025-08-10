@@ -31,7 +31,9 @@ def reservations():
 def stands():
     if request.method == 'GET':
         if request.args.get('action') == 'get_list':
-            result = jsonify(get_stands())
+            source_type = request.args.get('source_type')
+            result = jsonify(get_stands(source_type))
+            print(result)
         elif request.args.get('action') == 'get_stand':
             stand_id = request.args.get('stand_id')
             result = jsonify(get_stand(stand_id))

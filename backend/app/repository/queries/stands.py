@@ -11,6 +11,13 @@ class DBStands():
                 """
         return execute_db_query(query)
 
+    def get_stands_list_by_source_type(self, source_type):
+        query = f"""
+                SELECT id, name, source_type, status, last_update FROM {self.table_name}
+                WHERE source_type = '{source_type}';
+                """
+        return execute_db_query(query)
+
     def get_stand(self, id: int):
         query = f"""
                 SELECT * FROM {self.table_name}

@@ -1,111 +1,38 @@
 :root {
     --accent-color: #4CAF50;
+    --text-accent-color: #ffffff;
+
     --hover-color: #6e8399e3;
+    --text-hover-color: #ffffff;
+
     --navbar-color: #f1f1f1;
     --main-background-color: #ffffff;
-    --neutral-button-color: #c0c0c0;
-    --reject-color: #F44336;
-    --warning-color: #FFC107;
-    --info-color: #2196F3;
     --text-main-color: #000000;
-    --text-hovered-color: #ffffff;
-    --text-secondary-color: #566474;
+
+    --neutral-button-color: #c0c0c0;
     --text-button-color: #000000;
-    --text-button-active-color: #ffffff;
-    --disabled-color: #b0b6b8;
+
+    --card-background-color: #ffffff;
+    --card-background-hover-color: #4caf4f77;
+    --card-background-picked-color: #4caf4f18;
+    --text-secondary-color: #566474;
     --border-color: #b0b6b8;
     --border-picked-color: #316634;
-    --card-background-color: #ffffff;
-    --card-background-hover-color: #def8e6;
-    --card-background-picked-color: #ffffff;
+
+    --critical-background: #F44336;
+    --critical-text-color: #7e1710;
+    --warning-background: #e9d25a;
+    --warning-text-color: #72620e;
+    --info-background: #8aadb8;
+    --info-text-color: #122328;
+    --positive-background: #63bb66;
+    --positive-text-color: #183e1a;
+
+    --strong-text-color: #357237;
+    --disabled-color: #b0b6b8;
     --scrollbar-thumb-color: #f1f1f1;
     --scrollbar-thumb-hover-color: #4caf4f7c;
     --scrollbar-thumb-active-color: #4CAF50;
-    --strong-text-color: #357237;
-}
-
-[data-theme="dark-purple"] {
-    --accent-color: #8774e1;
-    --hover-color: #2b2b2b;
-    --navbar-color: #181818;
-    --main-background-color: #2c1428;
-    --neutral-button-color: #c0c0c0;
-    --reject-color: #ff595a;
-    --warning-color: #fed85a;
-    --info-color: #4C80CF;
-    --text-main-color: #f4f4f4;
-    --text-hovered-color: #ffffff;
-    --text-secondary-color: #aaaaaa;
-    --text-button-color: #ffffff;
-    --text-button-active-color: #ffffff;
-    --disabled-color: #444950;
-    --border-color: #b0b6b8;
-    --border-picked-color: #8774e1;
-    --card-background-color: #ffffff;
-    --card-background-hover-color: #453f5f;
-    --card-background-picked-color: #231638;
-    --scrollbar-thumb-color: #8774e1;
-    --scrollbar-thumb-hover-color: #5a44c1;
-    --scrollbar-thumb-active-color: #392985;
-    --strong-text-color: #00115e;
-}
-
-
-[data-theme="light-orange"] {
-    --accent-color: #ff9027;
-    --hover-color: #6e8399e3;
-    --navbar-color: #ffe8d1;
-    --main-background-color: #f9f6f2;
-    --neutral-button-color: #c0c0c0;
-    --reject-color: #e57373;
-    --warning-color: #ffe29a;
-    --info-color: #6cb8c9;
-    --text-main-color: #433524;
-    --text-hovered-color: #ffffff;
-    --text-secondary-color: #a68a6d;
-    --text-button-color: #ffffff;
-    --text-button-active-color: #ffffff;
-    --disabled-color: #e0d4c1;
-    --border-color: #e8dac9;
-    --border-picked-color: #ffb066;
-    --card-background-color: #fff7ef;
-    --card-background-hover-color: #ffe7cc;
-    --card-background-picked-color: #fcf2e8;
-    --scrollbar-thumb-color: #ffe3ba;
-    --scrollbar-thumb-hover-color: #ffcf91;
-    --scrollbar-thumb-active-color: #ffb066;
-    --strong-text-color: #a04d00;
-}
-
-[data-theme="black-yellow"] {
-    --accent-color: #ffd600;
-    --hover-color: #c0c0c0;
-    --navbar-color: #101010;
-    --main-background-color: #181818;
-    --neutral-button-color: #c0c0c0;
-    --reject-color: #ff5252;
-    --warning-color: #fff59d;
-    --info-color: #64b5f6;
-    --text-main-color: #fffde7;
-    --text-hovered-color: #000000;
-    --text-secondary-color: #cfcfcf;
-    --text-button-color: #ffffff;
-    --text-button-active-color: #ffffff;
-    --disabled-color: #393939;
-    --border-color: #333333;
-    --border-picked-color: #ffd600;
-    --card-background-color: #1a1a1a;
-    --card-background-hover-color: #232323;
-    --card-background-picked-color: #282828;
-    --scrollbar-thumb-color: #ffd600;
-    --scrollbar-thumb-hover-color: #ffe066;
-    --scrollbar-thumb-active-color: #ffc400;
-    --strong-text-color: #ffd600;
-    --strong-text-color: #646300;
-}
-
-* {
-    box-sizing: inherit;
 }
 
 p {
@@ -120,15 +47,55 @@ strong {
     color: var(--strong-text-color);
 }
 
+input {
+    outline: none;
+    font-family: Arial;
+    font-size: large;
+    background-color: var(--main-background-color);
+    color: var(--text-main-color);
+    border: solid 2px var(--border-color);
+    padding: 4px;
+    border-radius: 10px;
+}
+
+input:focus {
+    border: solid 3px var(--border-picked-color);
+}
+
+select {
+    outline: none;
+    font-family: Arial;
+    font-size: large;
+    background-color: var(--main-background-color);
+    color: var(--text-main-color);
+    border: solid 2px var(--border-color);
+}
+
+textarea {
+    outline: none;
+    font-family: Arial;
+    font-size: 20px;
+    border-radius: 10px;
+    background-color: var(--main-background-color);
+    color: var(--text-main-color);
+    border: solid 2px var(--border-color);
+}
+
+textarea:focus {
+    border: solid 2px var(--border-picked-color);
+}
+
+select:focus {
+    border: solid 3px var(--border-picked-color);
+}
+
 ::-webkit-scrollbar {
     width: 15px;
-    /* background-color: #f1f1f1; */
     background-color: var(--main-background-color);
     border-radius: 10px;
 }
 
 ::-webkit-scrollbar-thumb {
-    /* background-color: #f1f1f1; */
     background-color: var(--scrollbar-thumb-color);
     border-radius: 10px;
 }
@@ -138,6 +105,28 @@ strong {
 }
 
 ::-webkit-scrollbar-thumb:active {
-    /* background-color: #4CAF50; */
     background-color: var(--scrollbar-thumb-active-color);
+}
+
+.card {
+    color: var(--text-main-color);
+    cursor: pointer;
+    user-select: none;
+    padding: 10px;
+    margin: 12px;
+    height: auto;
+    width: auto;
+    border: solid 2px var(--border-color);
+    border-radius: 12px;
+    background-color: var(--main-backgrounds-color);
+}
+
+.card:hover {
+    background-color: var(--card-background-hover-color);
+}
+
+.card.picked {
+    border: 3px solid var(--border-picked-color);
+    background-color: var(--card-background-picked-color);
+    cursor: auto;
 }

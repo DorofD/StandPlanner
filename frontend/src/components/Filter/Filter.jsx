@@ -1,5 +1,6 @@
 import React from "react";
-import filterLogo from './filter.png'
+// import { ReactComponent as FilterIcon } from './filter.svg';
+import FilterIcon from './filter.svg';
 import Button from "../Button/Button";
 import "./Filter.css"
 /**
@@ -19,9 +20,9 @@ export default function Filter({ children, onClick }) {
 
     return (
         <div className="filterContainer">
-            <img src={filterLogo} alt="" className="filterLogo" />
+            <FilterIcon style={{ color: 'var(--accent-color)', width: 40, height: 40 }} />
             {children}
-            <Button style={"standartNeutral"} onClick={onClick}>Очистить</Button>
+            <Button onClick={onClick}>Очистить</Button>
         </div>
     );
 }

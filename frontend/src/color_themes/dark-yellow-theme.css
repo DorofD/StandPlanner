@@ -1,0 +1,25 @@
+[data-theme="black-yellow"] {
+    --accent-color: #ffd600;
+    --hover-color: #c0c0c0;
+    --navbar-color: #101010;
+    --main-background-color: #181818;
+    --neutral-button-color: #c0c0c0;
+    --critical-color: #ff5252;
+    --warning-color: #fff59d;
+    --text-main-color: #fffde7;
+    --text-hover-color: #000000;
+    --text-secondary-color: #cfcfcf;
+    --text-button-color: #ffffff;
+    --text-button-active-color: #ffffff;
+    --disabled-color: #393939;
+    --border-color: #333333;
+    --border-picked-color: #ffd600;
+    --card-background-color: #1a1a1a;
+    --card-background-hover-color: #232323;
+    --card-background-picked-color: #282828;
+    --scrollbar-thumb-color: #ffd600;
+    --scrollbar-thumb-hover-color: #ffe066;
+    --scrollbar-thumb-active-color: #ffc400;
+    --strong-text-color: #ffd600;
+    --strong-text-color: #646300;
+}

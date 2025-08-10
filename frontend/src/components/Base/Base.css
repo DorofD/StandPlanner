@@ -1,26 +1,29 @@
 div.baseSidebar {
-    /* background-color: #f1f1f1; */
     background-color: var(--navbar-color);
     float: left;
-    display: inline-flex;
+    display: flex;
+    flex-direction: column;
     align-items: stretch;
-    height: 95%;
+    height: 100%;
     width: 12%;
-    box-sizing: initial
+    box-sizing: border-box
 }
 
 div.baseContent {
+    box-sizing: border-box;
     display: flex;
-    height: 95%;
+    height: 100%;
     padding-left: 1px;
     box-sizing: initial;
     background-color: var(--main-background-color);
-    width: auto;
+    width: 88%;
 }
 
-div.baseEmptyDiv {
-    height: 100%;
-    width: 50px;
+div.baseUserName {
+    font-family: Arial;
+    font-size: 20px;
+    margin-right: 10px;
+
 }
 
 nav.baseSidebar {
@@ -38,7 +41,6 @@ ul.base {
 .baseHref {
     display: inline-block;
     padding-top: 8%;
-    /* color: #000; */
     color: var(--text-main-color);
     padding-bottom: 8%;
     padding-left: 10%;
@@ -49,20 +51,16 @@ ul.base {
 }
 
 .baseHref:hover {
-    /* background-color: #6e8399e3; */
     background-color: var(--hover-color);
-    /* color: #ffffff; */
-    color: var(--text-hovered-color);
+    color: var(--text-hover-color);
 }
 
 
 .activeBaseHref {
-    /* background-color: #4CAF50; */
     background-color: var(--accent-color);
     display: inline-block;
     padding-top: 8%;
-    /* color: #ffffff; */
-    color: var(--text-hovered-color);
+    color: var(--text-hover-color);
     padding-bottom: 8%;
     padding-left: 10%;
     text-decoration: none;
@@ -72,15 +70,11 @@ ul.base {
 }
 
 .activeBaseHref:hover {
-    /* background-color: #6e8399e3; */
-    /* background-color: var(--hover-color); */
-    /* color: #ffffff; */
-    color: var(--text-hovered-color);
+    color: var(--text-hover-color);
 }
 
 
 div.baseHeader {
-    /* background-color: #f1f1f1; */
     background-color: var(--navbar-color);
     color: var(--text-main-color);
     display: flex;
@@ -89,6 +83,15 @@ div.baseHeader {
     float: right;
     align-items: center;
     justify-content: right;
+    gap: 15px;
+}
+
+div.baseBody {
+    height: 95%;
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    box-sizing: border-box;
 }
 
 span.baseHeader {
@@ -97,8 +100,6 @@ span.baseHeader {
 }
 
 .active {
-    /* background-color: #4CAF50; */
     background-color: var(--accent-color);
-    /* color: #ffffff; */
-    color: var(--text-hovered-color);
+    color: var(--text-hover-color);
 }

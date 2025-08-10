@@ -29,44 +29,40 @@ export default function Base() {
         <>
             <div className="baseHeader" id="modal-root">
                 <ColorSchemeSelector></ColorSchemeSelector>
-                <div className="baseEmptyDiv"></div>
-                {userName}
+                <div className="baseUserName">{userName}</div>
                 <Button style={"logout"} type={"submit"} onClick={toogleAuth}> Выйти </Button>
             </div>
-            <div className="baseSidebar">
-                <nav className="baseSidebar">
-                    <Notification data={notificationData} />
-                    <ul className="base">
-                        <li>
-                            <NavLink to="/" className={({ isActive }) => isActive ? 'activeBaseHref' : 'baseHref'}>
-                                Главная
-                            </NavLink>
-                        </li>
-                        <li>
-                            <NavLink to="/planner" className={({ isActive }) => isActive ? 'activeBaseHref' : 'baseHref'}>
-                                Планировщик
-                            </NavLink>
-                        </li>
-                        {userRole === 'admin' && (<>
+            <div className="baseBody">
+                <div className="baseSidebar">
+                    <nav className="baseSidebar">
+                        <Notification data={notificationData} />
+                        <ul className="base">
                             <li>
-                                <NavLink to="/stands" className={({ isActive }) => isActive ? 'activeBaseHref' : 'baseHref'}>
-                                    Стенды
+                                <NavLink to="/" className={({ isActive }) => isActive ? 'activeBaseHref' : 'baseHref'}>
+                                    Главная
                                 </NavLink>
                             </li>
                             <li>
-                                <NavLink to="/admin" className={({ isActive }) => isActive ? 'activeBaseHref' : 'baseHref'}>
-                                    Администрирование
+                                <NavLink to="/planner" className={({ isActive }) => isActive ? 'activeBaseHref' : 'baseHref'}>
+                                    Планировщик
                                 </NavLink>
                             </li>
-                        </>)}
-                        <NavLink to="/about" className={({ isActive }) => isActive ? 'activeBaseHref' : 'baseHref'}>
-                            О приложении
-                        </NavLink>
-                    </ul>
-                </nav>
-            </div>
-            <div className="baseContent">
-                <Outlet />
+                            {userRole === 'admin' && (<>
+                                <li>
+                                    <NavLink to="/admin" className={({ isActive }) => isActive ? 'activeBaseHref' : 'baseHref'}>
+                                        Администрирование
+                                    </NavLink>
+                                </li>
+                            </>)}
+                            <NavLink to="/about" className={({ isActive }) => isActive ? 'activeBaseHref' : 'baseHref'}>
+                                О приложении
+                            </NavLink>
+                        </ul>
+                    </nav>
+                </div>
+                <div className="baseContent">
+                    <Outlet />
+                </div>
             </div>
         </>
     );

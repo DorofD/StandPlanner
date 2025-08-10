@@ -1,7 +1,7 @@
 import { authFetch } from './authFetch';
 
-export async function apiGetStands() {
-    const response = await authFetch(`${process.env.BACKEND_URL}/stands?action=get_list`, {
+export async function apiGetStands(source_type = 'all') {
+    const response = await authFetch(`${process.env.BACKEND_URL}/stands?action=get_list&source_type=${source_type}`, {
         method: 'GET',
     })
     const stands = await response.json()

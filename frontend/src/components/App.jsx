@@ -2,7 +2,7 @@ import React, { useContext, useState, createContext, useEffect } from "react";
 import { Routes, Route } from "react-router-dom"
 import Main from "./Main/Main"
 import Base from "./Base/Base"
-import Stands from "./Stands/Stands"
+import Stands from "./Stands/Stands";
 import Planner from "./Planner/Planner"
 import Admin from "./Admin/Admin"
 import About from "./About/About"
@@ -15,7 +15,7 @@ import Sources from "./Sources/Sources";
 import { PrivateRoute } from "./PrivateRoute/PrivateRoute";
 import { useAuthContext } from "../hooks/useAuthContext";
 import "./App.css"
-
+import '../color_themes/App-themes-links.css';
 export default function App() {
     const { userRole } = useAuthContext()
     return (
@@ -26,10 +26,10 @@ export default function App() {
                     <Route path="/" element={<Base />}>
                         <Route index element={<Main />} />
                         <Route path="/planner" element={<Planner />} />
-                        <Route path="/stands" element={<Stands />} />
                         {userRole === 'admin' && <Route path="/admin" element={<Admin />}>
                             <Route path="/admin/users" element={<Users />} />
                             <Route path="/admin/sources" element={<Sources />} />
+                            <Route path="/admin/stands" element={<Stands />} />
                             <Route path="/admin/bots" element={<Bots />} />
                             <Route path="/admin/logs" element={<Logs />} />
                             <Route path="/admin/apscheduler" element={<Apscheduler />} />

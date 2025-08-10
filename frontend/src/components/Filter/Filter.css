@@ -18,29 +18,13 @@ img.filterLogo {
 }
 
 input.filter {
-    font-family: Arial;
-    font-size: large;
     width: 20%;
     padding: 4px;
-    border: solid 3px #afafaf;
     border-radius: 10px;
 }
 
 select.filter {
-    font-family: Arial;
-    font-size: large;
     width: 20%;
     padding: 4px;
-    border: solid 3px #afafaf;
-    background-color: white;
     border-radius: 10px;
-}
-
-select.filter:focus {
-    border: solid 3px #646464;
-}
-
-select.filter:hover {
-    border: solid 3px #646464;
-    cursor: pointer;
 }

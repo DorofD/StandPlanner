@@ -243,8 +243,8 @@ export default function Users() {
                     </div>
 
                     <div className="addModalUsersButtons">
-                        <Button style={"standartAccept"} onClick={() => addUser()}> Добавить </Button>
-                        <Button style={"standartNeutral"} onClick={closeAddModal}> Закрыть </Button>
+                        <button onClick={() => addUser()}>Добавить</button>
+                        <button onClick={closeAddModal}> Закрыть</button>
                     </div>
                 </div>
             </Modal>
@@ -273,9 +273,9 @@ export default function Users() {
                     </div>
 
                     <div className="addModalUsersButtons">
-                        <Button style={"standartAccept"} onClick={() => { validateChanges() }}> Изменить </Button>
-                        <Button style={"standartReject"} onClick={() => openAcceptModalWithAction(deleteUser)}> Удалить </Button>
-                        <Button style={"standartNeutral"} onClick={closeChangeModal}> Закрыть </Button>
+                        <button onClick={() => { validateChanges() }}>Изменить</button>
+                        <button onClick={() => openAcceptModalWithAction(deleteUser)}>Удалить </button>
+                        <button onClick={closeChangeModal}> Закрыть </button>
                     </div>
                 </div>
             </Modal >
@@ -291,8 +291,8 @@ export default function Users() {
                         <p>Вы уверены?</p>
                     </div>
                     <div className="acceptModalButtons">
-                        <Button style={"modalAccept"} onClick={() => { actionFunction(); closeAcceptModal(); }}> Да </Button>
-                        <Button style={"modalReject"} onClick={closeAcceptModal}> Нет </Button>
+                        <button className={"positive acceptModal"} onClick={() => { actionFunction(); closeAcceptModal(); }}> Да </button>
+                        <button className={"critical acceptModal"} onClick={closeAcceptModal}> Нет </button>
                     </div>
                 </div>
             </AcceptModal>

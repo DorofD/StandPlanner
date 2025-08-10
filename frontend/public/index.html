@@ -5,11 +5,38 @@
   <link rel="icon" href="icon.png" type="image/x-icon">
   <meta charset="utf-8">
   <title>Stand Planner</title>
+  <style>
+    html,
+    body,
+    #root {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    *,
+    *::before,
+    *::after {
+      box-sizing: inherit;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      font-size: 18px;
+      background-color: var(--main-background-color);
+    }
+
+    #root {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+    }
+  </style>
 </head>
 
-<body
-  style="margin: 0%; font-family: Arial; font-size: 18px; width: 100vw; height: 100vh;background-color: var(--main-background-color);;">
-  <div id="root" style="height: 100%; width: 100%; box-sizing: border-box;">
+<body>
+  <div id="root">
   </div>
 </body>
 

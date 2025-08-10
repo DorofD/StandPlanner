@@ -1,7 +1,6 @@
 import React from "react";
 import { useState, useEffect } from "react";
 import "./Login.css";
-import Button from "../Button/Button";
 import { useAuthContext } from "../../hooks/useAuthContext";
 import { useNotificationContext } from "../../hooks/useNotificationContext";
 import { useNavigate } from 'react-router-dom';
@@ -62,10 +61,10 @@ export default function Login() {
                 <form className="login" onSubmit={getAuth}>
                     <input className="login" type="text" name="username" placeholder="username" />
                     <input className="login" type="password" name="password" placeholder="password" autoComplete="on" />
-                    <Button style={"login"} type={"submit"}> Войти</Button>
+                    <button className="login" type="submit">Войти</button>
 
                     {status === 'loading' && <div className="loading"> Ожидайте </div>}
-                    {status === 'error' && <div className="error"> Не удалось войти </div>}
+                    {status === 'error' && <div className="loginError"> Не удалось войти </div>}
                 </form>
             </div>
         </>

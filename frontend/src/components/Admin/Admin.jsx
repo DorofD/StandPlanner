@@ -22,6 +22,7 @@ export default function Admin() {
                     <ul className="admin">
                         <li className="admin"> <NavLink to="/admin/users" >Пользователи</NavLink></li>
                         <li className="admin"> <NavLink to="/admin/sources" >Источники</NavLink></li>
+                        <li className="admin"> <NavLink to="/admin/stands" >Стенды</NavLink></li>
                         <li className="admin"> <NavLink to="/admin/bots" >Боты</NavLink></li>
                         <li className="admin"> <NavLink to="/admin/logs" >Логи</NavLink></li>
                         <li className="admin"> <NavLink to="/admin/apscheduler" >APScheduler</NavLink></li>

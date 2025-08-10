@@ -1,8 +1,11 @@
 from app.repository.queries.stands import DBStands
 
 
-def get_stands():
-    return DBStands().get_stands_list()
+def get_stands(source_type):
+    if source_type == 'all':
+        return DBStands().get_stands_list()
+    else:
+        return DBStands().get_stands_list_by_source_type(source_type)
 
 
 def get_stand(id):
