@@ -1,25 +1,65 @@
 [data-theme="black-yellow"] {
+    /* Ключевой, самый контрастный цвет приложения, используется только для ключевых или активных элементов */
     --accent-color: #ffd600;
-    --hover-color: #c0c0c0;
-    --navbar-color: #101010;
-    --main-background-color: #181818;
-    --neutral-button-color: #c0c0c0;
-    --critical-color: #ff5252;
-    --warning-color: #fff59d;
-    --text-main-color: #fffde7;
-    --text-hover-color: #000000;
-    --text-secondary-color: #cfcfcf;
-    --text-button-color: #ffffff;
-    --text-button-active-color: #ffffff;
-    --disabled-color: #393939;
-    --border-color: #333333;
+    /* Цвет текста элементов, использующих accent-color как background-color */
+    --text-accent-color: #222222;
+
+    /* Цвет заднего фона кнопок и ссылок, когда на них попадает курсор (:hover) */
+    --hover-color: #ffe066cc;
+    /* светло-жёлтый с прозрачностью */
+    /* Цвет текста элементов, когда они :hover */
+    --text-hover-color: #222222;
+
+    /* Задний цвет навигационной панели */
+    --navbar-color: #23262b;
+    /* Цвет основного заднего фона контента приложения */
+    --main-background-color: #181a1b;
+    /* Основной цвет текста приложения */
+    --text-main-color: #f6f6f6;
+
+    /* Задний цвет обычных кнопок действий (закрыть, очистить фильтр, скачать и т.п.) */
+    --neutral-button-color: #35393e;
+    /* Цвет текста обычных кнопок */
+    --text-button-color: #f6f6f6;
+
+    /* Цвет заднего фона карточек сущностей */
+    --card-background-color: #23262b;
+    /* Цвет заднего фона карточек при :hover */
+    --card-background-hover-color: #ffd6001a;
+    /* Цвет заднего фона карточки, когда она focused */
+    --card-background-picked-color: #ffd6000d;
+    /* Цвет текста в карточках в названиях пунктов (например, надписи "Дата изменения:" или "Статус:") */
+    --text-secondary-color: #a0a7b4;
+    /* Цвет границ карточек и таблиц */
+    --border-color: #393e42;
+    /* Цвет границ карточек и элементов, когда они focused */
     --border-picked-color: #ffd600;
-    --card-background-color: #1a1a1a;
-    --card-background-hover-color: #232323;
-    --card-background-picked-color: #282828;
-    --scrollbar-thumb-color: #ffd600;
-    --scrollbar-thumb-hover-color: #ffe066;
-    --scrollbar-thumb-active-color: #ffc400;
+
+    /* Задний цвет (оттенок красного) кнопок критических предупреждений (например, ошибка со стороны сервера)*/
+    --critical-background: #d32f2f;
+    /* Цвет текста компонентов с фоном critical-color */
+    --critical-text-color: #fff0ee;
+    /* Задний цвет (оттенок жёлтого) немного негативных предупреждений (например, пользователь забыл заполнить поле) */
+    --warning-background: #ffe066;
+    /* Цвет текста компонентов с фоном warning-color */
+    --warning-text-color: #3e3400;
+    /* Задний цвет (оттенок серого или светло-голубого) обычных информационных уведомлений */
+    --info-background: #2c4251;
+    /* Цвет текста компонентов с фоном info-color */
+    --info-text-color: #c9e4ff;
+    /* Задний цвет (оттенок зелёного) положительных уведомлений и кнопок подтверждения */
+    --positive-background: #388e3c;
+    /* Цвет текста компонентов с фоном positive-color */
+    --positive-text-color: #eaffea;
+
+    /* Цвет жирного текста */
     --strong-text-color: #ffd600;
-    --strong-text-color: #646300;
+    /* Цвет disabled элементов (например, отключенный input text или select) */
+    --disabled-color: #393e42;
+    /* Обычный цвет ползунка скроллбара */
+    --scrollbar-thumb-color: #23262b;
+    /* Цвет ползунка скроллбара при наведении */
+    --scrollbar-thumb-hover-color: #ffd60033;
+    /* Цвет ползунка скроллбара при взаимодействии */
+    --scrollbar-thumb-active-color: #ffd600;
 }

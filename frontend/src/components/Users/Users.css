@@ -1,19 +1,33 @@
-div.users {
+div.usersContainer {
     height: 100%;
     width: 70%;
-    overflow: auto;
+
 }
 
 div.usersHeader {
-    align-items: left;
-    margin: 20px;
+    height: 10%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+}
+
+
+div.usersNotes {
+    box-sizing: border-box;
+    overflow: auto;
+    height: 80%;
+    width: 100%;
+    border-top: solid 3px var(--border-color);
+    border-bottom: solid 3px var(--border-color);
 }
 
 div.addModalUsers {
-    padding: 5px;
-    width: 385px;
+    padding: 20px;
+    /* width: 385px;
     height: 355px;
     text-align: center;
+    background-color: var(--main-background-color); */
 
 }
 
@@ -42,7 +56,7 @@ input.addModalUsers {
     width: 300px;
     height: 32px;
     padding: 4px;
-    border: solid 3px var(--border-color);
+    /* border: solid 3px var(--border-color); */
     border-radius: 10px;
 }
 
@@ -57,9 +71,9 @@ select.addModalUsers {
     font-size: large;
     width: 180px;
     padding: 4px;
-    border: solid 3px var(--border-color);
+    /* border: solid 3px var(--border-color); */
     border-radius: 10px;
-    background-color: var(--maing-background-color);
+    /* background-color: var(--main-background-color); */
 }
 
 select.addModalUsers:disabled {

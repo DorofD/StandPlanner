@@ -22,10 +22,18 @@ div.mainStandLayout {
     /*  */
     padding: 5px;
     margin: 10px;
-    border: solid 4px #afafaf;
+    border: solid 4px var(--border-color);
     border-radius: 10px;
-    color: black;
+    color: var(--text-main-color);
 }
+
+div.mainStandLayout span,
+li,
+th,
+tr {
+    color: var(--text-main-color);
+}
+
 
 div.mainStandLayout ul,
 div.mainStandLayout li {

@@ -1,10 +1,10 @@
-.card.users {
-    /* vertical-align: middle; */
+div.card.users {
+    box-sizing: border-box;
+    vertical-align: middle;
     padding: 10px;
     user-select: none;
-    border-radius: 10px;
     margin: 20px;
-    height: 50px;
+    height: auto;
 }
 
 

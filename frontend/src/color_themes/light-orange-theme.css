@@ -1,24 +1,68 @@
 [data-theme="light-orange"] {
+    /* Ключевой, самый контрастный цвет приложения, используется только для ключевых или активных элементов */
     --accent-color: #ff9027;
-    --hover-color: #6e8399e3;
-    --navbar-color: #ffe8d1;
-    --main-background-color: #f9f6f2;
-    --neutral-button-color: #c0c0c0;
-    --critical-color: #e57373;
-    --warning-color: #ffe29a;
-    --text-main-color: #433524;
+    /* Цвет текста элементов, использующих accent-color как background-color */
+    --text-accent-color: #ffffff;
+
+    /* Задний цвет кнопок и ссылок, когда на них попадает курсор (:hover) */
+    --hover-color: #ffae5d;
+    /* светло-оранжевый, но не слишком яркий */
+    /* Цвет текста элементов, когда они :hover  */
     --text-hover-color: #ffffff;
-    --text-secondary-color: #a68a6d;
-    --text-button-color: #ffffff;
-    --text-button-active-color: #ffffff;
-    --disabled-color: #e0d4c1;
-    --border-color: #e8dac9;
-    --border-picked-color: #ffb066;
-    --card-background-color: #fff7ef;
-    --card-background-hover-color: #ffe7cc;
-    --card-background-picked-color: #fcf2e8;
-    --scrollbar-thumb-color: #ffe3ba;
-    --scrollbar-thumb-hover-color: #ffcf91;
-    --scrollbar-thumb-active-color: #ffb066;
-    --strong-text-color: #a04d00;
+
+    /* Задний цвет навигационной панели */
+    --navbar-color: #f6f6f6;
+    /* Цвет основного заднего фона контента приложения */
+    --main-background-color: #ffffff;
+    /* Основной цвет текста приложения */
+    --text-main-color: #181818;
+
+    /* Задний цвет обычных кнопок действий (закрыть, очистить фильтр, скачать и т.п.) */
+    --neutral-button-color: #e2e2e2;
+    /* Цвет текста обычных кнопок*/
+    --text-button-color: #232323;
+
+    /* Цвет заднего фона карточек сущностей */
+    --card-background-color: #ffffff;
+    /* Цвет заднего фона карточек при :hover */
+    --card-background-hover-color: #ff90271a;
+    /* очень светлый оранжевый */
+    /* Цвет заднего фона карточки, когда она focused */
+    --card-background-picked-color: #ff90270c;
+    /* ещё более прозрачный оранжевый */
+    /* Цвет текста в карточках в названиях пунктов (например, надписи "Дата изменения:" или "Статус:") */
+    --text-secondary-color: #7a7a7a;
+    /* Цвет границ карточек и таблиц */
+    --border-color: #d1d5db;
+    /* Цвет границ карточек и элементов, когда они focused */
+    --border-picked-color: #ff9027;
+
+    /* Задний цвет (оттенок красного) кнопок критических предупреждений (например, ошибка со стороны сервера)*/
+    --critical-background: #ff4d3a;
+    /* Цвет текста компонентов с фоном critical-color*/
+    --critical-text-color: #8b2012;
+    /* Задний цвет (оттенок желтого) немного негативных предупреждений (например, пользователь забыл заполнить поле) */
+    --warning-background: #ffe082;
+    /* Цвет текста компонентов с фоном warning-color */
+    --warning-text-color: #8c6d1f;
+    /* Задний цвет (оттенок серого или светло-голубого) обычных информационных уведомлений */
+    --info-background: #cfe6fa;
+    /* Цвет текста компонентов с фоном info-color */
+    --info-text-color: #23405a;
+    /* Задний цвет (оттенок зеленого) положительных уведомлений и кнопок подтверждения */
+    --positive-background: #b5e7b0;
+    /* Цвет текста компонентов с фоном positive-color */
+    --positive-text-color: #225c28;
+
+    /* Цвет жирного текста */
+    --strong-text-color: #b75d00;
+    /* насыщенный темно-оранжевый */
+    /* Цвет disabled элементов (например, отключенный input text или select) */
+    --disabled-color: #d1d5db;
+    /* Обычный цвет ползунка скроллбара */
+    --scrollbar-thumb-color: #f6f6f6;
+    /* Цвет ползунка скроллбара при наведении */
+    --scrollbar-thumb-hover-color: #ff90271c;
+    /* Цвет ползунка скроллбара при взаимодействии */
+    --scrollbar-thumb-active-color: #ff9027;
 }

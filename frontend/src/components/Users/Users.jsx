@@ -189,12 +189,9 @@ export default function Users() {
     }, [])
 
     return (
-        <div className="users">
+        <div className="usersContainer">
             <div className="usersHeader">
-                <Button
-                    style={'standartNeutral'}
-                    onClick={() => { setPickedUser({ id: 0, login: '', role: '' }); setIsAddModalOpen(true) }}>Добавить пользователя
-                </Button>
+                <button onClick={() => { setPickedUser({ id: 0, login: '', role: '' }); setIsAddModalOpen(true) }}>Добавить пользователя</button>
             </div>
             <Filter onClick={() => setFilterUsers({ login: '', role: '', auth_type: '' })}>
                 <input type="text" className="filter" placeholder="Пользователь" onChange={e => setFilterUsers({ ...filterUsers, login: e.target.value })} value={filterUsers.login} />
@@ -202,20 +199,24 @@ export default function Users() {
                 <input type="text" className="filter" placeholder="Авторизация" onChange={e => setFilterUsers({ ...filterUsers, auth_type: e.target.value })} value={filterUsers.auth_type} />
             </Filter>
 
-            {loading === 'loading' && <Loader />}
-            {loading === 'error' && <p> бекенд отвалился</p>}
-            {loading === 'loaded' && <>
-                {filteredUsers.map(user =>
-                    <UserCard
-                        id={user.id}
-                        login={user.login}
-                        authType={user.auth_type}
-                        role={user.role}
-                        picked={pickedUser.id === user.id && true || false}
-                        onClick={() => { setPickedUser(user); setChangedUser({ id: user.id, login: user.login, role: user.role, password: '', confirmPassword: '' }); setAdditionalText([]); setIsChangeModalOpen(true) }}>
-                    </UserCard>
-                )}
-            </>}
+            <div className="usersNotes">
+
+
+                {loading === 'loading' && <Loader />}
+                {loading === 'error' && <p> бекенд отвалился</p>}
+                {loading === 'loaded' && <>
+                    {filteredUsers.map(user =>
+                        <UserCard
+                            id={user.id}
+                            login={user.login}
+                            authType={user.auth_type}
+                            role={user.role}
+                            picked={pickedUser.id === user.id && true || false}
+                            onClick={() => { setPickedUser(user); setChangedUser({ id: user.id, login: user.login, role: user.role, password: '', confirmPassword: '' }); setAdditionalText([]); setIsChangeModalOpen(true) }}>
+                        </UserCard>
+                    )}
+                </>}
+            </div>
 
             <Modal isOpen={isAddModalOpen} onClose={() => closeAddModal()}>
                 <div className="addModalUsers">

@@ -71,6 +71,10 @@ select {
     border: solid 2px var(--border-color);
 }
 
+select:focus {
+    border: solid 3px var(--border-picked-color);
+}
+
 textarea {
     outline: none;
     font-family: Arial;
@@ -85,9 +89,6 @@ textarea:focus {
     border: solid 2px var(--border-picked-color);
 }
 
-select:focus {
-    border: solid 3px var(--border-picked-color);
-}
 
 ::-webkit-scrollbar {
     width: 15px;
