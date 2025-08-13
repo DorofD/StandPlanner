@@ -25,8 +25,8 @@
     --warning-text-color: #72620e;
     --info-background: #8aadb8;
     --info-text-color: #122328;
-    --positive-background: #63bb66;
-    --positive-text-color: #183e1a;
+    --positive-background: #cdfdce;
+    --positive-text-color: #000000;
 
     --strong-text-color: #357237;
     --disabled-color: #b0b6b8;
@@ -130,4 +130,14 @@ textarea:focus {
     border: 3px solid var(--border-picked-color);
     background-color: var(--card-background-picked-color);
     cursor: auto;
+}
+
+div.positiveSelection {
+    color: var(--positive-text-color);
+    background-color: var(--positive-background);
+}
+
+div.criticalSelection {
+    color: var(--critical-text-color);
+    background-color: var(--critical-background);
 }

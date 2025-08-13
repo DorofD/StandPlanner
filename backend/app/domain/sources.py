@@ -60,7 +60,7 @@ class ConfluencePageIdSource():
         for status in ['data_success', 'stand_success', 'updated']:
             if self.source['status'] == status and not self.source['stand_id']:
                 self.fields_to_update['status'] = 'error'
-                self.fields_to_update['description'] = f"{self.source['description']} ||| Source with status '{status}' must have linked stand, but source with pageId={self.source['value']} has an empty stand_id field"
+                self.fields_to_update['description'] = f"{self.source['description']} \n\n||| Source with status '{status}' must have linked stand, but source with pageId={self.source['value']} has an empty stand_id field"
                 return {'fields_to_update': self.fields_to_update, 'success': False}
 
     def process_source_dispatcher(self):
@@ -88,7 +88,7 @@ class ConfluencePageIdSource():
         page_data = self._get_page_data()
         if not page_data['success']:
             self.fields_to_update['status'] = 'error'
-            self.fields_to_update['description'] = f"{self.source['description']} ||| {page_data['error']}"
+            self.fields_to_update['description'] = f"{self.source['description']} \n\n||| {page_data['error']}"
             return {'fields_to_update': self.fields_to_update, 'success': False}
         self.fields_to_update['status'] = 'data_success'
         self.fields_to_update['version'] = page_data['version']
@@ -110,28 +110,28 @@ class ConfluencePageIdSource():
         if versions_match['success']:
             self.fields_to_update['status'] = 'updated'
             now = datetime.now()
-            formatted_now = now.strftime("%H:%M-%d.%m.%Y")
+            formatted_now = now.strftime("%d.%m.%Y-%H:%M")
             self.fields_to_update['last_update'] = formatted_now
             self.stand_data['last_update'] = formatted_now
             return {'fields_to_update': self.fields_to_update, 'stand_data': self.stand_data, 'success': True}
         elif 'error' in versions_match:
             self.fields_to_update['status'] = 'error'
-            self.fields_to_update['description'] = f"{self.source['description']} ||| Error when processing source with status 'stand_success' {versions_match['error']}"
+            self.fields_to_update['description'] = f"{self.source['description']} \n\n||| Error when processing source with status 'stand_success' {versions_match['error']}"
             self.stand_data['last_update'] = 'error'
             self.stand_data[
-                'add_to_description'] = f"||| !Updating for source failed, stand and source data may be outdated, check the source with pageId {self.source['value']}"
+                'add_to_description'] = f"\n\n||| !Updating for source failed, stand and source data may be outdated, check the source with pageId {self.source['value']}"
             return {'fields_to_update': self.fields_to_update, 'stand_data': self.stand_data, 'success': False}
         elif 'outdated' in versions_match:
             page_data = self._get_page_data()
             if not page_data['success']:
                 self.fields_to_update['status'] = 'error'
-                self.fields_to_update['description'] = f"{self.source['description']} ||| Error when updating: {page_data['error']}"
+                self.fields_to_update['description'] = f"{self.source['description']} \n\n||| Error when updating: {page_data['error']}"
                 self.stand_data[
-                    'add_to_description'] = f"||| !Updating for source failed, stand and source data may be outdated, check the source with pageId {self.source['value']}"
+                    'add_to_description'] = f"\n\n||| !Updating for source failed, stand and source data may be outdated, check the source with pageId {self.source['value']}"
                 self.stand_data['last_update'] = 'error'
                 return {'fields_to_update': self.fields_to_update, 'stand_data': self.stand_data, 'success': False}
             now = datetime.now()
-            formatted_now = now.strftime("%H:%M-%d.%m.%Y")
+            formatted_now = now.strftime("%d.%m.%Y-%H:%M")
             self.fields_to_update['last_update'] = formatted_now
             self.fields_to_update['status'] = 'updated'
             self.fields_to_update['version'] = page_data['version']

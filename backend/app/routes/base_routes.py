@@ -1,9 +1,8 @@
 from flask import Blueprint, request, jsonify
 from app.services.stands import get_stands, get_stand, add_stand, delete_stand, change_stand
 from app.services.reservations import add_reservaiton, get_reservations_for_planner, change_reservation, delete_reservation
-from app.services.sources import add_source, get_sources, process_source, process_all_sources, delete_source
+from app.services.sources import add_source, get_sources, process_source, process_all_sources, delete_source, change_source
 from app import scheduler as app_scheduler
-
 import traceback
 
 main = Blueprint('main', __name__)
@@ -64,16 +63,19 @@ def sources():
         if data['action'] == 'add':
             add_source(data['source_note'])
         if data['action'] == 'process_one':
-            # print(data)
             if process_source(data['source_type'], data['source_id']):
                 return jsonify({'success': True, 'message': 'Source has ben successfully processed'}), 200, {'ContentType': 'application/json'}
             else:
                 return jsonify({'success': False, 'message': 'Something going wrong, check source description and service logs'}), 200, {'ContentType': 'application/json'}
-    # if data['action'] == 'change':
-    #     if 'name' in data:
-    #         change_stand(id=data['id'], name=data['name'])
-    #     if 'description' in data:
-    #         change_stand(id=data['id'], description=data['description'])
+        if data['action'] == 'process_all':
+            if process_source(data['source_type'], data['source_id']):
+                return jsonify({'success': True, 'message': 'Source has ben successfully processed'}), 200, {'ContentType': 'application/json'}
+            else:
+                return jsonify({'success': False, 'message': 'Something going wrong, check source description and service logs'}), 200, {'ContentType': 'application/json'}
+        if data['action'] == 'change':
+            source_type = data['source_type']
+            source_note = data['source_note']
+            change_source(source_type, source_note)
         if data['action'] == 'delete':
             delete_source(data['id'], data['source_type'])
     return jsonify({'success': True}), 200, {'ContentType': 'application/json'}

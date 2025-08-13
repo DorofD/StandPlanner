@@ -1,17 +1,83 @@
-.loader-wrapper {
+div.loaderContainer {
+    display: block;
     position: fixed;
     top: 85%;
     left: 90%;
     transform: translate(-50%, -50%);
+    z-index: 9998;
+    /* background-color: aqua;
+    padding: 25px;
+    border-radius: 25%; */
+}
+
+.overlayLoader {
+    /* position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0; */
+    position: fixed;
+    height: 100%;
+    width: 100%;
+    opacity: 40%;
+    background-color: var(--navbar-color);
+    z-index: 9998;
+    text-align: center;
+}
+
+div.loaderTitle {
+    font-size: 20px;
+    margin-top: 5px;
+    color: var(--text-secondary-color);
+    display: block;
+    box-sizing: content-box;
+    text-align: center;
+    user-select: none;
+}
+
+.dots::after {
+    content: '';
+    animation: dots 2s steps(4, end) infinite;
+}
+
+@keyframes dots {
+    0% {
+        content: '';
+    }
+
+    25% {
+        content: ' .';
+    }
+
+    50% {
+        content: ' . .';
+    }
+
+    75% {
+        content: ' . . .';
+    }
+
+    100% {
+        content: '';
+    }
+}
+
+.loader-wrapper {
+    /* position: fixed;
+    top: 85%;
+    left: 90%;
+    transform: translate(-50%, -50%); */
     display: flex;
     align-items: center;
     justify-content: center;
+    margin-bottom: 10px;
+    /* background-color: var(--navbar-color); */
     z-index: 9999;
 }
 
 .loader {
-    width: 48px;
-    height: 48px;
+    width: 60px;
+    height: 60px;
     border-radius: 50%;
     position: relative;
     animation: rotate 1s linear infinite;
@@ -22,14 +88,14 @@
     content: '';
     box-sizing: border-box;
     position: absolute;
-    inset: 0px;
+    inset: -2px;
     border-radius: 50%;
-    border: 5px solid #4CAF50;
+    border: 8px solid var(--accent-color);
     animation: prixClipFix 2s linear infinite;
 }
 
 .loader::after {
-    border-color: #8f8f8f;
+    border-color: var(--hover-color);
     animation: prixClipFix 2s linear infinite, rotate 0.5s linear infinite reverse;
     inset: 6px;
 }

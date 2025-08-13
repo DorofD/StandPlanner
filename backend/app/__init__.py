@@ -45,11 +45,11 @@ def create_app():
 
     @app.errorhandler(IntersectionError)
     def handle_value_error(error):
-        return jsonify({'error': str(error)}), 400
+        return jsonify({'message': str(error)}), 400
 
     @app.errorhandler(ReservationError)
     def handle_value_error(error):
-        return jsonify({'error': str(error)}), 400
+        return jsonify({'message': str(error)}), 400
 
     @app.errorhandler(Exception)
     def handle_value_error(error):
@@ -57,7 +57,7 @@ def create_app():
         traceback.print_exc()
         current_app.logger.exception(
             f'Backend has unknown error: {error}')
-        return jsonify({'error': f'Backend error: {error}'}), 500
+        return jsonify({'message': f'Backend error: {error}'}), 500
 
     handler = logging.FileHandler('data/app.log')
     formatter = logging.Formatter(

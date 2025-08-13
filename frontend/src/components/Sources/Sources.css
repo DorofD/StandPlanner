@@ -40,26 +40,32 @@ div.sourcesSetTypeHeader {
     width: 100%;
 }
 
+
 div.sourcesHint {
-    /* overflow: auto; */
     display: flex;
     flex-direction: column;
     box-sizing: border-box;
     align-items: center;
     width: 100%;
-    height: 60%;
+    height: auto;
 
 }
 
-div.sourcesNewSourceWrapper {
+div.sourcesManageSourceWrapper {
     padding: 10px;
     width: 100%;
     height: 40%;
     box-sizing: border-box;
 }
 
-div.sourcesNewSource {
-    padding: 10px;
+div.sourcesManageSourceWrapper.changeSource {
+    height: 70%;
+}
+
+
+div.sourcesManageSource {
+    padding: 15px;
+    color: var(--text-main-color);
     border: solid 3px var(--border-color);
     border-radius: 10px;
     box-sizing: border-box;
@@ -71,15 +77,17 @@ div.sourcesNewSource {
     gap: 10px;
 }
 
-div.sourcesNewSourceLabel {
+div.sourcesManageSourceTopLabel {
     width: 100%;
+    font-weight: bolder;
+    margin-bottom: 10px;
     text-align: center;
     color: var(--text-main-color);
 }
 
 
 
-input.newSource.name {
+input.manageSource.name {
     width: 40%;
     max-height: 40px;
     /* margin: 10px; */
@@ -88,7 +96,7 @@ input.newSource.name {
     padding-left: 10px;
 }
 
-textarea.newSource.description {
+textarea.manageSource.description {
     padding-left: 10px;
     padding-top: 10px;
     font-size: large;
@@ -96,14 +104,35 @@ textarea.newSource.description {
     height: auto;
     resize: none;
     box-sizing: border-box;
-    flex: 35%;
+    flex: 25%;
 }
 
-div.sourcesNewSourceButtons {
+div.changeSourceParams {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.param-row {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 16px;
+    border-bottom: 2px solid var(--border-color);
+}
+
+.param-key {
+    min-width: 220px;
+    color: var(--text-secondary-color);
+    /* font-weight: bold; */
+}
+
+
+div.sourcesManageSourceButtons {
     display: flex;
     flex-direction: row;
     align-items: flex-start;
-    gap: 10px;
+    gap: 20px;
 }
 
 div.sourcesNotes {
@@ -111,9 +140,6 @@ div.sourcesNotes {
     overflow: auto;
     height: 70%;
     width: 100%;
-    /* display: flex;
-
-    flex-direction: column; */
     border-top: solid 3px var(--border-color);
     border-bottom: solid 3px var(--border-color);
 }

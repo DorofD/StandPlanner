@@ -3,36 +3,22 @@ import Button from "../../Button/Button";
 import "./SourceCard.css";
 
 
-export default function SourceCard({ id, value, version, description, status, picked = false, last_update, onClick1, onClick2, onClick3, onClick4 }) {
+export default function SourceCard({ id, value, status, picked = false, last_update, onClick }) {
 
     return (
         <>
-            <div id={id} className={!picked && "card source" || "card source picked"} onClick={onClick1}>
-                {picked && <>
-                    <div className="sourceCardButtons header">
-                        <Button style={"standartNeutral"} onClick={(e) => { e.stopPropagation(); onClick4(); }}>Обновить данные</Button>
-                        <Button style={"standartNeutral"} onClick={(e) => { e.stopPropagation(); onClick2(); }}>Закрыть</Button>
-                    </div>
-                </>}
+            <div id={id} className={!picked && "card source" || "card source picked"} onClick={onClick}>
                 <div className="sourceCardTop">
                     <p className="sourceCardValueFaded">Page ID: </p>{value}
-                    <p className="sourceCardStatusFaded">Статус: </p>{status}
+                    <p className="sourceCardStatusFaded">Статус: </p><div className={
+                        status === "updated" && "paramValue positiveSelection" ||
+                        status === "error" && "paramValue criticalSelection" ||
+                        "paramValue"
+                    }>{status}</div>
                 </div>
                 <div className="sourceCardMiddle">
                     <p className="sourceCardUpdateFaded">Последнее обновление: </p>{last_update}
                 </div>
-                {picked && <>
-                    <div className="sourceCardMiddle">
-                        <p className="sourceCardVersionFaded">Версия: </p>{version}
-                    </div>
-                    <div className="sourceCardMiddle">
-                        <p className="sourceCardVersionFaded">Описание: </p>{description}
-                    </div>
-                    <div className="sourceCardButtons">
-                        <button onClick={(e) => { e.stopPropagation(); onClick3(); }}>Удалить</button>
-                    </div>
-                </>}
-
             </div>
         </>
     )

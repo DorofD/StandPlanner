@@ -49,6 +49,15 @@ p.sourceCardValueFaded {
     color: var(--text-secondary-color);
 }
 
+div.paramValue {
+    display: inline;
+    padding-left: 0.4em;
+    padding-right: 0.4em;
+    padding-top: 0.1em;
+    padding-bottom: 0.2em;
+    border-radius: 1em;
+}
+
 p.sourceCardVersionFaded {
     display: inline;
     /* color: rgba(0, 0, 0, 0.61); */

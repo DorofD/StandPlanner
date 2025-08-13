@@ -1,10 +1,11 @@
 import React, { Component, useState, useEffect } from "react";
 import "./Sources.css";
 import SourceCard from "./SourceCard/SourceCard";
-import { apiGetSources, apiAddSource, apiDeleteSource, apiActualizeSource } from "../../services/apiSources";
+import { apiGetSources, apiAddSource, apiDeleteSource, apiActualizeSource, apiChangeSource } from "../../services/apiSources";
 import { useAuthContext } from "../../hooks/useAuthContext";
 import { useNotificationContext } from "../../hooks/useNotificationContext";
 import AcceptModal from "../AcceptModal/AcceptModal";
+import Loader from "../Loader/Loader";
 
 export default function Sources() {
     const { userName, userId } = useAuthContext();
@@ -12,9 +13,12 @@ export default function Sources() {
     const [selectedType, setSelectedType] = useState('')
     const [sources, setSources] = useState([])
     const [loading, setLoading] = useState('start')
+    const [loaderState, setLoaderState] = useState({ active: false, overlay: false })
+
 
     const [pickedSource, setPickedSource] = useState({ id: 0 })
     const [newSource, setNewSource] = useState({ value: '', description: '', source_type: '' })
+    const [changedSource, setChangedSource] = useState({ id: 0, description: '' })
     const [actionFunction, setActionFunction] = useState(null);
     const [isAcceptModalOpen, setIsAcceptModalOpen] = useState(false);
     const [showHint, setShowHint] = useState(false);
@@ -32,8 +36,8 @@ export default function Sources() {
 
     function resetLocalChanges() {
         setNewSource({ value: '', description: '', source_type: '' });
+        setChangedSource({ id: 0, description: '' })
         setPickedSource({ id: 0 });
-        setSources([]);
     }
 
     async function getSources(source_type) {
@@ -54,42 +58,126 @@ export default function Sources() {
             return 1
         }
 
-        try {
-            console.log(newSource)
-            const response = await apiAddSource(newSource)
-            if (response.status == 200) {
-                getSources(newSource.source_type)
-                setNotificationData({ message: 'Источник добавлен', type: 'success' })
-                toggleNotificationFunc()
+        const response = await apiAddSource(newSource)
+            .then(response => {
+                console.log("response on addSource:", response.status);
+                return { status: response.status, body: response.json() }
+            })
+            .then(data => {
+                if (data.status == 200) {
+                    resetLocalChanges()
+                    getSources(selectedType)
+                    setNotificationData({ message: 'Источник добавлен', type: 'success' })
+                    toggleNotificationFunc()
+                    closeAcceptModal()
+                } else {
+                    console.log(data.body.success);
+                    console.log(data.body.message);
+                    setNotificationData({ message: `Не удалось добавить источник: ${data.message}`, type: 'error long' })
+                    toggleNotificationFunc()
+                }
+            })
+            .catch(error => {
+                console.log('Error:', error)
+                resetLocalChanges()
                 setNewSource({ value: '', description: '', source_type: selectedType })
-            } else {
-                setNotificationData({ message: 'Не удалось добавить источник', type: 'error' })
+                closeAcceptModal()
+                setNotificationData({ message: `Не удалось добавить источник: ${error}`, type: 'error long' })
                 toggleNotificationFunc()
-                setNewSource({ value: '', description: '', source_type: selectedType })
-            }
-        } catch (error) {
+                getSources(selectedType)
+                return 1
+            });
 
-            setNotificationData({ message: `Проблема с бекендом: ${error}`, type: 'error' })
-            toggleNotificationFunc()
-            setNewSource({ value: '', description: '', source_type: selectedType })
-        }
     }
+
     async function actualizeSource() {
+        console.log(`actualize for source with type: ${selectedType}, id: ${pickedSource.id}, pageId: ${pickedSource.value}`)
+        setLoaderState({ active: true, overlay: true })
         const response = await apiActualizeSource(selectedType, pickedSource.id)
             .then(response => response.json())
             .then(data => {
                 console.log(data.success);
+                setLoaderState({ active: false, overlay: false })
                 if (data.success) {
-                    setNotificationData({ message: `Ответ от сервера: ${data.message}`, type: 'success' })
+                    setNotificationData({ message: `Данные источника успешно обновлены`, type: 'success' })
                     toggleNotificationFunc()
                 } else {
-                    setNotificationData({ message: `Ответ от сервера: ${data.message}`, type: 'error long' })
+                    setNotificationData({ message: `Не удалось обновить данные источника: ${data.message}`, type: 'error long' })
                     toggleNotificationFunc()
                 }
                 setPickedSource({ id: 0 })
                 setNewSource({ value: '', description: '', source_type: selectedType })
                 getSources(selectedType)
+            })
+            .catch(error => {
+                console.log('Error:', error)
+                setPickedSource({ id: 0 })
+                setNewSource({ value: '', description: '', source_type: selectedType })
+                setLoaderState({ active: false, overlay: false })
+                setNotificationData({ message: `Проблема с бекендом: ${error}`, type: 'error long' })
+                toggleNotificationFunc()
+            });
+    }
 
+    async function changeSource() {
+        if (changedSource.description === pickedSource.description) {
+            setNotificationData({ message: `Внесите изменения чтобы их применить`, type: 'info' })
+            toggleNotificationFunc()
+            return 1
+        }
+        const response = await apiChangeSource(selectedType, changedSource)
+            .then(response => {
+                console.log("response on changeSource:", response.status);
+                return { status: response.status, body: response.json() }
+            })
+            .then(data => {
+                if (data.status == 200) {
+                    resetLocalChanges()
+                    getSources(selectedType)
+                    setNotificationData({ message: 'Источник изменен', type: 'success' })
+                    toggleNotificationFunc()
+                    setNewSource({ value: '', description: '', source_type: selectedType })
+                    closeAcceptModal()
+                } else {
+                    console.log(data.body.success);
+                    console.log(data.body.message);
+                    setNotificationData({ message: `Ответ от сервера: ${data.message}`, type: 'error long' })
+                    toggleNotificationFunc()
+                }
+            })
+            .catch(error => {
+                console.log('Error:', error)
+                resetLocalChanges()
+                setPickedSource({ id: 0 })
+                setNewSource({ value: '', description: '', source_type: selectedType })
+                closeAcceptModal()
+                setNotificationData({ message: `Не удалось изменить источник: ${error}`, type: 'error long' })
+                toggleNotificationFunc()
+                getSources(selectedType)
+                return 1
+            });
+    }
+
+    async function deleteSource() {
+        const response = await apiDeleteSource(selectedType, pickedSource.id)
+            .then(response => {
+                console.log("response on deleteSource:", response.status);
+                return { status: response.status, body: response.json() }
+            })
+            .then(data => {
+                if (data.status == 200) {
+                    resetLocalChanges()
+                    getSources(selectedType)
+                    setNotificationData({ message: 'Источник удален', type: 'success' })
+                    toggleNotificationFunc()
+                    setNewSource({ value: '', description: '', source_type: selectedType })
+                    closeAcceptModal()
+                } else {
+                    console.log(data.body.success);
+                    console.log(data.body.message);
+                    setNotificationData({ message: `Не удалось удалить источник: ${data.message}`, type: 'error long' })
+                    toggleNotificationFunc()
+                }
             })
             .catch(error => {
                 console.log('Error:', error)
@@ -97,25 +185,8 @@ export default function Sources() {
                 setNewSource({ value: '', description: '', source_type: selectedType })
                 setNotificationData({ message: `Проблема с бекендом: ${error}`, type: 'error long' })
                 toggleNotificationFunc()
+                return 1
             });
-    }
-    async function deleteSource() {
-
-        const response = await apiDeleteSource(selectedType, pickedSource.id)
-        if (response.status == 200) {
-            setPickedSource({ id: 0 })
-            getSources(selectedType)
-            setNotificationData({ message: 'Источник удален', type: 'success' })
-            toggleNotificationFunc()
-            setNewSource({ value: '', description: '', source_type: selectedType })
-            closeAcceptModal()
-
-        } else {
-            closeAcceptModal()
-            setNotificationData({ message: 'Не удалось удалить источник', type: 'error' })
-            toggleNotificationFunc()
-
-        }
     }
 
 
@@ -123,35 +194,63 @@ export default function Sources() {
     //     getSchedulerInfo()
     // }, [])
     return (
+
         <div className="sources">
+            {loaderState.active && <Loader withOverlay={loaderState.overlay} />}
             <div className="sourcesLeft">
                 <div className="sourcesSetType">
                     <div className="sourcesSetTypeHeader">
-                        <p>Источники информации о стендах</p>
+                        <p className="sourcesSetTypeHeader">Управление источниками информации о стендах</p>
                         <button
                             onClick={() => {
                                 setShowHint((prev) => !prev);
                             }}
+
                             className={showHint ? "showHint picked" : "showHint"}
                         >
                             ?
                         </button>
                     </div>
-
-                    <button
-                        onClick={() => { resetLocalChanges(); setSelectedType('manual') }}
-                        className={selectedType == 'manual' ? "sourcesSetType picked" : "sourcesSetType"}>
-                        Manual
-                    </button>
-                    <button onClick={() => { resetLocalChanges(); setSelectedType('confluence_page_id'); getSources('confluence_page_id'); setNewSource({ value: '', description: '', source_type: 'confluence_page_id' }) }}
-                        className={selectedType == 'confluence_page_id' ? "sourcesSetType picked" : "sourcesSetType"}>
-                        Confluence Page Id
-                    </button>
+                    {showHint &&
+                        <div className="sourcesHint">
+                            <div className="hintBox">
+                                {/* <p> */}
+                                Описание источников информации и их работы доступно во вкладке <strong>О приложении</strong>
+                                {/* </p> */}
+                            </div>
+                        </div>
+                        || <>
+                            <button
+                                onClick={() => { resetLocalChanges(); setSources([]); setSelectedType('manual') }}
+                                className={selectedType == 'manual' ? "sourcesSetType picked" : "sourcesSetType"}>
+                                Manual
+                            </button>
+                            <button onClick={() => { resetLocalChanges(); setSelectedType('confluence_page_id'); getSources('confluence_page_id'); setNewSource({ value: '', description: '', source_type: 'confluence_page_id' }) }}
+                                className={selectedType == 'confluence_page_id' ? "sourcesSetType picked" : "sourcesSetType"}>
+                                Confluence Page Id
+                            </button>
+                        </>
+                    }
                 </div>
 
                 <div className="sourcesNotes">
-                    {selectedType === 'manual' && <>описание manual</>}
-                    {loading === 'start' && <p> Выберите тип источника</p>}
+                    {selectedType === 'manual' && <>
+                        <div className="sourcesHint">
+                            <div className="hintBox">
+                                <p>
+                                    Тип источников <strong>manual</strong> подразумевает создание стендов вручную и не имеет собственных объектов
+                                </p>
+                                <p>
+                                    Перейдите во вкладку <strong>Администрирование / Стенды</strong>, если хотите создать стенд
+                                </p>
+                            </div>
+                        </div>
+                    </>}
+                    {loading === 'start' && selectedType !== 'manual' &&
+                        <div className="sourcesHint">
+                            <p> Выберите тип источника</p>
+                        </div>
+                    }
                     {loading === 'loading' && <p> Loading ...</p>}
                     {loading === 'error' && <p> бекенд отвалился</p>}
 
@@ -160,20 +259,17 @@ export default function Sources() {
                             <SourceCard id={source.id}
                                 value={source.value}
                                 version={source.version === '' && "Отсутствует" || source.version}
-                                description={source.description}
                                 status={source.status}
                                 picked={pickedSource.id === source.id && true || false}
                                 last_update={source.last_update === 'never' && "Отсутствует" || source.last_update}
-                                onClick1={() => { setPickedSource(source); }}
-                                onClick2={() => { setPickedSource({ id: 0 }); }}
-                                onClick3={() => openAcceptModalWithAction(deleteSource)}
-                                onClick4={() => actualizeSource()}
+                                onClick={() => { setPickedSource(source); setNewSource({ value: '', description: '', source_type: 'confluence_page_id' }); setChangedSource({ id: source.id, description: source.description }) }}
                             ></SourceCard>
                         )}
                     </>}
                     {loading === 'loaded' && selectedType === 'confluence_page_id' && <>
                         {serverResponse.length > 0 && <>{serverResponse.map(note =>
-                            <p>{note}</p>
+                            <p> {console.log(none)}</p>
+
                         )
 
                         } </>}
@@ -184,20 +280,30 @@ export default function Sources() {
 
             </div>
             <div className="sourcesRight">
-                {selectedType === 'manual' && <>описание manual</>}
-                {loading === 'start' && <p> Выберите тип источника</p>}
+                {selectedType === 'manual' && <>
+                    <div className="sourcesHint">
+                        <div className="hintBox">
+                            Выбран тип источников <strong>manual</strong>
+                        </div>
+                    </div>
+                </>}
+                {loading === 'start' && selectedType !== 'manual' &&
+                    <div className="sourcesHint">
+                        <p> Выберите тип источника</p>
+                    </div>
+                }
                 {loading === 'loading' && <p> Loading ...</p>}
                 {loading === 'error' && <p> бекенд отвалился</p>}
 
 
                 {loading === 'loaded' && selectedType === 'confluence_page_id' && !pickedSource.id &&
-                    <div className="sourcesNewSourceWrapper">
-                        <div className="sourcesNewSource">
-                            <div className="sourcesNewSourceLabel">Добавить источник Confluence Page ID</div>
+                    <div className="sourcesManageSourceWrapper">
+                        <div className="sourcesManageSource">
+                            <div className="sourcesManageSourceTopLabel">Добавить новый источник Confluence Page ID</div>
                             <input type="text"
                                 maxLength={100}
                                 placeholder='Page ID'
-                                className="newSource name"
+                                className="manageSource name"
                                 value={newSource.value}
                                 onChange={e => setNewSource({ ...newSource, value: e.target.value })}
                             />
@@ -205,82 +311,60 @@ export default function Sources() {
                             <textarea name="newSource"
                                 maxLength={4000}
                                 placeholder='Описание'
-                                className="newSource description"
+                                className="manageSource description"
                                 value={newSource.description}
                                 onChange={e => setNewSource({ ...newSource, description: e.target.value })}
                             >
                             </textarea>
-                            <button onClick={() => { setNewSource({ ...newSource, source_type: 'confluence_page_id' }); addSource() }}> Добавить </button>
-                        </div>
-                    </div>}
-                {loading === 'loaded' && selectedType === 'confluence_page_id' && pickedSource.id &&
-                    <div className="sourcesNewSourceWrapper">
-                        <div className="sourcesNewSource">
-                            <div className="sourcesNewSourceLabel">Редактировать выбранный источник</div>
-                            <input type="text"
-                                maxLength={100}
-                                placeholder='Page ID'
-                                className="newSource name"
-                                value={newSource.value}
-                                onChange={e => setNewSource({ ...newSource, value: e.target.value })}
-                            />
-
-                            <textarea name="newSource"
-                                maxLength={4000}
-                                placeholder='Описание'
-                                className="newSource description"
-                                value={newSource.description}
-                                onChange={e => setNewSource({ ...newSource, description: e.target.value })}
-                            >
-                            </textarea>
-                            <div className="sourcesNewSourceButtons">
-                                <button onClick={() => { console.log(loadedStand) }}> Изменить </button>
-                                <button onClick={() => { console.log(loadedStand) }}> Удалить </button>
-                                <button onClick={() => { setLoadedStand(false), setPickedStand({ id: 0, name: '', source_type: '' }) }}> Отменить </button>
+                            <div className="sourcesManageSourceButtons">
+                                <button onClick={() => { setNewSource({ ...newSource, source_type: 'confluence_page_id' }); addSource() }}> Добавить </button>
+                                <button onClick={() => { actualizeSource() }}> Обновить данные всех ресурсов</button>
                             </div>
                         </div>
-                    </div>}
-
-                {showHint &&
-                    <div className="sourcesHint">
-                        <div className="hintBox">
-                            <p>
-                                Источники информации (source_types) влияют на то, как стенды добавляются и обрабатываются в системе. На данный момент доступно 2 типа источников:
-                            </p>
-                            <p>
-                                1. <strong>Manual</strong> - ручное создание стенда. Если стенд был создан напрямую через веб-интерфейс, он автоматически получит source_type manual.
-                                К заполнению и изменению в данном режиме доступны только имя и описание стенда. Такие стенды могут участвовать в резервировании, но основном
-                                этот тип используется при разработке и отладке приложения
-                            </p>
-                            <p>
-                                2. <strong>Confluence Page Id</strong> - информация о стенде загружается из Confluence. Для создания стенда необходимо добавить источник:
-
-                                <ul>
-                                    <li>Скопировать Id странцы Confluence со стендом в поле "Page ID". Id страницы отображается в конце адреса страницы в браузере,
-                                        например https://...viewpage.action?pageId=132941063. Вставлять в поле нужно только число</li>
-                                    <li>Заполнить описание (опционально)</li>
-                                    <li>Добавить источник и принудительнообновить данные, либо дождаться ближайшего штатного обновления</li>
-                                </ul>
-                            </p>
-                            <p>
-                                Как обрабатывается данный тип источников:
-                                <ul>
-                                    <li>Сервис по pageId загружает верстку и метаданные нужной страницы из Confluence</li>
-                                    <li>Если загрузка прошла успешно и данные в порядке, сервис создает стенд и привязывает его к данному источнику </li>
-                                    <li>Сервис периодически обновляет конфигурации стендов, сравнивая имеющиеся данные (версия страницы, время последнего обновления)
-                                        со свежими данными из Confluence</li>
-                                </ul>
-                            </p>
-                            <p>
-                                Для корректной работы данного механизма <strong>важно</strong>, чтобы:
-                                <ul>
-                                    <li>На целевой странице в Confluence хранились данные только одного стенда</li>
-                                    <li>Название страницы соответствовало ожидаемому названию стенда</li>
-                                </ul>
-                            </p>
-                        </div>
-
                     </div>
+                }
+                {loading === 'loaded' && selectedType === 'confluence_page_id' && pickedSource.id &&
+                    <div className="sourcesManageSourceWrapper changeSource">
+                        <div className="sourcesManageSource">
+                            <div className="sourcesManageSourceTopLabel">Редактировать выбранный источник</div>
+                            <div className="changeSourceParams">
+                                <div className="param-row">
+                                    <div className="param-key">PageId</div>
+                                    <div>{pickedSource.value}</div>
+                                </div>
+                                <div className="param-row">
+                                    <div className="param-key">Статус</div>
+                                    <div>{pickedSource.status}</div>
+                                </div>
+                                <div className="param-row">
+                                    <div className="param-key">Версия</div>
+                                    <div>{pickedSource.version || "Отсутствует"}</div>
+                                </div>
+                                <div className="param-row">
+                                    <div className="param-key">Последнее обновление</div>
+                                    <div>{pickedSource.last_update === "never" && "Отсутствует" || pickedSource.last_update}</div>
+                                </div>
+                                <div className="param-row">
+                                    <div className="param-key">Привязанный стенд</div>
+                                    <div>{pickedSource.stand_id && pickedSource.stand_name || "Отсутствует"}</div>
+                                </div>
+                            </div>
+                            <textarea name="newSource"
+                                maxLength={4000}
+                                placeholder='Описание'
+                                className="manageSource description"
+                                value={changedSource.description}
+                                onChange={e => setChangedSource({ ...changedSource, description: e.target.value })}
+                            >
+                            </textarea>
+                            <div className="sourcesManageSourceButtons">
+                                <button onClick={() => { openAcceptModalWithAction(changeSource) }}> Применить изменения </button>
+                                <button onClick={() => { actualizeSource() }}>Обновить данные</button>
+                                <button onClick={() => { openAcceptModalWithAction(deleteSource) }}> Удалить </button>
+                                <button onClick={() => { setPickedSource({ id: 0 }), setChangedSource({ id: 0, description: '' }) }}> Отменить </button>
+                            </div>
+                        </div>
+                    </div> || <></>
                 }
             </div>
             <AcceptModal isOpen={isAcceptModalOpen} onClose={closeAcceptModal}>
