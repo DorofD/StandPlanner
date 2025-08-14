@@ -33,19 +33,25 @@ export async function apiChangeSource(source_type, source_note) {
 }
 
 export async function apiActualizeSource(source_type, source_id) {
-    let action_param;
-    if (source_id === 0) {
-        action_param = 'process_all'
-    } else {
-        action_param = 'process_one'
-    }
     const response = await authFetch(`${process.env.BACKEND_URL}/sources`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-            action: action_param,
+            action: "process_one",
             source_type: source_type,
             source_id: source_id
+        })
+    })
+    return response
+}
+
+export async function apiActualizeAllSources(source_type) {
+    const response = await authFetch(`${process.env.BACKEND_URL}/sources`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+            action: "process_all",
+            source_type: source_type,
         })
     })
     return response

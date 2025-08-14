@@ -35,9 +35,9 @@
     --border-picked-color: #8774e2;
 
     /* Задний цвет (оттенок красного) кнопок критических предупреждений */
-    --critical-background: #d13a3a;
+    --error-background: #d13a3a;
     /* Цвет текста компонентов с фоном critical-color*/
-    --critical-text-color: #fff0f0;
+    --error-text-color: #fff0f0;
     /* Задний цвет (оттенок желтого) немного негативных предупреждений */
     --warning-background: #ffdf7e;
     /* Цвет текста компонентов с фоном warning-color */
@@ -47,9 +47,9 @@
     /* Цвет текста компонентов с фоном info-color */
     --info-text-color: #e6e6fa;
     /* Задний цвет (оттенок зеленого) положительных уведомлений и кнопок подтверждения */
-    --positive-background: #49b67d;
+    --success-background: #49b67d;
     /* Цвет текста компонентов с фоном positive-color */
-    --positive-text-color: #18281a;
+    --success-text-color: #18281a;
 
     /* Цвет жирного текста */
     --strong-text-color: #bcb6f6;

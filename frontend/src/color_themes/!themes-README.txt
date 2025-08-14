@@ -34,10 +34,10 @@
    /* border-picked-color - цвет границ карточек и элементов, когда они focused */
     --border-picked-color: #316634;
 
-   /* critical-background - задний цвет (оттенок красного) кнопок критических предупреждений (например, ошибка со стороны сервера)*/
-    --critical-background: #F44336;
-   /* critical-text-color - цвет текста компонентов с фоном critical-color*/
-    --critical-text-color: #7e1710;
+   /* error-background - задний цвет (оттенок красного) кнопок критических предупреждений (например, ошибка со стороны сервера)*/
+    --error-background: #F44336;
+   /* error-text-color - цвет текста компонентов с фоном critical-color*/
+    --error-text-color: #7e1710;
    /* warning-background - задний цвет (оттенок желтого) немного негативных предупреждений (например, пользователь забыл заполнить поле) */
     --warning-background: #e9d25a;
    /* warning-text-color - цвет текста компонентов с фоном warning-color */
@@ -46,10 +46,10 @@
     --info-background: #7e8b8f;
    /* info-text-color - цвет текста компонентов с фоном info-color */
     --info-text-color: #122328;
-   /* positive-background - задний цвет (оттенок зеленого) положительных уведомлений и кнопок подтверждения */
-    --positive-background: #63bb66;
-   /* positive-text-color - цвет текста компонентов с фоном positive-color */
-    --positive-text-color: #183e1a;
+   /* success-background - задний цвет (оттенок зеленого) положительных уведомлений и кнопок подтверждения */
+    --success-background: #63bb66;
+   /* success-text-color - цвет текста компонентов с фоном positive-color */
+    --success-text-color: #183e1a;
 
    /* strong-text-color - цвет жирного текста */
     --strong-text-color: #357237;
@@ -71,9 +71,9 @@
 - text-button-color хорошо виден на фоне neutral-button-color
 - text-secondary-color немного приглушен (более прозрачный или блёклый) относительно text-main-color, хорошо виден на фоне  main-background-color, card-background-color и card-background-picked-color
 - border-picked-color - более выраженная версия border-color
-- critical-text-color хорошо виден на фоне critical-background
+- error-text-color хорошо виден на фоне error-background
 - warning-text-color хорошо виден на фоне warning-background
 - info-text-color хорошо виден на фоне info-background
-- positive-text-color хорошо виден на фоне positive-background
+- success-text-color хорошо виден на фоне success-background
 
 */

@@ -1,7 +1,7 @@
 import React, { Component, useState, useEffect } from "react";
 import "./Sources.css";
 import SourceCard from "./SourceCard/SourceCard";
-import { apiGetSources, apiAddSource, apiDeleteSource, apiActualizeSource, apiChangeSource } from "../../services/apiSources";
+import { apiGetSources, apiAddSource, apiDeleteSource, apiActualizeSource, apiActualizeAllSources, apiChangeSource } from "../../services/apiSources";
 import { useAuthContext } from "../../hooks/useAuthContext";
 import { useNotificationContext } from "../../hooks/useNotificationContext";
 import AcceptModal from "../AcceptModal/AcceptModal";
@@ -13,7 +13,7 @@ export default function Sources() {
     const [selectedType, setSelectedType] = useState('')
     const [sources, setSources] = useState([])
     const [loading, setLoading] = useState('start')
-    const [loaderState, setLoaderState] = useState({ active: false, overlay: false })
+    const [loaderActive, setLoaderActive] = useState(false)
 
 
     const [pickedSource, setPickedSource] = useState({ id: 0 })
@@ -58,48 +58,77 @@ export default function Sources() {
             return 1
         }
 
-        const response = await apiAddSource(newSource)
-            .then(response => {
-                console.log("response on addSource:", response.status);
-                return { status: response.status, body: response.json() }
-            })
-            .then(data => {
-                if (data.status == 200) {
-                    resetLocalChanges()
-                    getSources(selectedType)
-                    setNotificationData({ message: 'Источник добавлен', type: 'success' })
-                    toggleNotificationFunc()
-                    closeAcceptModal()
-                } else {
-                    console.log(data.body.success);
-                    console.log(data.body.message);
-                    setNotificationData({ message: `Не удалось добавить источник: ${data.message}`, type: 'error long' })
-                    toggleNotificationFunc()
-                }
-            })
-            .catch(error => {
-                console.log('Error:', error)
-                resetLocalChanges()
-                setNewSource({ value: '', description: '', source_type: selectedType })
-                closeAcceptModal()
-                setNotificationData({ message: `Не удалось добавить источник: ${error}`, type: 'error long' })
-                toggleNotificationFunc()
-                getSources(selectedType)
-                return 1
-            });
+        try {
+            const response = await apiAddSource(newSource);
+            const body = await response.json();
 
+            console.log("response on addSource:", response.status);
+
+            if (response.status === 200) {
+                console.log(body.message);
+                resetLocalChanges();
+                getSources(selectedType);
+                setNotificationData({ message: 'Источник добавлен', type: 'success' });
+                toggleNotificationFunc();
+                closeAcceptModal();
+            } else {
+                console.log(body.success);
+                console.log(body.message);
+                setNotificationData({ message: `Не удалось добавить источник: ${body.message}`, type: 'error long' });
+                toggleNotificationFunc();
+            }
+        } catch (error) {
+            console.log('Error:', error);
+            resetLocalChanges();
+            setNewSource({ value: '', description: '', source_type: selectedType });
+            closeAcceptModal();
+            setNotificationData({ message: `Не удалось добавить источник: ${error}`, type: 'error long' });
+            toggleNotificationFunc();
+            getSources(selectedType);
+        }
     }
 
     async function actualizeSource() {
         console.log(`actualize for source with type: ${selectedType}, id: ${pickedSource.id}, pageId: ${pickedSource.value}`)
-        setLoaderState({ active: true, overlay: true })
+        setLoaderActive(true)
         const response = await apiActualizeSource(selectedType, pickedSource.id)
             .then(response => response.json())
             .then(data => {
                 console.log(data.success);
-                setLoaderState({ active: false, overlay: false })
+                setLoaderActive(false)
                 if (data.success) {
                     setNotificationData({ message: `Данные источника успешно обновлены`, type: 'success' })
+                    toggleNotificationFunc()
+                } else {
+                    setNotificationData({ message: `Не удалось обновить данные источника, подробнее в описании источника`, type: 'error long' })
+                    toggleNotificationFunc()
+                }
+                setPickedSource({ id: 0 })
+                setNewSource({ value: '', description: '', source_type: selectedType })
+                getSources(selectedType)
+            })
+            .catch(error => {
+                console.log('Error:', error)
+                setPickedSource({ id: 0 })
+                setNewSource({ value: '', description: '', source_type: selectedType })
+                setLoaderActive(false)
+                setNotificationData({ message: `Проблема с бекендом: ${error}`, type: 'error long' })
+                toggleNotificationFunc()
+            });
+    }
+
+    async function actualizeAllSources() {
+        console.log(`bulk update sources: ${selectedType}`)
+        setNotificationData({ message: `Массовое обновление источников может занять до нескольких минут, ожидайте`, type: 'info long' })
+        toggleNotificationFunc()
+        setLoaderActive(true)
+        const response = await apiActualizeAllSources(selectedType)
+            .then(response => response.json())
+            .then(data => {
+                console.log(data.success);
+                setLoaderActive(false)
+                if (data.success) {
+                    setNotificationData({ message: `Массовое обновление прошло успешно`, type: 'success long' })
                     toggleNotificationFunc()
                 } else {
                     setNotificationData({ message: `Не удалось обновить данные источника: ${data.message}`, type: 'error long' })
@@ -113,7 +142,7 @@ export default function Sources() {
                 console.log('Error:', error)
                 setPickedSource({ id: 0 })
                 setNewSource({ value: '', description: '', source_type: selectedType })
-                setLoaderState({ active: false, overlay: false })
+                setLoaderActive(false)
                 setNotificationData({ message: `Проблема с бекендом: ${error}`, type: 'error long' })
                 toggleNotificationFunc()
             });
@@ -189,14 +218,10 @@ export default function Sources() {
             });
     }
 
-
-    // useEffect(() => {
-    //     getSchedulerInfo()
-    // }, [])
     return (
 
         <div className="sources">
-            {loaderState.active && <Loader withOverlay={loaderState.overlay} />}
+            {loaderActive && <Loader />}
             <div className="sourcesLeft">
                 <div className="sourcesSetType">
                     <div className="sourcesSetTypeHeader">
@@ -214,9 +239,7 @@ export default function Sources() {
                     {showHint &&
                         <div className="sourcesHint">
                             <div className="hintBox">
-                                {/* <p> */}
                                 Описание источников информации и их работы доступно во вкладке <strong>О приложении</strong>
-                                {/* </p> */}
                             </div>
                         </div>
                         || <>
@@ -318,7 +341,7 @@ export default function Sources() {
                             </textarea>
                             <div className="sourcesManageSourceButtons">
                                 <button onClick={() => { setNewSource({ ...newSource, source_type: 'confluence_page_id' }); addSource() }}> Добавить </button>
-                                <button onClick={() => { actualizeSource() }}> Обновить данные всех ресурсов</button>
+                                <button onClick={() => { actualizeAllSources() }}> Обновить данные всех ресурсов</button>
                             </div>
                         </div>
                     </div>
@@ -360,8 +383,8 @@ export default function Sources() {
                             <div className="sourcesManageSourceButtons">
                                 <button onClick={() => { openAcceptModalWithAction(changeSource) }}> Применить изменения </button>
                                 <button onClick={() => { actualizeSource() }}>Обновить данные</button>
-                                <button onClick={() => { openAcceptModalWithAction(deleteSource) }}> Удалить </button>
                                 <button onClick={() => { setPickedSource({ id: 0 }), setChangedSource({ id: 0, description: '' }) }}> Отменить </button>
+                                <button className="sourcesDeleteButton" onClick={() => { openAcceptModalWithAction(deleteSource) }}> Удалить </button>
                             </div>
                         </div>
                     </div> || <></>

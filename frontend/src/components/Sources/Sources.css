@@ -133,6 +133,11 @@ div.sourcesManageSourceButtons {
     flex-direction: row;
     align-items: flex-start;
     gap: 20px;
+    width: 100%;
+}
+
+button.sourcesDeleteButton {
+    margin-left: auto;
 }
 
 div.sourcesNotes {

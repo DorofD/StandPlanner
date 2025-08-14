@@ -63,13 +63,13 @@ button.reservationExit {
 
 /* актуальные */
 button.critical {
-    background-color: var(--critical-background);
-    color: var(--critical-text-color);
+    background-color: var(--error-background);
+    color: var(--error-text-color);
 }
 
 button.positive {
-    background-color: var(--positive-background);
-    color: var(--positive-text-color);
+    background-color: var(--success-background);
+    color: var(--success-text-color);
 }
 
 button.acceptModal {

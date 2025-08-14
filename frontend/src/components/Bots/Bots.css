@@ -1,28 +1,36 @@
 div.botsMain {
+    box-sizing: border-box;
     height: 100%;
     width: 100%;
     display: flex;
-    background-color: aqua;
+    border: 1px solid var(--border-color);
+    /* background-color: aqua; */
 }
 
 div.botsSection {
+    box-sizing: border-box;
     height: 100%;
     width: 60%;
-    background-color: blue;
+    border: 1px solid var(--border-color);
+    /* background-color: blue; */
 }
 
 div.botsSection2 {
+    box-sizing: border-box;
     height: 100%;
     width: 40%;
-    background-color: rgb(255, 0, 76);
+    border: 1px solid var(--border-color);
+    /* background-color: rgb(255, 0, 76); */
 }
 
 div.logsFilterContainer1 {
+    box-sizing: border-box;
     text-align: center;
     height: 5%;
     width: 100%;
+    border: 1px solid var(--border-color);
     /* padding: 20px; */
-    background-color: bisque;
+    /* background-color: bisque; */
 }
 
 div.logsNotes1 {
@@ -31,8 +39,9 @@ div.logsNotes1 {
     height: 95%;
     /* height: auto; */
     width: 100%;
-    border-top: solid 3px #afafaf;
+    border: 1px solid var(--border-color);
+    /* border-top: solid 3px #afafaf; */
 
-    border-bottom: solid 3px #afafaf;
+    /* border-bottom: solid 3px #afafaf; */
 
 }

@@ -58,7 +58,7 @@ def create_app():
         current_app.logger.exception(
             f'Backend has unknown error: {error}')
         return jsonify({'message': f'Backend error: {error}'}), 500
-
+        # return jsonify({'success': True, 'message': 'Source has ben successfully processed'}), 200, {'ContentType': 'application/json'}
     handler = logging.FileHandler('data/app.log')
     formatter = logging.Formatter(
         '%(asctime)s %(levelname)s: %(message)s', datefmt='%Y-%m-%d %H:%M:%S')

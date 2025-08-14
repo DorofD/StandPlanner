@@ -38,22 +38,22 @@ div.notification.long {
 }
 
 
-@media (width < 1000px) {
-    div.notification {
-        right: 1%;
-    }
-}
-
-div.notification.success {
-    background-color: #90ee90;
-}
-
 div.notification.error {
-    color: #000000;
-    background-color: #ee9090;
+    color: var(--error-text-color);
+    background-color: var(--error-background);
+}
+
+div.notification.warning {
+    color: var(--warning-text-color);
+    background-color: var(--warning-background);
 }
 
 div.notification.info {
-    color: #000000;
-    background-color: #eed590;
+    color: var(--info-text-color);
+    background-color: var(--info-background);
+}
+
+div.notification.success {
+    color: var(--success-text-color);
+    background-color: var(--success-background);
 }

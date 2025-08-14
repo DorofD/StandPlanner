@@ -19,14 +19,14 @@
     --border-color: #b0b6b8;
     --border-picked-color: #316634;
 
-    --critical-background: #F44336;
-    --critical-text-color: #7e1710;
+    --error-background: #F44336;
+    --error-text-color: #7e1710;
     --warning-background: #e9d25a;
     --warning-text-color: #72620e;
     --info-background: #8aadb8;
     --info-text-color: #122328;
-    --positive-background: #cdfdce;
-    --positive-text-color: #000000;
+    --success-background: #cdfdce;
+    --success-text-color: #000000;
 
     --strong-text-color: #357237;
     --disabled-color: #b0b6b8;
@@ -133,11 +133,11 @@ textarea:focus {
 }
 
 div.positiveSelection {
-    color: var(--positive-text-color);
-    background-color: var(--positive-background);
+    color: var(--success-text-color);
+    background-color: var(--success-background);
 }
 
 div.criticalSelection {
-    color: var(--critical-text-color);
-    background-color: var(--critical-background);
+    color: var(--error-text-color);
+    background-color: var(--error-background);
 }

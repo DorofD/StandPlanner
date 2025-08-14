@@ -1,7 +1,7 @@
 import { authFetch } from './authFetch';
 
-export async function apiGetStands(source_type = 'all') {
-    const response = await authFetch(`${process.env.BACKEND_URL}/stands?action=get_list&source_type=${source_type}`, {
+export async function apiGetStands() {
+    const response = await authFetch(`${process.env.BACKEND_URL}/stands?action=get_list`, {
         method: 'GET',
     })
     const stands = await response.json()
@@ -29,15 +29,14 @@ export async function apiAddStand(name, description) {
     return response
 }
 
-export async function apiChangeStand(id, name, description) {
+export async function apiChangeStand(id, fields_to_update) {
     const response = await authFetch(`${process.env.BACKEND_URL}/stands`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
             action: 'change',
             id: id,
-            name: name,
-            description: description
+            fields_to_update: fields_to_update
         })
     })
     return response

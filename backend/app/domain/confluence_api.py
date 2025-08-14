@@ -40,17 +40,6 @@ class ConfluenceAPI:
         result['data'] = data
         return result
 
-    def _format_layout(self, layout):
-        table_style = """
-        <style type="text/css">
-            table, th, td {
-                border: 1px solid black;
-            }
-        </style>
-        """
-        result = table_style + layout
-        return result
-
     def get_page_data(self, page_id):
         """
         Возвращает словарь
@@ -64,7 +53,7 @@ class ConfluenceAPI:
         data = response['data']
 
         try:
-            layout = self._format_layout(data['body']['export_view']['value'])
+            layout = data['body']['export_view']['value']
             result = {
                 'success': True,
                 'title': data['title'],

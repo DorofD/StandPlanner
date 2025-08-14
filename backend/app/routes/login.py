@@ -27,7 +27,7 @@ def login():
         refresh_token = create_refresh_token(
             identity=user['login'], additional_claims=user_claims)
         biba = True
-        current_app.logger.info(f"User logged in: {user['login']} -- {biba}")
+        current_app.logger.info(f"User logged in: {user['login']}")
 
         response = jsonify(
             {'success': True, 'body': auth_result, 'access_token': access_token})

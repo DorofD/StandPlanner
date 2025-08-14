@@ -1,7 +1,7 @@
 from flask import Blueprint, request, jsonify
 from app.services.stands import get_stands, get_stand, add_stand, delete_stand, change_stand
 from app.services.reservations import add_reservaiton, get_reservations_for_planner, change_reservation, delete_reservation
-from app.services.sources import add_source, get_sources, process_source, process_all_sources, delete_source, change_source
+from app.services.sources import add_source, get_sources, process_source, bulk_process_sources, delete_source, change_source
 from app import scheduler as app_scheduler
 import traceback
 
@@ -30,9 +30,7 @@ def reservations():
 def stands():
     if request.method == 'GET':
         if request.args.get('action') == 'get_list':
-            source_type = request.args.get('source_type')
-            result = jsonify(get_stands(source_type))
-            print(result)
+            result = jsonify(get_stands())
         elif request.args.get('action') == 'get_stand':
             stand_id = request.args.get('stand_id')
             result = jsonify(get_stand(stand_id))
@@ -42,10 +40,7 @@ def stands():
         if data['action'] == 'add':
             add_stand(name=data['name'], description=data['description'])
         if data['action'] == 'change':
-            if 'name' in data:
-                change_stand(id=data['id'], name=data['name'])
-            if 'description' in data:
-                change_stand(id=data['id'], description=data['description'])
+            change_stand(data['id'], data['fields_to_update'])
         if data['action'] == 'delete':
             delete_stand(id=data['id'])
 
@@ -68,10 +63,8 @@ def sources():
             else:
                 return jsonify({'success': False, 'message': 'Something going wrong, check source description and service logs'}), 200, {'ContentType': 'application/json'}
         if data['action'] == 'process_all':
-            if process_source(data['source_type'], data['source_id']):
-                return jsonify({'success': True, 'message': 'Source has ben successfully processed'}), 200, {'ContentType': 'application/json'}
-            else:
-                return jsonify({'success': False, 'message': 'Something going wrong, check source description and service logs'}), 200, {'ContentType': 'application/json'}
+            result = bulk_process_sources(data['source_type'])
+            return jsonify(result), 200, {'ContentType': 'application/json'}
         if data['action'] == 'change':
             source_type = data['source_type']
             source_note = data['source_note']

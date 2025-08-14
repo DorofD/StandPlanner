@@ -3,7 +3,9 @@ import "./Base.css";
 import { NavLink as NavLinkBase, Outlet, useLocation } from "react-router-dom";
 import Button from "../Button/Button";
 import Notification from "../Notification/Notification";
+import TimedMessages from "../TimedMessages/TimedMessages";
 import { useNotificationContext } from "../../hooks/useNotificationContext";
+import { useTimedMessagesContext } from "../../hooks/useTimedMessagesContext";
 import { useAuthContext } from "../../hooks/useAuthContext";
 import { useColorScheme } from "../../contexts/ColorSchemeContext";
 import ColorSchemeSelector from "../ColorSchemeSelector/ColorSchemeSelector";
@@ -22,6 +24,7 @@ export default function Base() {
     const { isAuthenticated, toogleAuth } = useAuthContext();
     const { userName, userRole, accessToken } = useAuthContext();
     const { notificationData } = useNotificationContext();
+    const { messages, addMesage } = useTimedMessagesContext();
     const location = useLocation();
 
 
@@ -35,7 +38,9 @@ export default function Base() {
             <div className="baseBody">
                 <div className="baseSidebar">
                     <nav className="baseSidebar">
+
                         <Notification data={notificationData} />
+                        <TimedMessages data={messages} />
                         <ul className="base">
                             <li>
                                 <NavLink to="/" className={({ isActive }) => isActive ? 'activeBaseHref' : 'baseHref'}>

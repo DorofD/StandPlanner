@@ -1,0 +1,75 @@
+.tmc-container {
+    width: 300px;
+}
+
+.tmc-input-row {
+    display: flex;
+    gap: 8px;
+}
+
+.tmc-input {
+    flex: 1;
+    padding: 6px;
+    border-radius: 4px;
+    border: 1px solid #bbb;
+}
+
+.tmc-button {
+    padding: 6px 12px;
+    background: #1976d2;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.tmc-button:hover {
+    background: #1565c0;
+}
+
+/* .tmc-messages {
+    margin-top: 20px;
+    position: absolute;
+} */
+
+.tmc-messages {
+    position: absolute;
+    bottom: 0;
+    left: 70%;
+    width: auto;
+    display: flex;
+    flex-direction: column-reverse;
+    top: 90%;
+    right: 5%;
+    padding: 10px;
+
+
+}
+
+.tmc-message {
+    margin-bottom: 8px;
+    padding: 8px;
+    background: var(--info-background);
+    border-radius: 4px;
+    transition: all 0.3s;
+}
+
+div.tmc-message.error {
+    color: var(--error-text-color);
+    background-color: var(--error-background);
+}
+
+div.tmc-message.warning {
+    color: var(--warning-text-color);
+    background-color: var(--warning-background);
+}
+
+div.tmc-message.info {
+    color: var(--info-text-color);
+    background-color: var(--info-background);
+}
+
+div.tmc-message.success {
+    color: var(--success-text-color);
+    background-color: var(--success-background);
+}

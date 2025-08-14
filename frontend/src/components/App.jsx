@@ -12,6 +12,7 @@ import Logs from "./Logs/Logs";
 import Apscheduler from "./Apscheduler/Apscheduler";
 import Login from "./Login/Login";
 import Sources from "./Sources/Sources";
+import TestComponent from "./TestComponent/TestComponent";
 import { PrivateRoute } from "./PrivateRoute/PrivateRoute";
 import { useAuthContext } from "../hooks/useAuthContext";
 import "./App.css"
@@ -33,6 +34,7 @@ export default function App() {
                             <Route path="/admin/bots" element={<Bots />} />
                             <Route path="/admin/logs" element={<Logs />} />
                             <Route path="/admin/apscheduler" element={<Apscheduler />} />
+                            <Route path="/admin/test" element={<TestComponent />} />
                         </Route>}
                         <Route path="/about" element={<About />} />
                     </Route>

@@ -1,7 +1,6 @@
 import React, { Component, useState, useEffect } from "react";
 import "./Stands.css";
 import StandCard from "./StandCard/StandCard";
-import { apiGetSources, apiAddSource, apiDeleteSource, apiActualizeSource } from "../../services/apiSources";
 import { useAuthContext } from "../../hooks/useAuthContext";
 import { useNotificationContext } from "../../hooks/useNotificationContext";
 import AcceptModal from "../AcceptModal/AcceptModal";
@@ -10,21 +9,17 @@ import { apiGetStands, apiGetStand, apiChangeStand, apiAddStand, apiDeleteStand 
 export default function Stands() {
     const { userName, userId } = useAuthContext();
     const { notificationData, setNotificationData, toggleNotificationFunc, notificationToggle } = useNotificationContext();
-    const [selectedType, setSelectedType] = useState('')
-    const [sources, setSources] = useState([])
     const [loading, setLoading] = useState('start')
 
-    const [pickedSource, setPickedSource] = useState({ id: '' })
-    const [newSource, setNewSource] = useState({ value: '', description: '', source_type: '' })
     const [newStand, setNewStand] = useState({ name: '', description: '' })
+    const [stands, setStands] = useState([])
+    const [pickedStand, setPickedStand] = useState({ id: '', name: '', source_type: '' })
     const [actionFunction, setActionFunction] = useState(null);
     const [isAcceptModalOpen, setIsAcceptModalOpen] = useState(false);
     const [showHint, setShowHint] = useState(false);
-    const [serverResponse, setServerResponse] = useState([]);
-
-    const [stands, setStands] = useState([])
-    const [pickedStand, setPickedStand] = useState({ id: '', name: '', source_type: '' })
     const [loadedStand, setLoadedStand] = useState(false)
+    const [isChanged, setIsChanged] = useState(false)
+
 
 
     const openAcceptModalWithAction = (action) => {
@@ -36,102 +31,10 @@ export default function Stands() {
         setIsAcceptModalOpen(false);
     };
 
-    function resetLocalChanges() {
-        setPickedStand({ id: '', name: '', source_type: '' });
-        setNewStand({ name: '', description: '' });
-        setNewSource({ value: '', description: '', source_type: '' });
-        setPickedSource({ id: '' });
-        setSources([]);
-        setStands([])
-        setLoadedStand(false)
-    }
-
-    async function getSources(source_type) {
+    async function getStands() {
         try {
             setLoading('loading')
-            const load_sources = await apiGetSources(source_type)
-            setSources(load_sources)
-            setLoading('loaded')
-        } catch (err) {
-            setLoading('error')
-        }
-    }
-
-    async function addSource() {
-        if (newSource.value.length === 0) {
-            setNotificationData({ message: `Введите Page ID`, type: 'error' })
-            toggleNotificationFunc()
-            return 1
-        }
-
-        try {
-            console.log(newSource)
-            const response = await apiAddSource(newSource)
-            if (response.status == 200) {
-                getSources(newSource.source_type)
-                setNotificationData({ message: 'Источник добавлен', type: 'success' })
-                toggleNotificationFunc()
-                setNewSource({ value: '', description: '', source_type: selectedType })
-            } else {
-                setNotificationData({ message: 'Не удалось добавить источник', type: 'error' })
-                toggleNotificationFunc()
-                setNewSource({ value: '', description: '', source_type: selectedType })
-            }
-        } catch (error) {
-
-            setNotificationData({ message: `Проблема с бекендом: ${error}`, type: 'error' })
-            toggleNotificationFunc()
-            setNewSource({ value: '', description: '', source_type: selectedType })
-        }
-    }
-    async function actualizeSource() {
-        const response = await apiActualizeSource(selectedType, pickedSource.id)
-            .then(response => response.json())
-            .then(data => {
-                console.log(data.success);
-                if (data.success) {
-                    setNotificationData({ message: `Ответ от сервера: ${data.message}`, type: 'success' })
-                    toggleNotificationFunc()
-                } else {
-                    setNotificationData({ message: `Ответ от сервера: ${data.message}`, type: 'error long' })
-                    toggleNotificationFunc()
-                }
-                setPickedSource({ id: '' })
-                setNewSource({ value: '', description: '', source_type: selectedType })
-                getSources(selectedType)
-
-            })
-            .catch(error => {
-                console.log('Error:', error)
-                setPickedSource({ id: '' })
-                setNewSource({ value: '', description: '', source_type: selectedType })
-                setNotificationData({ message: `Проблема с бекендом: ${error}`, type: 'error long' })
-                toggleNotificationFunc()
-            });
-    }
-    async function deleteSource() {
-
-        const response = await apiDeleteSource(selectedType, pickedSource.id)
-        if (response.status == 200) {
-            setPickedSource({ id: '' })
-            getSources(selectedType)
-            setNotificationData({ message: 'Источник удален', type: 'success' })
-            toggleNotificationFunc()
-            setNewSource({ value: '', description: '', source_type: selectedType })
-            closeAcceptModal()
-
-        } else {
-            closeAcceptModal()
-            setNotificationData({ message: 'Не удалось удалить источник', type: 'error' })
-            toggleNotificationFunc()
-
-        }
-    }
-
-    async function getStands(source_type) {
-        try {
-            setLoading('loading')
-            const loadedStands = await apiGetStands(source_type)
+            const loadedStands = await apiGetStands()
             setStands(loadedStands)
             setLoading('loaded')
         } catch (err) {
@@ -144,10 +47,12 @@ export default function Stands() {
             const lStand = await apiGetStand(id)
 
             setLoadedStand(lStand)
+            setIsChanged({ name: false, description: false })
         } catch (err) {
             setLoading('error')
         }
     }
+
     async function addStand() {
         if (!newStand['name'] || !newStand['description']) {
             setNotificationData({ message: 'Заполните доступные поля', type: 'error' })
@@ -169,7 +74,20 @@ export default function Stands() {
     }
 
     async function changeStand() {
-        const response = await apiChangeStand(pickedStand['id'], pickedStand['name'], pickedStand['description'])
+        if (pickedStand.id !== loadedStand.id) {
+            setNotificationData({ message: "Внутренняя ошибка: pickedStand.id !== loadedStand.id", type: 'error long' })
+            toggleNotificationFunc()
+            return 1
+        }
+        if (!isChanged.name && !isChanged.description) {
+            setNotificationData({ message: "Внесите изменения, чтобы их применить", type: 'warning' })
+            toggleNotificationFunc()
+            return 1
+        }
+        let fields_to_update = {}
+        if (isChanged.name) { fields_to_update.name = loadedStand.name }
+        if (isChanged.description) { fields_to_update.description = loadedStand.description }
+        const response = await apiChangeStand(pickedStand['id'], fields_to_update)
         if (response.status == 200) {
             getStands()
             setNotificationData({ message: 'Стенд изменён', type: 'success' })
@@ -194,209 +112,118 @@ export default function Stands() {
             toggleNotificationFunc()
         }
     }
-    // useEffect(() => {
-    //     getSchedulerInfo()
-    // }, [])
+    useEffect(() => {
+        getStands()
+    }, [])
+
     return (
-        <div className="sources">
-            <div className="sourcesLeft">
-                <div className="sourcesSetType">
-                    <div className="sourcesSetTypeHeader">
-                        <p>Источники информации о стендах</p>
-                        <button
-                            onClick={() => {
-                                setShowHint((prev) => !prev);
-                            }}
-                            className={showHint ? "showHint picked" : "showHint"}
-                        >
-                            ?
-                        </button>
-                    </div>
-
-                    <button
-                        onClick={() => { resetLocalChanges(); setSelectedType('manual'); getStands('manual') }}
-                        className={selectedType == 'manual' ? "sourcesSetType picked" : "sourcesSetType"}>
-                        Manual
-                    </button>
-                    <button onClick={() => { resetLocalChanges(); setSelectedType('confluence_page_id'); getSources('confluence_page_id'); setNewSource({ value: '', description: '', source_type: 'confluence_page_id' }) }}
-                        className={selectedType == 'confluence_page_id' ? "sourcesSetType picked" : "sourcesSetType"}>
-                        Confluence Page Id
-                    </button>
-                </div>
-
-                <div className="sourcesNotes">
-                    {loading === 'start' && <p> Выберите тип источника</p>}
+        <div className="stands">
+            <div className="standsLeft">
+                <div className="standsNotes">
                     {loading === 'loading' && <p> Loading ...</p>}
                     {loading === 'error' && <p> бекенд отвалился</p>}
-                    {loading === 'loaded' && selectedType === 'manual' && <>
+                    {loading === 'loaded' && <>
                         {stands.map(stand =>
-                            <SourcesStandCard id={stand.id}
+                            <StandCard id={stand.id}
                                 name={stand.name}
                                 picked={pickedStand['id'] === stand.id && true || false}
                                 source_type={stand.source_type}
                                 status={stand.status}
                                 last_update={stand.stand_last}
-                                onClick={() => { setLoadedStand(false); setNewStand({ name: '', description: '' }); setPickedStand(stand); getStand(stand.id) }}>
-                            </SourcesStandCard>)}</>}
-
-                    {loading === 'loaded' && selectedType === 'confluence_page_id' && <>
-                        {sources.map(source =>
-                            <SourceCard id={source.id}
-                                value={source.value}
-                                version={source.version === '' && "Отсутствует" || source.version}
-                                description={source.description}
-                                status={source.status}
-                                picked={pickedSource.id === source.id && true || false}
-                                last_update={source.last_update === 'never' && "Отсутствует" || source.last_update}
-                                onClick1={() => { setPickedSource(source); }}
-                                onClick2={() => { setPickedSource({ id: '' }); }}
-                                onClick3={() => openAcceptModalWithAction(deleteSource)}
-                                onClick4={() => actualizeSource()}
-                            ></SourceCard>
-                        )}
-                    </>}
-                    {loading === 'loaded' && selectedType === 'confluence_page_id' && <>
-                        {serverResponse.length > 0 && <>{serverResponse.map(note =>
-                            <p>{note}</p>
-                        )
-
-                        } </>}
-                        {sources.length === 0 && <p> Источников с таким типом не найдено</p>}
-
-                    </>}
+                                onClick={() => { setNewStand({ name: '', description: '' }); setPickedStand(stand); getStand(stand.id) }}>
+                            </StandCard>)}</>}
                 </div>
 
             </div>
-            <div className="sourcesRight">
-                {loading === 'start' && <p> Выберите тип источника</p>}
+            <div className="standsRight">
                 {loading === 'loading' && <p> Loading ...</p>}
                 {loading === 'error' && <p> бекенд отвалился</p>}
-                {loading === 'loaded' && selectedType === 'manual' && <>
-                    {stands && pickedStand.id === '' &&
-                        <div className="sourcesNewSourceWrapper">
-                            <div className="sourcesNewSource">
-                                <div className="sourcesNewSourceLabel">Добавить новый стенд</div>
+                {loading === 'loaded' && <>
+                    {stands && !pickedStand.id &&
+                        <div className="standsManageStandWrapper">
+                            <div className="standsManageStand">
+                                <div className="standsManageStandTopLabel">Добавить новый стенд</div>
                                 <input type="text"
                                     maxLength={100}
                                     placeholder='Название'
-                                    className="newSource name"
-                                    value={newStand.name}
+                                    className="manageStand newName"
+                                    value={newStand.value}
                                     onChange={e => setNewStand({ ...newStand, name: e.target.value })}
                                 />
-                                <textarea name="newSource"
+
+                                <textarea name="newStand"
                                     maxLength={4000}
                                     placeholder='Описание'
-                                    className="newSource description"
+                                    className="manageStand description"
                                     value={newStand.description}
                                     onChange={e => setNewStand({ ...newStand, description: e.target.value })}
                                 >
                                 </textarea>
-                                <div className="sourcesNewSourceButtons">
+                                <div className="standsManageStandButtons">
                                     <button onClick={() => { addStand() }}> Добавить </button>
-                                    <button onClick={() => { setNewStand({ name: '', description: '' }); setLoadedStand(false), setPickedStand({ id: '', name: '', source_type: '' }) }}> Отменить </button>
                                 </div>
                             </div>
                         </div>
+
                     }
 
-                    {stands && pickedStand.id !== '' && loadedStand &&
-                        <div className="sourcesNewSourceWrapper">
-                            <div className="sourcesNewSource">
-                                <div className="sourcesNewSourceLabel">Изменить стенд {loadedStand.name}</div>
-                                <input type="text"
-                                    maxLength={100}
-                                    placeholder='Название'
-                                    className="newSource name"
-                                    value={loadedStand.name}
-                                    onChange={e => setLoadedStand({ ...loadedStand, name: e.target.value })}
-                                />
-                                <textarea name="newSource"
+                    {stands && pickedStand.id && loadedStand &&
+                        <div className="standsManageStandWrapper changeStand">
+                            <div className="standsManageStand">
+                                <div className="standsManageStandTopLabel">Редактировать стенд</div>
+                                <div className="changeStandParams">
+                                    <input type="text"
+                                        maxLength={100}
+                                        placeholder='Название'
+                                        className="manageStand name"
+                                        value={loadedStand.name}
+                                        onChange={e => {
+                                            setLoadedStand({ ...loadedStand, name: e.target.value });
+                                            setIsChanged({ ...isChanged, name: true })
+                                        }}
+                                    />
+                                    {/* <div className="param-row">
+                                        <div className="param-key">Name</div>
+                                        <div>{pickedStand.name}</div>
+                                    </div> */}
+                                    <div className="param-row">
+                                        <div className="param-key">Статус</div>
+                                        <div>{pickedStand.status}</div>
+                                    </div>
+                                    <div className="param-row">
+                                        <div className="param-key">Источник</div>
+                                        <div>{pickedStand.source_type || "Отсутствует"}</div>
+                                    </div>
+                                    <div className="param-row">
+                                        <div className="param-key">Последнее обновление</div>
+                                        <div>{pickedStand.last_update === "never" && "Отсутствует" || pickedStand.last_update}</div>
+                                    </div>
+                                </div>
+                                <textarea name="newStand"
                                     maxLength={4000}
                                     placeholder='Описание'
-                                    className="newSource description"
+                                    className="manageStand description"
                                     value={loadedStand.description}
-                                    onChange={e => setLoadedStand({ ...loadedStand, description: e.target.value })}
+                                    onChange={e => {
+                                        setLoadedStand({ ...loadedStand, description: e.target.value });
+                                        setIsChanged({ ...isChanged, description: true });
+                                    }}
                                 >
                                 </textarea>
-                                <div className="sourcesNewSourceButtons">
-                                    <button onClick={() => { console.log(loadedStand) }}> Изменить </button>
-                                    <button onClick={() => { console.log(loadedStand) }}> Удалить </button>
-                                    <button onClick={() => { setLoadedStand(false), setPickedStand({ id: '', name: '', source_type: '' }) }}> Отменить </button>
+                                <div className="standsManageStandButtons">
+                                    <button onClick={() => { openAcceptModalWithAction(changeStand) }}> Применить изменения </button>
+                                    <button onClick={() => { setPickedStand({ id: 0 }); setLoadedStand(false) }}> Отменить </button>
+                                    <button className="standsDeleteButton" onClick={() => { openAcceptModalWithAction(deleteStand) }}> Удалить </button>
                                 </div>
                             </div>
-                        </div>
+                        </div> || <></>
                     }
                 </>}
-                {loading === 'loaded' && selectedType === 'confluence_page_id' &&
-                    <div className="sourcesNewSourceWrapper">
-                        <div className="sourcesNewSource">
-                            <div className="sourcesNewSourceLabel">Добавить источник Confluence Page ID</div>
-                            <input type="text"
-                                maxLength={100}
-                                placeholder='Название'
-                                className="newSource name"
-                                value={newSource.value}
-                                onChange={e => setNewSource({ ...newSource, value: e.target.value })}
-                            />
 
-                            <textarea name="newSource"
-                                maxLength={4000}
-                                placeholder='Описание'
-                                className="newSource description"
-                                value={newSource.description}
-                                onChange={e => setNewSource({ ...newSource, description: e.target.value })}
-                            >
-                            </textarea>
-                            <button onClick={() => { setNewSource({ ...newSource, source_type: 'confluence_page_id' }); addSource() }}> Добавить </button>
-                        </div>
-                    </div>}
-
-                {showHint &&
-                    <div className="sourcesHint">
-                        <div className="hintBox">
-                            <p>
-                                Источники информации (source_types) влияют на то, как стенды добавляются и обрабатываются в системе. На данный момент доступно 2 типа источников:
-                            </p>
-                            <p>
-                                1. <strong>Manual</strong> - ручное создание стенда. Если стенд был создан напрямую через веб-интерфейс, он автоматически получит source_type manual.
-                                К заполнению и изменению в данном режиме доступны только имя и описание стенда. Такие стенды могут участвовать в резервировании, но основном
-                                этот тип используется при разработке и отладке приложения
-                            </p>
-                            <p>
-                                2. <strong>Confluence Page Id</strong> - информация о стенде загружается из Confluence. Для создания стенда необходимо добавить источник:
-
-                                <ul>
-                                    <li>Скопировать Id странцы Confluence со стендом в поле "Page ID". Id страницы отображается в конце адреса страницы в браузере,
-                                        например https://...viewpage.action?pageId=132941063. Вставлять в поле нужно только число</li>
-                                    <li>Заполнить описание (опционально)</li>
-                                    <li>Добавить источник и принудительнообновить данные, либо дождаться ближайшего штатного обновления</li>
-                                </ul>
-                            </p>
-                            <p>
-                                Как обрабатывается данный тип источников:
-                                <ul>
-                                    <li>Сервис по pageId загружает верстку и метаданные нужной страницы из Confluence</li>
-                                    <li>Если загрузка прошла успешно и данные в порядке, сервис создает стенд и привязывает его к данному источнику </li>
-                                    <li>Сервис периодически обновляет конфигурации стендов, сравнивая имеющиеся данные (версия страницы, время последнего обновления)
-                                        со свежими данными из Confluence</li>
-                                </ul>
-                            </p>
-                            <p>
-                                Для корректной работы данного механизма <strong>важно</strong>, чтобы:
-                                <ul>
-                                    <li>На целевой странице в Confluence хранились данные только одного стенда</li>
-                                    <li>Название страницы соответствовало ожидаемому названию стенда</li>
-                                </ul>
-                            </p>
-                        </div>
-
-                    </div>
-                }
             </div>
             <AcceptModal isOpen={isAcceptModalOpen} onClose={closeAcceptModal}>
                 <div className="acceptModal">
                     <div className="acceptModalText">
-                        <p>Источник будет удалён</p>
                         <p>Вы уверены?</p>
                     </div>
                     <div className="acceptModalButtons">

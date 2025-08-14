@@ -2,7 +2,7 @@ from flask import current_app
 from app.repository.queries.sources_confluence_page_id import DBSourcesConfluencePageId
 from app.repository.queries.stands import DBStands
 from app.domain.sources import ConfluencePageIdSource
-
+from app.domain.html_parser import HTMLParser
 # logger = current_app.logger
 # logger.error(f"User failed to log in: {user['login']}")
 # logger.info(f"User is logged in: {user['login']}")
@@ -17,7 +17,6 @@ def add_source(source_note):
     if source_type == 'confluence_page_id':
         return DBSourcesConfluencePageId().add_source(
             source_note['value'], source_note['description'])
-    raise Exception('Unknown source_type')
 
 
 def process_source(source_type, source_id):
@@ -30,7 +29,7 @@ def process_source(source_type, source_id):
         return result
 
 
-def process_all_sources(source_type):
+def bulk_process_sources(source_type):
     if source_type == 'confluence_page_id':
         current_app.logger.debug(
             f"Starting bulk update for confluence_page_id sources")
@@ -68,9 +67,10 @@ def process_all_sources(source_type):
 
         final_result_note_str = "Results summary is:\n"
         for note in results:
-            final_result_note_str += f"\nSource - id: {note['id']}, pageId: {note['value']}, success: {note['success']}\nStatus changes: {note['status_befor']} => {note['status_after']}\n"
-            current_app.logger.debug(
-                f"results for ")
+            final_result_note_str += f"\n\nSource - id: {note['id']}, pageId: {note['value']}, success: {note['success']}\nStatus changes: {note['status_before']} => {note['status_after']}"
+        current_app.logger.debug(final_result_note_str)
+
+        return {'success': True, 'results': results, 'exceptions': exceptions}
 
 
 def handle_confluence_page_id(source_id):
@@ -114,8 +114,11 @@ def handle_confluence_page_id(source_id):
                 try:
                     current_app.logger.debug(
                         f"Going to add stand: name - {stand_data['name']} \nsource_type - {source_type}\nstatus - {stand_data['status']}\ndescription - {stand_data['description']}\nsome long layout and last_update never")
+
+                    json_layout = HTMLParser(stand_data['html_layout'].encode(
+                        'utf-8')).convert_confluence_storage_into_json()
                     added_stand_id = db_stands.add_stand(
-                        stand_data['name'], source_type, stand_data['status'], stand_data['description'], stand_data['html_layout'].encode('utf-8'), 'never')
+                        stand_data['name'], source_type, stand_data['status'], stand_data['description'], json_layout, 'never')
                     current_app.logger.debug(
                         f"Adding result is {str(added_stand_id)}")
                     if not added_stand_id:
@@ -149,8 +152,11 @@ def handle_confluence_page_id(source_id):
                             db_stands.add_text_to_stand_description(
                                 processed_note['stand_id'], stand_data[field_name])
                         elif field_name == 'html_layout':
+                            json_layout = HTMLParser(stand_data['html_layout'].encode(
+                                'utf-8')).convert_confluence_storage_into_json()
+
                             db_stands.update_stand_html(
-                                processed_note['stand_id'], stand_data['html_layout'])
+                                processed_note['stand_id'], json_layout)
                 except Exception as e:
                     current_app.logger.error(
                         f"Source processing error: Unknown error when updating stand: {e}")
@@ -164,10 +170,6 @@ def handle_confluence_page_id(source_id):
     current_app.logger.debug(
         f"Enter out of cycle, something goes wrong, return False")
     return False
-
-
-def process_all_sources():
-    pass
 
 
 def get_sources(source_type):

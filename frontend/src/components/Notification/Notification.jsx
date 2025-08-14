@@ -4,18 +4,18 @@ import { useNotificationContext } from "../../hooks/useNotificationContext";
 
 
 
-export default function Notification () {
-    
-    const {notificationData, notificationToggle} = useNotificationContext();
+export default function Notification() {
 
-    const message = notificationData['message']
-    const type = notificationData['type']
-    
-    if (!message) return (<></>);
+  const { notificationData, notificationToggle } = useNotificationContext();
 
-    return (
-      <div className={'notification ' + type} key={notificationToggle} >
-        {message}
-      </div>
-    );
+  const message = notificationData['message']
+  const type = notificationData['type']
+
+  if (!message) return (<></>);
+
+  return (
+    <div className={'notification ' + type} key={notificationToggle} >
+      {message}
+    </div>
+  );
 };

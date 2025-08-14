@@ -140,13 +140,9 @@ export default function Logs() {
                         <p className="logsLevel">Уровень логирования: {logLevel}</p>
                         <p className="logsLevel">Доступные статусы: |{logLevels.map((level, index) => (
                             <>
-                                {/* <li className="logsLevels" key={index}>{level}</li> */}
-
-                                {/* <p className="logsStatuses"> {level}</p> */}
                                 <div id={index} className="logsStatus"> {level} | </div>
                             </>
                         ))}</p>
-                        <p className="logsCount">Размер файла БД: {dbFileSize}</p>
                         <p className="logsCount">Размер файла базы данных: {dbFileSize}</p>
                     </div>
                     <div className="logsActions">
