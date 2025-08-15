@@ -18,13 +18,6 @@ div.testComponentSection {
     border: 1px solid var(--border-color);
 }
 
-div.testComponentSection2 {
-    box-sizing: border-box;
-    height: 100%;
-    width: 40%;
-    border: 1px solid var(--border-color);
-}
-
 div.testFilterContainer1 {
     box-sizing: border-box;
     display: flex;
@@ -82,6 +75,15 @@ select.testSelect {
     width: 100%;
     padding: 4px;
     border-radius: 10px;
+}
+
+
+div.testComponentSection2 {
+    box-sizing: border-box;
+    height: 100%;
+    width: 40%;
+    overflow: auto;
+    border: 1px solid var(--border-color);
 }
 
 .testComponentSection2 * {

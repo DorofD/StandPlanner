@@ -9,6 +9,7 @@ export async function apiGetSources(source_type) {
 }
 
 export async function apiAddSource(source_note) {
+    console.log(source_note)
     const response = await authFetch(`${process.env.BACKEND_URL}/sources`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },

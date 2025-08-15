@@ -23,7 +23,7 @@ def create_db():
                 "source_type"	TEXT NOT NULL CHECK("source_type" IN ('manual', 'confluence_page_id')),
                 "status"	TEXT NOT NULL CHECK("status" IN ('free', 'busy', 'maintenance', 'unknown', 'error')),
                 "description"	TEXT,
-                "html_layout"	TEXT,
+                "page_layout"	TEXT,
                 "last_update"	TEXT,
                 PRIMARY KEY("id" AUTOINCREMENT)
             );

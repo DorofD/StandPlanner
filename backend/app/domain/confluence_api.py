@@ -14,70 +14,34 @@ class ConfluenceAPI:
         }
 
     def _request_get(self, api_path):
-        """Возвращает объект {'success': True, 'errror': '', 'data': some_python_object_decoded_from_json_body}"""
-        result = {'success': None, 'error': None, 'data': None}
-        try:
-            response = requests.get(
-                self.base_url + api_path, headers=self.headers)
-        except RequestException as e:
-            result['success'] = False
-            result['error'] = e
-            return result
-        try:
-            response.raise_for_status()
-        except Exception as e:
-            print(e)
-            result['success'] = False
-            result['error'] = e
-            return result
-        try:
-            data = response.json()
-        except JSONDecodeError:
-            result['success'] = False
-            result['error'] = f"JSONDecodeError when decoding responce body. Respone info: {response.status_code} on {response.request.method} {response.url} "
-            return result
-        result['success'] = True
-        result['data'] = data
-        return result
+        """Возвращает словарь или список, декодированный из json"""
+        response = requests.get(
+            self.base_url + api_path, headers=self.headers)
+        response.raise_for_status()
+        data = response.json()
+        return data
 
     def get_page_data(self, page_id):
         """
         Возвращает словарь
-        {'success': True, 'title': str, 'version': str, 'layout': str}
-        если 'success': False, добавится ключ 'error'
+        {'title': str, 'version': str, 'layout': str}
         """
         api_path = f"/content/{str(page_id)}?expand=body.export_view,version"
-        response = self._request_get(api_path)
-        if not response['success']:
-            return response
-        data = response['data']
+        data = self._request_get(api_path)
 
-        try:
-            layout = data['body']['export_view']['value']
-            result = {
-                'success': True,
-                'title': data['title'],
-                'version': f"{data['version']['when']}_{data['version']['number']}",
-                'layout': layout
-            }
-        except KeyError as e:
-            return {'success': False, 'error': f"Successfully loaded {self.base_url}{api_path}, but missing field {e}"}
+        layout = data['body']['export_view']['value']
+        result = {
+            'title': data['title'],
+            'version': f"{data['version']['when']}_{data['version']['number']}",
+            'layout': layout
+        }
         return result
 
     def get_page_version(self, page_id):
         """
-                Возвращает словарь
-        {'success': True, 'version': str 'when_number'} если 'success': False, добавится ключ 'error'
-
+        Возвращает строку версии в формате 'when_number'
         """
         api_path = f"/content/{str(page_id)}?expand=version"
-        response = self._request_get(api_path)
-        if not response['success']:
-            return response
-        data = response['data']
-        try:
-            result = {'success': True,
-                      'version': f"{data['version']['when']}_{data['version']['number']}"}
-        except KeyError as e:
-            return {'success': False, 'error': f"Successfully loaded {self.base_url}{api_path}, but missing field {e}"}
-        return result
+        data = self._request_get(api_path)
+        version = f"{data['version']['when']}_{data['version']['number']}"
+        return version

@@ -122,6 +122,7 @@ export default function Stands() {
                 <div className="standsNotes">
                     {loading === 'loading' && <p> Loading ...</p>}
                     {loading === 'error' && <p> бекенд отвалился</p>}
+                    {loading === 'loaded' && stands.length == 0 && <p>Пока не добавлено ни одного стенда</p>}
                     {loading === 'loaded' && <>
                         {stands.map(stand =>
                             <StandCard id={stand.id}

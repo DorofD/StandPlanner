@@ -18,20 +18,20 @@ export default function Apscheduler() {
     }
 
     useEffect(() => {
-        getSchedulerInfo()  
+        getSchedulerInfo()
     }, [])
     return (
         <div>
             {loading === 'loading' && <p> Loading ...</p>}
             {loading === 'error' && <p> бекенд отвалился</p>}
             {loading === 'loaded' && <>
-                        <div>Scheduler status: {schedulerInfo.status.toString()}</div>
-                        <div>Jobs:</div>
-                        {schedulerInfo.jobs.map(job =>
-                        <div>
-                            {/*job.id*/} {job.name} Next run: {job.next_run} | trigger: {job.trigger}
-                        </div>)}
-                        </>}
-      </div>
+                <div>Scheduler status: {schedulerInfo.status.toString()}</div>
+                <div>Jobs:</div>
+                {schedulerInfo.jobs.map(job =>
+                    <div>
+                        {/*job.id*/} {job.name} Next run: {job.next_run} | trigger: {job.trigger}
+                    </div>)}
+            </>}
+        </div>
     );
 }

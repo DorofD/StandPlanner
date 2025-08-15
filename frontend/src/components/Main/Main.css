@@ -1,14 +1,19 @@
-div.mainStands {
+div.mainRightContainer {
+    display: block;
+    width: 100%;
+}
+
+div.mainLeftContainer {
     /* background-color: aquamarine; */
     height: 100%;
-    width: 30%;
+    width: 35%;
     overflow: auto;
 }
 
 div.mainStandDescription {
     /* background-color: rgb(207, 252, 102); */
     height: 10%;
-    width: 70%;
+    width: 65%;
     text-align: center;
 }
 
@@ -28,10 +33,12 @@ div.mainStandLayout {
 }
 
 div.mainStandLayout span,
-li,
-th,
-tr {
+div.mainStandLayout li,
+div.mainStandLayout th,
+div.mainStandLayout tr {
     color: var(--text-main-color);
+    box-sizing: border-box;
+    border: solid 1px var(--border-color);
 }
 
 
@@ -101,7 +108,14 @@ textarea.mainComments:focus {
     height: 40px;
 }
 
-div.mainRightContainer {
-    display: block;
-    width: 100%;
+.layoutRender {
+    box-sizing: border-box;
+}
+
+/* .layoutRender div, */
+.layoutRender table,
+.layoutRender tr,
+.layoutRender th,
+.layoutRender td {
+    border: solid 1px var(--border-color);
 }

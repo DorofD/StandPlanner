@@ -20,17 +20,17 @@
     --border-picked-color: #316634;
 
     --error-background: #F44336;
-    --error-text-color: #7e1710;
+    --error-text-color: #440d09;
     --warning-background: #e9d25a;
-    --warning-text-color: #72620e;
+    --warning-text-color: #423908;
     --info-background: #8aadb8;
     --info-text-color: #122328;
-    --success-background: #cdfdce;
+    --success-background: #a8fca9;
     --success-text-color: #000000;
 
     --strong-text-color: #357237;
     --disabled-color: #b0b6b8;
-    --scrollbar-thumb-color: #f1f1f1;
+    --scrollbar-thumb-color: #acacac;
     --scrollbar-thumb-hover-color: #4caf4f7c;
     --scrollbar-thumb-active-color: #4CAF50;
 }

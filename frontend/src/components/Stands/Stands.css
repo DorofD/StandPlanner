@@ -145,15 +145,3 @@ ources .hintBox p {
     text-indent: 15px;
     text-align: justify;
 }
-
-.layoutRender {
-    box-sizing: border-box;
-}
-
-/* .layoutRender div, */
-.layoutRender table,
-.layoutRender tr,
-.layoutRender th,
-.layoutRender td {
-    border: solid 1px var(--border-color);
-}

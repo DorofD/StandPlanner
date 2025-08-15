@@ -207,6 +207,7 @@ export default function Users() {
                 {loading === 'loaded' && <>
                     {filteredUsers.map(user =>
                         <UserCard
+                            key={user.id}
                             id={user.id}
                             login={user.login}
                             authType={user.auth_type}

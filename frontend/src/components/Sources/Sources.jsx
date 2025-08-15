@@ -57,9 +57,18 @@ export default function Sources() {
             toggleNotificationFunc()
             return 1
         }
+        // console.log(newSource)
+        if (!newSource.source_type) {
+            newSource.source_type = selectedType
+        }
+        let noteToAdd = {}
+        noteToAdd.source_type = selectedType
+        noteToAdd.value = newSource.value
+        noteToAdd.description = newSource.description
 
         try {
-            const response = await apiAddSource(newSource);
+            console.log(noteToAdd)
+            const response = await apiAddSource(noteToAdd);
             const body = await response.json();
 
             console.log("response on addSource:", response.status);
@@ -340,7 +349,7 @@ export default function Sources() {
                             >
                             </textarea>
                             <div className="sourcesManageSourceButtons">
-                                <button onClick={() => { setNewSource({ ...newSource, source_type: 'confluence_page_id' }); addSource() }}> Добавить </button>
+                                <button onClick={() => addSource()}> Добавить </button>
                                 <button onClick={() => { actualizeAllSources() }}> Обновить данные всех ресурсов</button>
                             </div>
                         </div>

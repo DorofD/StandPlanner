@@ -41,33 +41,32 @@ class DBStands():
         else:
             return False
 
-    def add_stand(self, name: str, source_type: str, status: str = 'unknown', description: str = '', html_layout: str = '', last_update: str = 'never'):
+    def add_stand(self, name: str, source_type: str, status: str = 'unknown', description: str = '', page_layout: str = '', last_update: str = 'never'):
         """Возвращает int lastrowid"""
         query = f"""
-            INSERT INTO stands (name, source_type, status, description, html_layout, last_update)
+            INSERT INTO stands (name, source_type, status, description, page_layout, last_update)
             VALUES (?, ?, ?, ?, ?, ?);
         """
         params = [name, source_type, status,
-                  description, html_layout, last_update]
+                  description, page_layout, last_update]
         return execute_parametrized_query(query, params)
 
     def update_stand_field(self, id: int, field: str, value: str):
-        """Можно менять значения полей name, description, html_layout"""
+        """Можно менять значения полей name, description, page_layout"""
         query = f"""
                 UPDATE {self.table_name} SET {field} = '{value}'
                 WHERE id = '{id}';
                 """
         return execute_db_query(query)
 
-    def update_stand_html(self, id, html_layout):
+    def update_stand_layout(self, id, page_layout):
         query = f"""
-            UPDATE stands SET html_layout = ? WHERE id = ?;
+            UPDATE stands SET page_layout = ? WHERE id = ?;
         """
-        params = [html_layout, id]
+        params = [page_layout, id]
         return execute_parametrized_query(query, params)
 
     def add_text_to_stand_description(self, id, adding_text):
-        """Можно менять значения полей name, description, html_layout"""
         query = f"""
                     UPDATE {self.table_name}
                     SET description = description || '{adding_text}'

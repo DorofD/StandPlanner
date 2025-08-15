@@ -2,14 +2,14 @@ from bs4 import BeautifulSoup
 from app.repository.queries.stands import DBStands
 import json
 
-stand = DBStands().get_stand(3)
-html_layout = stand['html_layout']
+# stand = DBStands().get_stand(3)
+# page_layout = stand['page_layout']
 
 
 class HTMLParser():
-    def __init__(self, html_layout):
+    def __init__(self, page_layout):
         # для Confluence storage лучше парсер 'xml', надо сделать
-        self.soup = BeautifulSoup(html_layout, 'html.parser')
+        self.soup = BeautifulSoup(page_layout, 'html.parser')
         self.key_tags = {
             'div', 'table', 'tr', 'td', 'th', 'tbody', 'thead', 'tfoot',
             'colgroup', 'col', 'p', 'ul', 'ol', 'li', 'span'
@@ -18,8 +18,10 @@ class HTMLParser():
     def convert_confluence_storage_into_json(self):
         full_tree = self.get_full_data_tree()
         cleaned_tree = self.build_key_tag_tree(full_tree)
+
         result = []
-        for note in cleaned_tree:
+        for note in full_tree:
+            cleaned_tree = self.build_key_tag_tree(note)
             result.append(cleaned_tree)
         return json.dumps(result)
 
