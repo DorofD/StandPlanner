@@ -132,12 +132,22 @@ textarea:focus {
     cursor: auto;
 }
 
-div.positiveSelection {
-    color: var(--success-text-color);
-    background-color: var(--success-background);
-}
-
-div.criticalSelection {
+*.error-colors {
     color: var(--error-text-color);
     background-color: var(--error-background);
+}
+
+*.warning-colors {
+    color: var(--warning-text-color);
+    background-color: var(--warning-background);
+}
+
+*.info-colors {
+    color: var(--info-text-color);
+    background-color: var(--info-background);
+}
+
+*.success-colors {
+    color: var(--success-text-color);
+    background-color: var(--success-background);
 }

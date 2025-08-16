@@ -125,13 +125,16 @@ export default function Stands() {
                     {loading === 'loaded' && stands.length == 0 && <p>Пока не добавлено ни одного стенда</p>}
                     {loading === 'loaded' && <>
                         {stands.map(stand =>
-                            <StandCard id={stand.id}
+                            <StandCard
+                                key={stand.id}
+                                id={stand.id}
                                 name={stand.name}
                                 picked={pickedStand['id'] === stand.id && true || false}
                                 source_type={stand.source_type}
                                 status={stand.status}
                                 last_update={stand.stand_last}
-                                onClick={() => { setNewStand({ name: '', description: '' }); setPickedStand(stand); getStand(stand.id) }}>
+                                onClick={() => { setNewStand({ name: '', description: '' }); setPickedStand(stand); getStand(stand.id) }}
+                                errorWarning={true}>
                             </StandCard>)}</>}
                 </div>
 

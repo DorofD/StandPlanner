@@ -2,18 +2,28 @@ import React, { Component } from "react";
 import "./StandCard.css";
 
 
-export default function StandCard({ id, name, source_type, status, last_update, onClick, picked = false }) {
+export default function StandCard({ id, name, source_type, status, onClick, picked = false, errorWarning = false }) {
 
     return (
         <>
-            <div id={id} className={picked && "card sourcesStand picked" || "card sourcesStand"} onClick={onClick}>
-                <div className="sourceStandCardHeader">
-                    <p className="sourceStandName">{name}</p>
+            <div id={id} className={picked && "card stand picked" || "card stand"} onClick={onClick}>
+                <div className="standCardParams">
+
+                    <div className="standCardHeader">
+                        <p className="standCardName">{name}</p>
+                    </div>
+                    <div className="standCardBottom">
+                        <p className="standCardValueFaded">Статус: </p>
+
+                        {status === "free" && <div className={"paramValue success-colors"}>Свободен</div> ||
+                            status === "busy" && <div className={"paramValue info-colors"}>Занят</div> ||
+                            status === "unknown" && <div className={"paramValue warning-colors"}>Неизвестен</div> ||
+                            status === "maintenance" && <div className={"paramValue info-colors"}>Занят</div>}
+
+                        <p className="standCardStatusFaded">Источник: </p>{source_type}
+                    </div>
                 </div>
-                <div className="sourcesStandCardBottom">
-                    <p className="sourceCardValueFaded">Статус: </p>{status}
-                    <p className="sourceCardStatusFaded">Источник: </p>{source_type}
-                </div>
+                {errorWarning !== true && <div className="standCardParamValue error-colors">Проблема!</div>}
             </div>
         </>
     )

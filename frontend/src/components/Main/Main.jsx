@@ -3,9 +3,8 @@ import { useState, useEffect, useContext } from "react";
 import "./Main.css";
 import { apiGetStands, apiGetStand } from "../../services/apiStands";
 import StandCard from "../Stands/StandCard/StandCard";
-import sendIcon from "./send.png"
+import Filter from "../Filter/Filter";
 import { useAuthContext } from "../../hooks/useAuthContext";
-import { Beba } from "./beba";
 
 export default function Main() {
     const [loadingStands, setLoadingStands] = useState('loading')
@@ -14,11 +13,12 @@ export default function Main() {
     const [standInfo, setStandInfo] = useState({ description: '', page_layout: '' })
     const [renderedElement, setRenderedElement] = useState(false)
 
-    const [commentText, setCommentText] = useState('');
+    const [filterStands, setFilterStands] = useState({ name: '', status: '', source_type: '' });
+    const [standStatuses, setStandStatuses] = useState([['free', "Свободен"], ['busy', "Занят"], ['maintenance', "Обслуживание"], ['unknown', "Неизвестен"]])
+    const [sourceTypes, setSourceTypes] = useState(['manual', 'confluence_page_id', 'massive_search'])
 
     async function getStands() {
         try {
-            console.log('getStands start!')
             setLoadingStands('loading')
             const stands = await apiGetStands()
             setStands(stands)
@@ -37,10 +37,6 @@ export default function Main() {
         } catch (err) {
             setLoadingStands('error')
         }
-    }
-
-    function handleComment(event) {
-        setCommentText(event.target.value)
     }
 
     async function pickStand(id) {
@@ -87,64 +83,70 @@ export default function Main() {
         );
     }
 
-
-    const MainStandLayOutValue = renderFromJson(standInfo.page_layout)
-
+    const filteredStands = stands.filter(item => {
+        return (
+            (filterStands.status === '' || item.status.includes(filterStands.status)) &&
+            (filterStands.source_type === '' || item.source_type.includes(filterStands.source_type))
+        );
+    }
+    )
     useEffect(() => {
         getStands()
     }, [])
     return (
         <>
-            {/* {standInfo.page_layout} */}
-            {/* <ColorSchemeSelector></ColorSchemeSelector> */}
-            {/* {console.log(typeof (standInfo.page_layout[3]))} */}
             <div className="mainLeftContainer">
+                <div className="mainLeft1">
+                    {/* <div>Стенды</div> */}
+                    <Filter onClick={() => setFilterStands({ status: '', source_type: '' })} closeText="X">
+                        {/* <input type="text" className="filter" placeholder="Название" onChange={e => setFilterStands({ ...filterStands, name: e.target.value })} value={filterStands.name} /> */}
+                        <select className='filter adaptive' onChange={e => setFilterStands({ ...filterStands, status: e.target.value })}>
+                            {loadingStands === 'loaded' && <>{<option className='' value="" selected={filterStands.status === '' && true || false}>Статус </option>}
+                                {standStatuses.map((type, index) => <option id={index} value={type[0]}>{type[1]}</option>)}</>}
+                            {loadingStands === 'error' && <>{<option value="" selected={filterStands.status === '' && true || false}>Бекенд отвалился</option>}</>}
+                        </select>
+                        <select className='filter adaptive' adaptive onChange={e => setFilterStands({ ...filterStands, status: e.target.value })}>
+                            {loadingStands === 'loaded' && <>{<option className='' value="" selected={filterStands.status === '' && true || false}>Источник </option>}
+                                {sourceTypes.map((type, index) => <option id={index} value={type}>Conflunce PageId</option>)}</>}
+                            {loadingStands === 'error' && <>{<option value="" selected={filterStands.status === '' && true || false}>Бекенд отвалился</option>}</>}
+                        </select>
+                        {/* <input type="text" className="filter" placeholder="Текст записи" onChange={e => setFilterStands({ ...filterStands, note: e.target.value })} value={filterStands.note} /> */}
+                    </Filter>
+                </div>
+
                 {loadingStands === 'loading' && <p> Loading ...</p>}
                 {loadingStands === 'error' && <p> бекенд отвалился</p>}
                 {loadingStands === 'loaded' && stands.length == 0 && <> <p>Пока не добавлено ни одного стенда</p></>}
                 {loadingStands === 'loaded' && <>
-                    {stands.map(stand =>
-                        <StandCard
-                            key={stand.id}
-                            id={stand.id}
-                            name={stand.name}
-                            picked={pickedStand['id'] === stand.id && true || false}
-                            // onClick={() => { getStand(stand.id); setPickedStand(stand); console.log("кнопка") }}>
-                            // onClick={() => { getStand(stand.id); setPickedStand(stand); console.log("кнопка") }}>
-                            onClick={() => {
-                                getStand(stand.id).then(() => setPickedStand(stand));
-                            }}>
-                        </StandCard>)}
+                    <div className="mainLeft2">
+                        {filteredStands.map(stand =>
+                            <StandCard
+                                key={stand.id}
+                                id={stand.id}
+                                name={stand.name}
+                                status={stand.status}
+                                source_type={stand.source_type}
+                                picked={pickedStand['id'] === stand.id && true || false}
+                                onClick={() => {
+                                    getStand(stand.id).then(() => setPickedStand(stand));
+                                }}>
+                            </StandCard>)}
+                    </div>
                 </>}
             </div>
             <div className="mainRightContainer">
+                <div className="mainRight1">
+                    <div className="mainStandLayout">
+                        {standInfo.description && (standInfo.description) || <>
+                            {renderFromJson(standInfo.page_layout[0])}
+                            {renderFromJson(standInfo.page_layout[1])}
+                            {renderFromJson(standInfo.page_layout[2])}
+                        </>
+                        }
 
-                <div className="mainStandLayout">
-                    {/* {standInfo.page_layout && (
-                        <div
-                            dangerouslySetInnerHTML={{ __html: standInfo.page_layout }}
-                        />
-                    )} */}
-
-                    {/* {standInfo.page_layout} */}
-                    {standInfo.name && (standInfo.name) || <p>пусто</p>}
-                    {console.log('in mainStandLayout', standInfo)}
-                    {standInfo.description && (standInfo.description) || <p>пусто</p>}
-                    {renderFromJson(standInfo.page_layout[0])}
-                    {renderFromJson(standInfo.page_layout[1])}
-                    {renderFromJson(standInfo.page_layout[2])}
-                    {/* {typeof (standInfo.page_layout) == Object && <p>bibas</p>} */}
-
+                    </div>
+                    <div className="mainRight2"></div>
                 </div>
-                {/* {standInfo && standInfo.page_layout && (
-                    <div className="layoutRender">
-                        {renderFromJson(standInfo.page_layout)}
-                        </div>
-                        )} */}
-                {/* <div className="mainStandDescription">
-                            {standInfo.page_layout && (standInfo.page_layout) || <></>}
-        
-                        </div> */}
                 <div className="mainStandDescription">
                     {standInfo.description && (standInfo.description) || <></>}
 

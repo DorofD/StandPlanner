@@ -1,7 +1,6 @@
 import React from "react";
 // import { ReactComponent as FilterIcon } from './filter.svg';
 import FilterIcon from './filter.svg';
-import Button from "../Button/Button";
 import "./Filter.css"
 /**
  * Компонент фильтрации логов.
@@ -16,13 +15,13 @@ import "./Filter.css"
  * 
  * 
  */
-export default function Filter({ children, onClick }) {
+export default function Filter({ children, onClick, closeText = 'Очистить' }) {
 
     return (
         <div className="filterContainer">
             <FilterIcon style={{ color: 'var(--accent-color)', width: 40, height: 40 }} />
             {children}
-            <Button onClick={onClick}>Очистить</Button>
+            <button onClick={onClick}>{closeText}</button>
         </div>
     );
 }

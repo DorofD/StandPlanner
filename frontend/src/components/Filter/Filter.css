@@ -28,3 +28,9 @@ select.filter {
     padding: 4px;
     border-radius: 10px;
 }
+
+select.filter.adaptive {
+    width: auto;
+    padding: 4px;
+    border-radius: 10px;
+}

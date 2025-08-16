@@ -11,8 +11,8 @@ export default function SourceCard({ id, value, status, picked = false, last_upd
                 <div className="sourceCardTop">
                     <p className="sourceCardValueFaded">Page ID: </p>{value}
                     <p className="sourceCardStatusFaded">Статус: </p><div className={
-                        status === "relevant" && "paramValue positiveSelection" ||
-                        status === "failed" && "paramValue criticalSelection" ||
+                        status === "relevant" && "paramValue success-colors" ||
+                        status === "failed" && "paramValue error=color" ||
                         "paramValue"
                     }>{status}</div>
                 </div>

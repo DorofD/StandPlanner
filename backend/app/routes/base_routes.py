@@ -34,9 +34,7 @@ def stands():
         elif request.args.get('action') == 'get_stand':
             stand_id = request.args.get('stand_id')
             stand = get_stand(stand_id)
-            print(type(stand['page_layout']))
             stand['page_layout'] = json.loads(stand['page_layout'])
-            print(len(stand['page_layout']))
             result = jsonify(stand)
         return result
     if request.method == 'POST':

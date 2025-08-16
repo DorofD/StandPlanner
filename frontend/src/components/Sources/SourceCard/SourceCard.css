@@ -29,12 +29,12 @@ div.sourceCardMiddle {
     overflow-wrap: break-word;
 }
 
-div.sourceCardStatus {
+/* div.sourceCardStatus {
     display: inline;
     width: 100%;
     text-align: left;
     margin-bottom: 4px;
-}
+} */
 
 p.sourceCardStatusFaded {
     display: inline;

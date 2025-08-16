@@ -1,51 +1,87 @@
-.card.sourcesStand {
+p.standCardStatusFaded {
     box-sizing: border-box;
-    user-select: none;
-    padding: 10px;
-    margin: 20px;
-    height: auto;
-    width: auto;
-    white-space: pre-wrap;
-    display: block;
-}
-
-p.sourceStandName {
-    font-size: 18px;
-    font-weight: 600;
-    margin-top: 0;
-    margin-bottom: 0px;
-}
-
-div.sourceCardTop {
-    display: block;
-    width: 100%;
-    text-align: left;
-}
-
-p.sourceCardStatusFaded {
     display: inline;
     /* color: rgba(0, 0, 0, 0.61); */
     margin-left: 20px;
     color: var(--text-secondary-color);
 }
 
-p.sourceCardValueFaded {
+p.standCardValueFaded {
     display: inline;
     /* color: rgba(0, 0, 0, 0.61); */
     color: var(--text-secondary-color);
 }
 
-div.sourceStandCardHeader {
-    display: block;
-    width: 100%;
-    text-align: left;
-    display: inline;
-}
 
-div.sourcesStandCardBottom {
+div.standCardBottom {
     display: block;
     width: 100%;
     text-align: left;
     margin-top: 10px;
     overflow-wrap: break-word;
+}
+
+/* div.standCardHeader {
+    display: block;
+    width: 100%;
+    text-align: left;
+    display: inline;
+} */
+
+div.standCardHeader {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    text-align: left;
+    display: inline;
+}
+
+
+
+.card.stand {
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: row;
+    user-select: none;
+    padding: 10px;
+    margin: 0;
+    height: auto;
+    width: auto;
+}
+
+p.standCardName {
+    font-size: 18px;
+    font-weight: 600;
+    margin-top: 0;
+    margin-bottom: 0px;
+}
+
+div.standCardParams {
+    display: flex;
+    flex-direction: row;
+    width: 85%;
+    text-align: left;
+    display: inline;
+}
+
+div.standCardAlert {
+    text-align: center;
+    height: auto;
+    max-height: 40px;
+    background-color: var(--error-background);
+    color: var(--error-text-color);
+
+}
+
+div.standCardParamValue {
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+    padding-left: 0.4em;
+    padding-right: 0.4em;
+    padding-bottom: auto;
+    border-radius: 1em;
+    height: 30px;
+    margin-top: auto;
+    margin-bottom: auto;
 }
