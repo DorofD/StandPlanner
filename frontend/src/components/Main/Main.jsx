@@ -77,7 +77,7 @@ export default function Main() {
                     {/* <div>Стенды</div> */}
                     {loading === 'loading' && <p> Loading ...</p>}
                     {loading === 'error' && <p> бекенд отвалился</p>}
-                    {loading === 'loaded' && stands.length == 0 && <> <p>Пока не добавлено ни одного стенда</p></>}
+
                     {loading === 'loaded' && <>
 
                         <Filter onClick={() => setFilterStands({ status: '', source_type: '' })} closeText="X">
@@ -92,16 +92,7 @@ export default function Main() {
                             </select>
                         </Filter>
                     </>}
-                    {/* <Filter onClick={() => setFilterStands({ status: '', source_type: '' })}>
-                        <select className='filter' onChange={e => setFilterStands({ ...filterStands, status: e.target.value })}>
-                            {loading === 'loaded' && <>{<option className='' value="" selected={filterStands.status === '' && true || false}> Статус </option>}
-                                {logLevels.map((level, index) => <option id={index} value={level}>{level}</option>)}</>}
-                            {loadingLogs === 'error' && <>{<option value="" selected={filterLogs.status === '' && true || false}>Бекенд отвалился</option>}</>}
-                        </select>
-                        <input type="text" className="filter" placeholder="Текст записи" onChange={e => setFilterLogs({ ...filterLogs, note: e.target.value })} value={filterLogs.note} />
-                    </Filter> */}
                 </div>
-                {console.log(filterStands)}
                 {loading === 'loading' && <p> Loading ...</p>}
                 {loading === 'error' && <p> бекенд отвалился</p>}
                 {loading === 'loaded' && stands.length == 0 && <> <p>Пока не добавлено ни одного стенда</p></>}
