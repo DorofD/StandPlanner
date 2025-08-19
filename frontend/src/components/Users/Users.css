@@ -51,7 +51,6 @@ div.addModalUsersHeader {
 input.addModalUsers {
     height: 20px;
     margin: 8px;
-    font-family: Arial;
     font-size: large;
     width: 300px;
     height: 32px;
@@ -67,7 +66,6 @@ input.addModalUsers:disabled {
 select.addModalUsers {
     height: 35px;
     margin: 8px;
-    font-family: Arial;
     font-size: large;
     width: 180px;
     padding: 4px;

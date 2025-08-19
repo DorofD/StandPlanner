@@ -1,7 +1,6 @@
 button {
     border: 0;
     outline: 0;
-    font-family: Arial;
     font-size: 15px;
     cursor: pointer;
     user-select: none;
@@ -29,7 +28,6 @@ button.logout {
 }
 
 button.reservationAdd {
-    font-family: Arial;
     font-size: medium;
     display: block;
     margin: 0 auto;
@@ -44,7 +42,6 @@ button.reservationAdd {
 }
 
 button.reservationExit {
-    font-family: Arial;
     font-size: medium;
     display: block;
     margin: 0 auto;

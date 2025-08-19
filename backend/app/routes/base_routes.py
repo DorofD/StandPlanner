@@ -1,4 +1,4 @@
-from flask import Blueprint, request, jsonify
+from flask import Blueprint, request, current_app, jsonify
 from app.services.stands import get_stands, get_stand, add_stand, delete_stand, change_stand
 from app.services.reservations import add_reservaiton, get_reservations_for_planner, change_reservation, delete_reservation
 from app.services.sources import add_source, get_sources, process_source, bulk_process_sources, delete_source, change_source
@@ -31,12 +31,18 @@ def stands():
     if request.method == 'GET':
         if request.args.get('action') == 'get_list':
             result = jsonify(get_stands())
+            return result
         elif request.args.get('action') == 'get_stand':
             stand_id = request.args.get('stand_id')
             stand = get_stand(stand_id)
-            stand['page_layout'] = json.loads(stand['page_layout'])
-            result = jsonify(stand)
-        return result
+            if stand['page_layout']:
+                try:
+                    stand['page_layout'] = json.loads(stand['page_layout'])
+                    result = jsonify(stand)
+                    return result
+                except Exception as e:
+                    current_app.logger.info(
+                        f"Failed to json.loads page_layout from stand with id: {e}")
     if request.method == 'POST':
         data = request.json
         if data['action'] == 'add':

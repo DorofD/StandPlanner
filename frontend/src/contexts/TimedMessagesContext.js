@@ -8,7 +8,7 @@ export const TimedMessagesProvider = ({ children }) => {
 
   const addMessage = (text, style = 'info', duration = 10000) => {
     const id = idRef.current++;
-    setMessages((msgs) => [...msgs, { id, text, style }]);
+    setMessages((msgs) => [...msgs, { id, text, style, duration }]);
     setTimeout(() => {
       setMessages((msgs) => msgs.filter((msg) => msg.id !== id));
     }, duration);

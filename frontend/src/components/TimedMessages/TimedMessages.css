@@ -1,35 +1,34 @@
-.tmc-container {
-    width: 300px;
+@keyframes fadeInOut {
+
+    0%,
+    100% {
+        opacity: 0;
+    }
+
+    10%,
+    90% {
+        opacity: 1;
+    }
 }
 
-.tmc-input-row {
-    display: flex;
-    gap: 8px;
+@keyframes progressBar {
+    from {
+        width: 100%;
+    }
+
+    to {
+        width: 0%;
+    }
 }
 
-.tmc-input {
-    flex: 1;
-    padding: 6px;
-    border-radius: 4px;
-    border: 1px solid #bbb;
-}
-
-.tmc-button {
-    padding: 6px 12px;
-    background: #1976d2;
-    color: #fff;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-}
-
-.tmc-button:hover {
-    background: #1565c0;
-}
-
-/* .tmc-messages {
-    margin-top: 20px;
-    position: absolute;
+/* .progress-bar {
+    height: 40px;
+    background-color: #fd6811;
+    width: 100%;
+    border-radius: 2px;
+    animation-name: progressBar;
+    animation-timing-function: linear;
+    animation-duration: var(--animation-duration, 500ms);
 } */
 
 .tmc-messages {
@@ -47,11 +46,15 @@
 }
 
 .tmc-message {
+    animation-name: fadeInOut;
+    animation-duration: var(--animation-duration, 3000ms);
     margin-bottom: 8px;
     padding: 8px;
     background: var(--info-background);
     border-radius: 4px;
     transition: all 0.3s;
+    z-index: 1001;
+
 }
 
 div.tmc-message.error {

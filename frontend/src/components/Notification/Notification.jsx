@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import "./Notification.css";
-import { useNotificationContext } from "../../hooks/useNotificationContext";
+// // import { useNotificationContext } from "../../hooks/useNotificationContext";
+import { useTimedMessagesContext } from "../../hooks/useTimedMessagesContext";
 
 
 

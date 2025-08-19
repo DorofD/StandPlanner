@@ -9,7 +9,9 @@ export const NotificationProvider = ({ children }) => {
 
   // Возвращаем контекст провайдера, передавая значения isAuthenticated и setAuth в качестве значения контекста
   return (
-    <NotificationContext.Provider value={{ notificationData, notificationToggle, setNotificationData, toggleNotificationFunc: () => toggleNote(toggle => toggle + 1) }}>
+    <NotificationContext.Provider value={{
+      notificationData, notificationToggle, setNotificationData, toggleNotificationFunc: () => toggleNote(toggle => toggle + 1)
+    }}>
       {children}
     </NotificationContext.Provider>
   );

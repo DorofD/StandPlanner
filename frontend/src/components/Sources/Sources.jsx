@@ -3,13 +3,14 @@ import "./Sources.css";
 import SourceCard from "./SourceCard/SourceCard";
 import { apiGetSources, apiAddSource, apiDeleteSource, apiActualizeSource, apiActualizeAllSources, apiChangeSource } from "../../services/apiSources";
 import { useAuthContext } from "../../hooks/useAuthContext";
-import { useNotificationContext } from "../../hooks/useNotificationContext";
+import { useTimedMessagesContext } from "../../hooks/useTimedMessagesContext";
 import AcceptModal from "../AcceptModal/AcceptModal";
 import Loader from "../Loader/Loader";
 
 export default function Sources() {
     const { userName, userId } = useAuthContext();
-    const { notificationData, setNotificationData, toggleNotificationFunc, notificationToggle } = useNotificationContext();
+    const { messages, addMessage } = useTimedMessagesContext();
+
     const [selectedType, setSelectedType] = useState('')
     const [sources, setSources] = useState([])
     const [loading, setLoading] = useState('start')
@@ -53,8 +54,7 @@ export default function Sources() {
 
     async function addSource() {
         if (newSource.value.length === 0) {
-            setNotificationData({ message: `Введите Page ID`, type: 'error' })
-            toggleNotificationFunc()
+            addMessage('Введите Page ID', 'error', 3000)
             return 1
         }
         // console.log(newSource)
@@ -77,22 +77,19 @@ export default function Sources() {
                 console.log(body.message);
                 resetLocalChanges();
                 getSources(selectedType);
-                setNotificationData({ message: 'Источник добавлен', type: 'success' });
-                toggleNotificationFunc();
+                addMessage('Источник добавлен', 'success', 3000)
                 closeAcceptModal();
             } else {
                 console.log(body.success);
                 console.log(body.message);
-                setNotificationData({ message: `Не удалось добавить источник: ${body.message}`, type: 'error long' });
-                toggleNotificationFunc();
+                addMessage(`Не удалось добавить источник: ${body.message}`, 'info', 10000)
             }
         } catch (error) {
             console.log('Error:', error);
             resetLocalChanges();
             setNewSource({ value: '', description: '', source_type: selectedType });
             closeAcceptModal();
-            setNotificationData({ message: `Не удалось добавить источник: ${error}`, type: 'error long' });
-            toggleNotificationFunc();
+            addMessage(`Не удалось добавить источник: ${body.message}`, 'info', 10000)
             getSources(selectedType);
         }
     }
@@ -106,11 +103,9 @@ export default function Sources() {
                 console.log(data.success);
                 setLoaderActive(false)
                 if (data.success) {
-                    setNotificationData({ message: `Данные источника успешно обновлены`, type: 'success' })
-                    toggleNotificationFunc()
+                    addMessage('Данные источника успешно обновлены', 'success', 3000)
                 } else {
-                    setNotificationData({ message: `Не удалось обновить данные источника, подробнее в описании источника`, type: 'error long' })
-                    toggleNotificationFunc()
+                    addMessage('Не удалось обновить данные источника, подробнее в описании источника', 'error', 3000)
                 }
                 setPickedSource({ id: 0 })
                 setNewSource({ value: '', description: '', source_type: selectedType })
@@ -121,15 +116,13 @@ export default function Sources() {
                 setPickedSource({ id: 0 })
                 setNewSource({ value: '', description: '', source_type: selectedType })
                 setLoaderActive(false)
-                setNotificationData({ message: `Проблема с бекендом: ${error}`, type: 'error long' })
-                toggleNotificationFunc()
+                addMessage(`Проблема с бекендом: ${error}`, 'info', 10000)
             });
     }
 
     async function actualizeAllSources() {
         console.log(`bulk update sources: ${selectedType}`)
-        setNotificationData({ message: `Массовое обновление источников может занять до нескольких минут, ожидайте`, type: 'info long' })
-        toggleNotificationFunc()
+        addMessage(`Массовое обновление источников может занять до нескольких минут, ожидайте`, 'info', 10000)
         setLoaderActive(true)
         const response = await apiActualizeAllSources(selectedType)
             .then(response => response.json())
@@ -137,11 +130,9 @@ export default function Sources() {
                 console.log(data.success);
                 setLoaderActive(false)
                 if (data.success) {
-                    setNotificationData({ message: `Массовое обновление прошло успешно`, type: 'success long' })
-                    toggleNotificationFunc()
+                    addMessage('Массовое обновление прошло успешно', 'success', 3000)
                 } else {
-                    setNotificationData({ message: `Не удалось обновить данные источника: ${data.message}`, type: 'error long' })
-                    toggleNotificationFunc()
+                    addMessage(`Не удалось обновить данные источника: ${data.message}`, 'error', 10000)
                 }
                 setPickedSource({ id: 0 })
                 setNewSource({ value: '', description: '', source_type: selectedType })
@@ -152,15 +143,13 @@ export default function Sources() {
                 setPickedSource({ id: 0 })
                 setNewSource({ value: '', description: '', source_type: selectedType })
                 setLoaderActive(false)
-                setNotificationData({ message: `Проблема с бекендом: ${error}`, type: 'error long' })
-                toggleNotificationFunc()
+                addMessage(`Проблема с бекендом: ${error}`, 'error', 3000)
             });
     }
 
     async function changeSource() {
         if (changedSource.description === pickedSource.description) {
-            setNotificationData({ message: `Внесите изменения чтобы их применить`, type: 'info' })
-            toggleNotificationFunc()
+            addMessage(`Внесите изменения чтобы их применить`, 'info', 3000)
             return 1
         }
         const response = await apiChangeSource(selectedType, changedSource)
@@ -172,15 +161,13 @@ export default function Sources() {
                 if (data.status == 200) {
                     resetLocalChanges()
                     getSources(selectedType)
-                    setNotificationData({ message: 'Источник изменен', type: 'success' })
-                    toggleNotificationFunc()
+                    addMessage('Источник изменен', 'success', 3000)
                     setNewSource({ value: '', description: '', source_type: selectedType })
                     closeAcceptModal()
                 } else {
                     console.log(data.body.success);
                     console.log(data.body.message);
-                    setNotificationData({ message: `Ответ от сервера: ${data.message}`, type: 'error long' })
-                    toggleNotificationFunc()
+                    addMessage(`Ответ от сервера: ${data.message}`, 'error', 3000)
                 }
             })
             .catch(error => {
@@ -189,8 +176,7 @@ export default function Sources() {
                 setPickedSource({ id: 0 })
                 setNewSource({ value: '', description: '', source_type: selectedType })
                 closeAcceptModal()
-                setNotificationData({ message: `Не удалось изменить источник: ${error}`, type: 'error long' })
-                toggleNotificationFunc()
+                addMessage(`Не удалось изменить источник: ${error}`, 'info', 10000)
                 getSources(selectedType)
                 return 1
             });
@@ -206,23 +192,20 @@ export default function Sources() {
                 if (data.status == 200) {
                     resetLocalChanges()
                     getSources(selectedType)
-                    setNotificationData({ message: 'Источник удален', type: 'success' })
-                    toggleNotificationFunc()
+                    addMessage('Источник удален', 'success', 3000)
                     setNewSource({ value: '', description: '', source_type: selectedType })
                     closeAcceptModal()
                 } else {
                     console.log(data.body.success);
                     console.log(data.body.message);
-                    setNotificationData({ message: `Не удалось удалить источник: ${data.message}`, type: 'error long' })
-                    toggleNotificationFunc()
+                    addMessage(`Не удалось удалить источник: ${data.message}`, 'info', 10000)
                 }
             })
             .catch(error => {
                 console.log('Error:', error)
                 setPickedSource({ id: 0 })
                 setNewSource({ value: '', description: '', source_type: selectedType })
-                setNotificationData({ message: `Проблема с бекендом: ${error}`, type: 'error long' })
-                toggleNotificationFunc()
+                addMessage(`Проблема с бекендом: ${error}`, 'error', 10000)
                 return 1
             });
     }

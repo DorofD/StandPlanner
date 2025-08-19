@@ -2,12 +2,14 @@ import React from "react";
 import { useState, useEffect } from "react";
 import "./Login.css";
 import { useAuthContext } from "../../hooks/useAuthContext";
-import { useNotificationContext } from "../../hooks/useNotificationContext";
+// // import { useNotificationContext } from "../../hooks/useNotificationContext";
+import { useTimedMessagesContext } from "../../hooks/useTimedMessagesContext";
 import { useNavigate } from 'react-router-dom';
 import { apiAuth } from "../../services/apiLogin";
 
 export default function Login() {
-    const { notificationData, setNotificationData, toggleNotificationFunc, notificationToggle } = useNotificationContext();
+    const { messages, addMessage } = useTimedMessagesContext();
+
     const { isAuthenticated, toogleAuth } = useAuthContext()
     const { userName, setUserName } = useAuthContext()
     const { userRole, setUserRole } = useAuthContext()
@@ -34,8 +36,6 @@ export default function Login() {
                 setaccessToken(user.access_token)
                 localStorage.setItem('accessToken', user.access_token);
                 toogleAuth()
-                setNotificationData({ message: '', type: 'success' })
-                toggleNotificationFunc()
                 navigate('/');
             } else {
                 setStatus('error')

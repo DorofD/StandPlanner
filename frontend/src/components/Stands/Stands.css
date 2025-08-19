@@ -18,6 +18,32 @@ div.standsRight {
     justify-content: stretch;
 }
 
+div.standsLeft1 {
+    width: 100%;
+    height: 10%;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+
+div.standsLeft2 {
+    width: 100%;
+    height: 90%;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    gap: 10px;
+    padding-left: 15px;
+    padding-right: 15px;
+    padding-top: 15px;
+    overflow-y: auto;
+    border-top: solid 3px var(--border-color);
+    border-bottom: solid 3px var(--border-color);
+}
+
 
 div.standsManageStandWrapper {
     padding: 10px;

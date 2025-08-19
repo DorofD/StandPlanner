@@ -5,13 +5,15 @@ import UserCard from "./UserCard/UserCard";
 import Button from "../Button/Button";
 import Filter from "../Filter/Filter";
 import { apiGetUsers, apiAddUser, apiChangeUser, apiDeleteUser } from "../../services/apiUsers";
-import { useNotificationContext } from "../../hooks/useNotificationContext";
+// // import { useNotificationContext } from "../../hooks/useNotificationContext";
+import { useTimedMessagesContext } from "../../hooks/useTimedMessagesContext";
 import Modal from "../Modal/Modal";
 import AcceptModal from "../AcceptModal/AcceptModal";
 import Loader from "../Loader/Loader";
 
 export default function Users() {
-    const { notificationData, setNotificationData, toggleNotificationFunc, notificationToggle } = useNotificationContext();
+    const { messages, addMessage } = useTimedMessagesContext();
+
     const [loaderActive, setLoaderActive] = useState(false)
 
     const [users, setUsers] = useState([])
@@ -63,32 +65,27 @@ export default function Users() {
 
     async function addUser() {
         if (!newUser.login) {
-            setNotificationData({ message: 'Введите имя пользователя', type: 'error' })
-            toggleNotificationFunc()
+            addMessage('Введите имя пользователя', 'warning', 3000)
             return false
         }
 
         if (!newUser.role) {
-            setNotificationData({ message: 'Выберете роль пользователя', type: 'error' })
-            toggleNotificationFunc()
+            addMessage('Выберете роль пользователя', 'warning', 3000)
             return false
         }
 
         if (!newUser.auth_type) {
-            setNotificationData({ message: 'Выберете тип авторизации пользователя', type: 'error' })
-            toggleNotificationFunc()
+            addMessage('Выберете тип авторизации пользователя', 'warning', 3000)
             return false
         }
 
         if (!newUser.password && newUser.auth_type === 'local') {
-            setNotificationData({ message: 'Введите пароль', type: 'error' })
-            toggleNotificationFunc()
+            addMessage('Введите пароль', 'warning', 3000)
             return false
         }
 
         if (newUser.password != newUser.confirmPassword) {
-            setNotificationData({ message: 'Пароли не совпадают', type: 'error' })
-            toggleNotificationFunc()
+            addMessage('Пароли не совпадают', 'warning', 3000)
             return false
         }
 
@@ -97,12 +94,10 @@ export default function Users() {
         if (response.status == 200) {
             getUsers()
             closeAddModal()
-            setNotificationData({ message: 'Пользователь добавлен', type: 'success' })
-            toggleNotificationFunc()
+            addMessage('Пользователь добавлен', 'success', 3000)
 
         } else {
-            setNotificationData({ message: 'Не удалось добавить пользователя', type: 'error' })
-            toggleNotificationFunc()
+            addMessage('Не удалось добавить пользователя', 'error', 3000)
         }
     }
 
@@ -119,8 +114,7 @@ export default function Users() {
             textList.push(`Логин: ${pickedUser.login} => ${changedUser.login}`)
         }
         if (changedUser.password != changedUser.confirmPassword) {
-            setNotificationData({ message: 'Пароли не совпадают', type: 'error' })
-            toggleNotificationFunc()
+            addMessage('Пароли не совпадают', 'warning', 3000)
             return false
         }
         if (changedUser.password) {
@@ -128,8 +122,7 @@ export default function Users() {
             textList.push(`Новый пароль`)
         }
         if (Object.keys(changesDict).length === 0) {
-            setNotificationData({ message: 'Вы ничего не изменили', type: 'error' })
-            toggleNotificationFunc()
+            addMessage('Вы ничего не изменили', 'warning', 3000)
             setAdditionalText([])
             return false
         }
@@ -146,14 +139,12 @@ export default function Users() {
             getUsers()
             closeAcceptModal()
             closeChangeModal()
-            setNotificationData({ message: 'Пользователь изменен', type: 'success' })
-            toggleNotificationFunc()
+            addMessage('Пользователь изменен', 'success', 3000)
             setAdditionalText([])
 
         } else {
             closeAcceptModal()
-            setNotificationData({ message: 'Не удалось изменить пользователя', type: 'error' })
-            toggleNotificationFunc()
+            addMessage('Не удалось изменить пользователя', 'warning', 3000)
             setAdditionalText([])
         }
     }
@@ -165,13 +156,11 @@ export default function Users() {
             getUsers()
             closeAcceptModal()
             closeChangeModal()
-            setNotificationData({ message: 'Пользователь изменен', type: 'success' })
-            toggleNotificationFunc()
+            addMessage('Пользователь изменен', 'success', 3000)
 
         } else {
             closeAcceptModal()
-            setNotificationData({ message: 'Не удалось изменить пользователя', type: 'error' })
-            toggleNotificationFunc()
+            addMessage('Не удалось изменить пользователя', 'error', 3000)
         }
     }
 

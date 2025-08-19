@@ -2,13 +2,15 @@ import React, { Component, useState, useEffect } from "react";
 import "./Stands.css";
 import StandCard from "./StandCard/StandCard";
 import { useAuthContext } from "../../hooks/useAuthContext";
-import { useNotificationContext } from "../../hooks/useNotificationContext";
+// // import { useNotificationContext } from "../../hooks/useNotificationContext";
+import { useTimedMessagesContext } from "../../hooks/useTimedMessagesContext";
 import AcceptModal from "../AcceptModal/AcceptModal";
 import { apiGetStands, apiGetStand, apiChangeStand, apiAddStand, apiDeleteStand } from "../../services/apiStands";
 
 export default function Stands() {
     const { userName, userId } = useAuthContext();
-    const { notificationData, setNotificationData, toggleNotificationFunc, notificationToggle } = useNotificationContext();
+    const { messages, addMessage } = useTimedMessagesContext();
+
     const [loading, setLoading] = useState('start')
 
     const [newStand, setNewStand] = useState({ name: '', description: '' })
@@ -34,7 +36,8 @@ export default function Stands() {
     async function getStands() {
         try {
             setLoading('loading')
-            const loadedStands = await apiGetStands()
+            const result = await apiGetStands()
+            const loadedStands = Array.isArray(result) ? result : [];
             setStands(loadedStands)
             setLoading('loaded')
         } catch (err) {
@@ -55,8 +58,7 @@ export default function Stands() {
 
     async function addStand() {
         if (!newStand['name'] || !newStand['description']) {
-            setNotificationData({ message: 'Заполните доступные поля', type: 'error' })
-            toggleNotificationFunc()
+            addMessage('Заполните доступные поля', 'warning', 3000)
             return false
         }
         const response = await apiAddStand(newStand['name'], newStand['description'])
@@ -64,24 +66,20 @@ export default function Stands() {
             setNewStand({ name: '', description: '' })
             setPickedStand({ id: '', name: '', description: '' })
             getStands()
-            setNotificationData({ message: 'Стенд добавлен', type: 'success' })
-            toggleNotificationFunc()
+            addMessage('Стенд добавлен', 'success', 3000)
 
         } else {
-            setNotificationData({ message: 'Не удалось добавить стенд', type: 'error' })
-            toggleNotificationFunc()
+            addMessage('Не удалось добавить стенд', 'error', 3000)
         }
     }
 
     async function changeStand() {
         if (pickedStand.id !== loadedStand.id) {
-            setNotificationData({ message: "Внутренняя ошибка: pickedStand.id !== loadedStand.id", type: 'error long' })
-            toggleNotificationFunc()
+            addMessage("Внутренняя ошибка: pickedStand.id !== loadedStand.id", 'error', 10000)
             return 1
         }
         if (!isChanged.name && !isChanged.description) {
-            setNotificationData({ message: "Внесите изменения, чтобы их применить", type: 'warning' })
-            toggleNotificationFunc()
+            addMessage("Внесите изменения, чтобы их применить", 'warning', 3000)
             return 1
         }
         let fields_to_update = {}
@@ -90,12 +88,10 @@ export default function Stands() {
         const response = await apiChangeStand(pickedStand['id'], fields_to_update)
         if (response.status == 200) {
             getStands()
-            setNotificationData({ message: 'Стенд изменён', type: 'success' })
-            toggleNotificationFunc()
+            addMessage('Стенд изменён', 'success', 3000)
 
         } else {
-            setNotificationData({ message: 'Не удалось изменить стенд', type: 'error' })
-            toggleNotificationFunc()
+            addMessage('Не удалось изменить стенд', 'error', 3000)
         }
     }
 
@@ -104,12 +100,10 @@ export default function Stands() {
         if (response.status == 200) {
             getStands()
             setPickedStand({ id: '', name: '', description: '' })
-            setNotificationData({ message: 'Стенд удалён', type: 'success' })
-            toggleNotificationFunc()
+            addMessage('Стенд удалён', 'success', 3000)
 
         } else {
-            setNotificationData({ message: 'Не удалось удалить стенд', type: 'error' })
-            toggleNotificationFunc()
+            addMessage('Не удалось удалить стенд', 'error', 3000)
         }
     }
     useEffect(() => {
@@ -119,7 +113,8 @@ export default function Stands() {
     return (
         <div className="stands">
             <div className="standsLeft">
-                <div className="standsNotes">
+                <div className="standsLeft1">Стенды</div>
+                <div className="standsLeft2">
                     {loading === 'loading' && <p> Loading ...</p>}
                     {loading === 'error' && <p> бекенд отвалился</p>}
                     {loading === 'loaded' && stands.length == 0 && <p>Пока не добавлено ни одного стенда</p>}

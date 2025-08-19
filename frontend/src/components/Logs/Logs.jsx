@@ -2,7 +2,8 @@ import React from "react";
 import { useState, useEffect, useContext } from "react";
 import { apiGetLogsJson, apiGetLogsFile, apiClearLogs } from "../../services/apiLogs";
 import Button from "../Button/Button";
-import { useNotificationContext } from "../../hooks/useNotificationContext";
+import { useTimedMessagesContext } from "../../hooks/useTimedMessagesContext";
+
 import LogCard from "./LogCard/LogCard";
 import "./Logs.css"
 import Filter from "../Filter/Filter";
@@ -13,7 +14,7 @@ import AcceptModal from "../AcceptModal/AcceptModal";
 export default function Logs() {
     const { accessToken } = useAuthContext();
 
-    const { notificationData, setNotificationData, toggleNotificationFunc, notificationToggle } = useNotificationContext();
+    const { messages, addMessage } = useTimedMessagesContext();
     const [loaderActive, setLoaderActive] = useState(false)
 
     const [loadingLogs, setLoadingLogs] = useState('loading')
@@ -63,8 +64,7 @@ export default function Logs() {
         try {
             const report = await apiGetLogsFile(accessToken)
         } catch (err) {
-            setNotificationData({ message: 'Не удалось загрузить отчет', type: 'error' })
-            toggleNotificationFunc()
+            addMessage('Не удалось загрузить отчет', 'error', 3000)
         }
     }
 
@@ -72,15 +72,12 @@ export default function Logs() {
         const response = await apiClearLogs()
         if (response.status == 200) {
             getLogsJson()
-            setNotificationData({ message: 'Логи очищены', type: 'success' })
-            toggleNotificationFunc()
+            addMessage('Логи очищены', 'success', 3000)
             closeAcceptModal()
 
         } else {
             closeAcceptModal()
-            setNotificationData({ message: 'Не удалось удалить очистить логи', type: 'error' })
-            toggleNotificationFunc()
-
+            addMessage('Не удалось очистить логи', 'error', 3000)
         }
     }
 

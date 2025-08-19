@@ -1,8 +1,8 @@
 import React, { Component } from "react";
 import "./StandCard.css";
+import WarningIcon from "./WarningIcon.svg"
 
-
-export default function StandCard({ id, name, source_type, status, onClick, picked = false, errorWarning = false }) {
+export default function StandCard({ id, name, source_type, status, onClick, picked = false, errorWarning = true }) {
 
     return (
         <>
@@ -20,10 +20,15 @@ export default function StandCard({ id, name, source_type, status, onClick, pick
                             status === "unknown" && <div className={"paramValue warning-colors"}>Неизвестен</div> ||
                             status === "maintenance" && <div className={"paramValue info-colors"}>Занят</div>}
 
-                        <p className="standCardStatusFaded">Источник: </p>{source_type}
                     </div>
+                    {/* <div className="standCardBottom">
+                        <p className="standCardStatusFaded">Источник: </p>{source_type}
+                    </div> */}
                 </div>
-                {errorWarning !== true && <div className="standCardParamValue error-colors">Проблема!</div>}
+                {/* {errorWarning === true && <div className="standCardParamValue error-colors">Проблема!</div>} */}
+                {errorWarning === true && <div className="standCardParamValue2 ">
+                    <WarningIcon style={{ color: 'var(--accent-color)', width: 40, height: 40 }} />
+                </div>}
             </div>
         </>
     )

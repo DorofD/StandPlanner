@@ -3,11 +3,11 @@ import "./TestComponent.css"
 import Loader from "../Loader/Loader";
 import { notificationsExamples, shortTextRu, mediumTextRu, longTextRu } from "./TextExamples";
 import { apiGetStand } from "../../services/apiStands";
-import { useNotificationContext } from "../../hooks/useNotificationContext";
+// // import { useNotificationContext } from "../../hooks/useNotificationContext";
 import { useTimedMessagesContext } from "../../hooks/useTimedMessagesContext";
 
+
 export default function TestComponent() {
-    const { notificationData, setNotificationData, toggleNotificationFunc, notificationToggle } = useNotificationContext();
     const { messages, addMessage } = useTimedMessagesContext();
     const [count, setCount] = useState(0);
     const [testText, setTestText] = useState('');
@@ -16,8 +16,7 @@ export default function TestComponent() {
     const [layOut, setLayOut] = useState([])
 
     async function showNotification(text, type) {
-        setNotificationData({ message: text, type: type })
-        toggleNotificationFunc()
+        addMessage('', 'info', 3000)
     }
 
     function getRandomNotification() {
@@ -106,9 +105,20 @@ export default function TestComponent() {
                         <button onClick={() => { getStand(1) }}>Стенд ТНИ2 Leg2 #2 (состав УРЛС)</button>
                         <button onClick={() => { getStand(2) }}>Стенд ТНИ2 SSD2 #4</button>
                     </div>
-                    <div className="testFilterContainerPart">
-
-                    </div>
+                    {/* <div className="testFilterContainerPart">
+                        <div class="n-success">
+                            <p>Предупредительное сообщение "SUCCESS".</p>
+                        </div>
+                        <div class="n-warning">
+                            <p>Предупредительное сообщение "WARNING".</p>
+                        </div>
+                        <div class="n-danger">
+                            <p>Предупредительное сообщение "DANGER".</p>
+                        </div>
+                        <div class="n-info">
+                            <p>Предупредительное сообщение "INFO".</p>
+                        </div>
+                    </div> */}
                 </div>
                 <div className="testContainerLeft">
                     <div className="testContainerLeft2">
@@ -118,18 +128,23 @@ export default function TestComponent() {
                             value={testText}
                             onChange={e => setTestText(e.target.value)}
                         ></textarea>
+                        <div className="testComponentButtons">
 
-                        <button onClick={() => showNotification(getRandomTextRu(), 'success')}>Notification success</button>
-                        <button onClick={() => showNotification(getRandomTextRu(), 'info')}>Notification info</button>
-                        <button onClick={() => showNotification(getRandomTextRu(), 'warning')}>Notification warning</button>
-                        <button onClick={() => showNotification(getRandomTextRu(), 'error')}>Notification error</button>
-                        <button onClick={() => addMessage(getRandomTextRu(), 'success')}>TimedMessage success</button>
-                        <button onClick={() => addMessage(getRandomTextRu(), 'info')}>TimedMessage info</button>
-                        <button onClick={() => addMessage(getRandomTextRu(), 'warning')}>TimedMessage warning</button>
-                        <button onClick={() => addMessage(getRandomTextRu(), 'error')}>TimedMessage error</button>
+                            <button onClick={() => showNotification(getRandomTextRu(), 'success')}>Notification success</button>
+                            <button onClick={() => showNotification(getRandomTextRu(), 'info')}>Notification info</button>
+                            <button onClick={() => showNotification(getRandomTextRu(), 'warning')}>Notification warning</button>
+                            <button onClick={() => showNotification(getRandomTextRu(), 'error')}>Notification error</button>
+                        </div>
+                        <div className="testComponentButtons">
+                            <button onClick={() => addMessage(getRandomTextRu(), 'success', 10000)}>TimedMessage success</button>
+                            <button onClick={() => addMessage(getRandomTextRu(), 'info', 2000)}>TimedMessage info</button>
+                            <button onClick={() => addMessage(getRandomTextRu(), 'warning', 3000)}>TimedMessage warning</button>
+                            <button onClick={() => addMessage(getRandomTextRu(), 'error', 1000)}>TimedMessage error</button>
+                        </div>
                     </div>
                     <div className="testContainerLeft2"></div>
                 </div>
+
             </div>
         </div>
     );

@@ -24,7 +24,7 @@ div.mainLeft1 {
     align-items: center;
 }
 
-div.mainLeft2 {
+/* div.mainLeft2 {
     width: 100%;
     height: 90%;
     box-sizing: border-box;
@@ -33,6 +33,23 @@ div.mainLeft2 {
     justify-content: flex-start;
     gap: 10px;
     padding-left: 10px;
+    overflow-y: auto;
+} */
+
+div.mainLeft2 {
+    width: 100%;
+    height: 90%;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    gap: 10px;
+    padding-left: 15px;
+    padding-right: 15px;
+    padding-top: 15px;
+    overflow-y: auto;
+    border-top: solid 3px var(--border-color);
+    border-bottom: solid 3px var(--border-color);
 }
 
 div.mainLeftBody {
@@ -90,7 +107,6 @@ div.mainComments {
 }
 
 textarea.mainStands {
-    font-family: Arial;
     font-size: 18px;
     width: 95%;
     height: 70%;
@@ -104,7 +120,6 @@ textarea.mainStands {
 
 
 textarea.mainComments {
-    font-family: Arial;
     font-size: 18px;
     width: 400px;
     height: 80px;

@@ -2,7 +2,7 @@ import React, { useState, useEffect, Component } from "react";
 import Modal from "../Modal/Modal";
 import Button from "../Button/Button";
 import { useAuthContext } from "../../hooks/useAuthContext";
-import { useNotificationContext } from "../../hooks/useNotificationContext";
+import { useTimedMessagesContext } from "../../hooks/useTimedMessagesContext";
 import './Planner.css'
 import filterLogo from './filter.png'
 import ReservationCard from "./ReservationCard/ReservationCard";
@@ -28,7 +28,8 @@ export default function Planner() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [stands, setStands] = useState([])
   const [reservations, setReservations] = useState([])
-  const { notificationData, setNotificationData, toggleNotificationFunc, notificationToggle } = useNotificationContext();
+  const { messages, addMessage } = useTimedMessagesContext();
+
   const currentDate = getCurrentDateString()
   const [modalMode, setModalMode] = useState('new')
 
@@ -166,18 +167,15 @@ export default function Planner() {
       const response = await apiDeleteReservation(pickedReservationId)
       if (response.status == 200) {
         closeModal()
-        setNotificationData({ message: 'Резервирование удалено', type: 'success' })
-        toggleNotificationFunc()
+        addMessage('Резервирование удалено', 'info', 3000)
         getReservations()
       } else {
         const responseData = await response.json()
-        setNotificationData({ message: responseData.error, type: 'error' })
-        toggleNotificationFunc()
+        addMessage(responseData.error, 'error', 3000)
       }
     } catch (error) {
       if (error instanceof TypeError && error.message === 'Failed to fetch') {
-        setNotificationData({ message: 'бекенд отвалился', type: 'error' })
-        toggleNotificationFunc()
+        addMessage('бекенд отвалился', 'error', 3000)
       } else { }
     }
   }
@@ -193,20 +191,17 @@ export default function Planner() {
 
   async function addReservation() {
     if (standId == 0) {
-      setNotificationData({ message: 'Стенд не выбран', type: 'error' })
-      toggleNotificationFunc()
+      addMessage('Стенд не выбран', 'warning', 3000)
       return 0
     }
 
     if (startTime.length < 5 && selectedStart !== 'startNow') {
-      setNotificationData({ message: 'Время начала введено некорректно', type: 'error' })
-      toggleNotificationFunc()
+      addMessage('Время начала введено некорректно', 'warning', 3000)
       return 0
     }
 
     if (duration.length < 5) {
-      setNotificationData({ message: 'Длительность введена некорректно', type: 'error' })
-      toggleNotificationFunc()
+      addMessage('Длительность введена некорректно', 'warning', 3000)
       return 0
     }
 
@@ -219,52 +214,44 @@ export default function Planner() {
     try {
       const response = await apiAddReservation(userId, standId, date, selectedStartTime, duration)
       if (response.status == 200) {
-        setNotificationData({ message: 'Стенд зарезервирован', type: 'success' })
-        toggleNotificationFunc()
+        addMessage('Стенд зарезервирован', 'success', 3000)
         closeModal()
         getReservations()
       } else {
         const responseData = await response.json()
-        setNotificationData({ message: responseData.error, type: 'error long' })
-        toggleNotificationFunc()
+        addMessage(responseData.error, 'error', 10000)
       }
     } catch (error) {
       if (error instanceof TypeError && error.message === 'Failed to fetch') {
-        setNotificationData({ message: 'бекенд отвалился', type: 'error' })
-        toggleNotificationFunc()
+        addMessage('бекенд отвалился', 'error', 3000)
       } else { }
     }
   }
   async function changeReservation() {
 
     if (startTime.length < 5 && selectedStart !== 'startNow') {
-      setNotificationData({ message: 'Время начала введено некорректно', type: 'error' })
-      toggleNotificationFunc()
+      addMessage('Время начала введено некорректно', 'warning', 3000)
       return 0
     }
 
     if (duration.length < 5) {
-      setNotificationData({ message: 'Длительность введена некорректно', type: 'error' })
-      toggleNotificationFunc()
+      addMessage('Длительность введена некорректно', 'warning', 3000)
       return 0
     }
 
     try {
       const response = await apiChangeReservation(pickedReservationId, standId, date, startTime, duration)
       if (response.status == 200) {
-        setNotificationData({ message: 'Резервирование изменено', type: 'success' })
-        toggleNotificationFunc()
+        addMessage('Резервирование изменено', 'success', 3000)
         closeModal()
         getReservations()
       } else {
         const responseData = await response.json()
-        setNotificationData({ message: responseData.error, type: 'error long' })
-        toggleNotificationFunc()
+        addMessage(responseData.error, 'error', 10000)
       }
     } catch (error) {
       if (error instanceof TypeError && error.message === 'Failed to fetch') {
-        setNotificationData({ message: 'бекенд отвалился', type: 'error' })
-        toggleNotificationFunc()
+        addMessage('бекенд отвалился', 'error', 3000)
       } else { }
     }
   }
