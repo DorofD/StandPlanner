@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import "./StandCard.css";
 import WarningIcon from "./WarningIcon.svg"
 
-export default function StandCard({ id, name, source_type, status, onClick, picked = false, errorWarning = true }) {
+export default function StandCard({ id, name, source_type, status, onClick, picked = false, errorWarning = false }) {
 
     return (
         <>

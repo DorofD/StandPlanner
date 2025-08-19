@@ -114,6 +114,7 @@ export default function Main() {
                                 name={stand.name}
                                 status={stand.status}
                                 source_type={stand.source_type}
+                                errorWarning={stand.source_status == 'failed' && true || false}
                                 picked={pickedStand['id'] === stand.id && true || false}
                                 onClick={() => {
                                     getStand(stand.id).then(() => setPickedStand(stand));
@@ -124,20 +125,44 @@ export default function Main() {
             </div>
             <div className="mainRightContainer">
                 <div className="mainRight1">
-                    <div className="mainStandLayout">
-                        {standInfo.description && (standInfo.description) || <>
-                            {renderFromJson(standInfo.page_layout[0])}
-                            {renderFromJson(standInfo.page_layout[1])}
-                            {renderFromJson(standInfo.page_layout[2])}
-                        </>
-                        }
+                    <div className="mainStandParams">
+                        <div className="standsManageStand">
+                            <div className="standsManageStandTopLabel">{pickedStand.name}</div>
+                            <div className="changeStandParams">
+                                <div className="param-row">
+                                    <div className="param-key">Статус</div>
+                                    <div>{pickedStand.status}</div>
+                                </div>
+                                <div className="param-row">
+                                    <div className="param-key">Источник</div>
+                                    <div>{pickedStand.source_type || "Отсутствует"}</div>
+                                </div>
+                                <div className="param-row">
+                                    <div className="param-key">Последнее обновление</div>
+                                    <div>{pickedStand.last_update === "never" && "Отсутствует" || pickedStand.last_update}</div>
+                                </div>
+                            </div>
+                            <textarea name="newStand"
+                                maxLength={4000}
+                                placeholder='Описание'
+                                className="manageStand description"
+                                value={standInfo.description}
+                            >
+                            </textarea>
+                        </div>
 
                     </div>
-                    <div className="mainRight2"></div>
                 </div>
-                <div className="mainStandDescription">
-                    {standInfo.description && (standInfo.description) || <></>}
-
+                <div className="mainRight2">
+                    <div className="mainStandLayout">
+                        {standInfo.page_layout && <>
+                            {standInfo.page_layout.map(element =>
+                                renderFromJson(element)
+                            )
+                            }
+                        </>
+                        }
+                    </div>
                 </div>
             </div>
 

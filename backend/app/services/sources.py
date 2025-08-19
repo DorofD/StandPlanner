@@ -9,7 +9,6 @@ import traceback
 
 
 def add_source(source_note):
-    print('source_type' not in source_note)
     if 'source_type' not in source_note:
         return {'success': False, 'message': "no source_type field in source_note"}
     if not source_note['source_type']:
@@ -31,43 +30,20 @@ def bulk_process_sources(source_type):
         current_app.logger.debug(
             f"Starting bulk update for confluence_page_id sources")
         all_sources = DBSourcesConfluencePageId().get_all_sources_short_info()
-        results = []
-        exceptions = []
+        result = True
+        print(all_sources)
         for source in all_sources:
-            result_note = {'id': source['id'], 'value': source['value'],
-                           'status_before': source['status'], 'status_after': None, 'success': None}
+            print(source['id'])
             try:
-                handle_result = handle_confluence_page_id(source['id'])
-                if handle_result:
-                    result_note['success'] = True
-                else:
-                    result_note['success'] = False
-                result_note['status_after'] = DBSourcesConfluencePageId().get_source(source['id'])[
-                    'status']
-                results.append(result_note)
+                if not process_source('confluence_page_id', source['id']):
+                    result = False
+
             except Exception as e:
+                result = False
                 current_app.logger.error(
                     f"Unknown exception in bulk update with source: id {source['id']}, pageId: {source['value']}; Exception is: {e}")
-                result_note['success'] = False
-                exceptions.append(
-                    {'id': source['id'], 'value': source['value']})
-
-        current_app.logger.debug(
-            f"Ending bulk update for confluence_page_id sources")
-        if not exceptions:
-            current_app.logger.debug(
-                f"There were no exceptions on bulk update layer")
-
-        else:
-            current_app.logger.debug(
-                f"Got {len(exceptions)} exceptions on bulk update, see the previous error logs")
-
-        final_result_note_str = "Results summary is:\n"
-        for note in results:
-            final_result_note_str += f"\n\nSource - id: {note['id']}, pageId: {note['value']}, success: {note['success']}\nStatus changes: {note['status_before']} => {note['status_after']}"
-        current_app.logger.debug(final_result_note_str)
-
-        return {'success': True, 'results': results, 'exceptions': exceptions}
+                continue
+        return result
 
 
 def handle_confluence_page_id(source_id):
@@ -79,28 +55,32 @@ def handle_confluence_page_id(source_id):
     source_type = 'confluence_page_id'
 
     processed_note = db_source.get_source(source_id)
+    try:
+        process_result = ConfluencePageIdSource(
+            processed_note).process_source_dispatcher()
+        # try:
+        # обработка ошибки процессинга ConfluencePageIdSource
+    except Exception as e:
+        # if process_result['success'] == False:
+        #     current_app.logger.error(
+        #         f"ConfluencePageIdSource.process_source_dispatcher catched unknown exception when processing: \n\n {process_result['error_message']}")
 
-    process_result = ConfluencePageIdSource(
-        processed_note).process_source_dispatcher()
-    current_app.logger.debug(
-        f"Get proccess_result, result is: {process_result['success']}")
-    # try:
-    # обработка ошибки процессинга ConfluencePageIdSource
-    if process_result['success'] == False:
+        # operations_log_str = f"[ {' ] => [ '.join(process_result['operations_log'])} ]"
+
+        # current_app.logger.error(
+        #     f"Operations log: \n\n {operations_log_str}")
         current_app.logger.error(
-            f"ConfluencePageIdSource.process_source_dispatcher catched unknown exception when processing: \n\n {process_result['error_message']}")
-
-        operations_log_str = f"[ {' ] => [ '.join(process_result['operations_log'])} ]"
-
-        current_app.logger.error(
-            f"Operations log: \n\n {operations_log_str}")
+            f"{str(e)} | {traceback.format_exc()}")
         db_source.update_source_field(source_id, 'status', 'failed')
         db_source.add_text_to_source_description(
-            source_id, f"\n\n{process_result['error_message']}")
+            source_id, f"\n\n{e}")
+        # db_source.add_text_to_source_description(
+        #     source_id, f"\n\n{process_result['error_message']}")
         if processed_note['stand_id']:
             DBStands().update_stand_field(
-                processed_note['stand_id'], 'last_update', 'source_failed')
-        return {'success': False, 'message': "Unknown error in ConfluencePageIdSource, see more in descriptions and logs"}
+                processed_note['stand_id'], 'source_status', 'failed')
+        # return {'success': False, 'message': "Unknown error in ConfluencePageIdSource, see more in descriptions and logs"}
+        return False
 
     if 'fields_to_update' in process_result:
         updated_fields = process_result['fields_to_update']
@@ -112,6 +92,7 @@ def handle_confluence_page_id(source_id):
 
     if 'stand_data' in process_result:
         stand_data = process_result['stand_data']
+        print(process_result['stand_data'])
         if not processed_note['stand_id']:
             # список ключей
             # stand_data['last_update']
@@ -121,8 +102,9 @@ def handle_confluence_page_id(source_id):
             # fields_to_update['status']
             # fields_to_update['version']
             # fields_to_update['last_update']
+            # print(stand_data['name'])
             added_stand_id = db_stands.add_stand(
-                stand_data['name'], source_type, "unknown", stand_data['description'], '', stand_data['last_update'])
+                stand_data['name'], source_type, "unknown", stand_data['description'], '', stand_data['last_update'], 'relevant')
             if not added_stand_id:
                 raise Exception(
                     'Fail to add stand')
@@ -142,7 +124,7 @@ def handle_confluence_page_id(source_id):
                 elif field_name == 'page_layout':
                     db_stands.update_stand_layout(
                         processed_note['stand_id'], stand_data['page_layout'])
-    return {'success': True, 'message': "Successful processed"}
+    return True
     # except Exception as e:
     #     error_message = f"{str(e)} | {traceback.format_exc()}"
     #     current_app.logger.error(error_message)
@@ -178,5 +160,9 @@ def change_source(source_type, source_note):
 
 def delete_source(source_id, source_type):
     if source_type == 'confluence_page_id':
-        return DBSourcesConfluencePageId().delete_source(source_id)
+        source = DBSourcesConfluencePageId().get_source(source_id)
+        if source['stand_id']:
+            DBStands().delete_stand(source['stand_id'])
+        DBSourcesConfluencePageId().delete_source(source_id)
+        return True
     raise Exception('Unknown source_type')

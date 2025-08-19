@@ -2,7 +2,6 @@ import React, { Component, useState, useEffect } from "react";
 import "./Base.css";
 import { NavLink as NavLinkBase, Outlet, useLocation } from "react-router-dom";
 import Button from "../Button/Button";
-import Notification from "../Notification/Notification";
 import TimedMessages from "../TimedMessages/TimedMessages";
 // // import { useNotificationContext } from "../../hooks/useNotificationContext";
 import { useTimedMessagesContext } from "../../hooks/useTimedMessagesContext";

@@ -63,6 +63,7 @@ class ConfluencePageIdSource():
 
         if self.source['status'] == 'new':
             result_dict = self._full_process()
+            print('result dict', result_dict['stand_data']['name'])
             return result_dict
         if self.source['status'] == 'relevant':
             result_dict = self._check_relevance()
@@ -85,7 +86,6 @@ class ConfluencePageIdSource():
         #     self.operations_log.append(
         #         f'There was an exception at this stage: {e}')
         #     self.error_message = f"{str(e)} | {traceback.format_exc()}"
-        # finally:
         #     return {
         #         'success': False,
         #         'error_message': self.error_message,
@@ -106,7 +106,7 @@ class ConfluencePageIdSource():
 
         now = datetime.now()
         formatted_now = now.strftime("%d.%m.%Y-%H:%M")
-
+        print(page_data['title'])
         self.operations_log.append('Going to set returning values')
         self.fields_to_update['status'] = 'relevant'
         self.fields_to_update['version'] = page_data['version']

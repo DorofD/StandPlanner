@@ -24,7 +24,7 @@ div.sourcesSetType {
     box-sizing: border-box;
     align-items: center;
     justify-content: center;
-    gap: 10px;
+    gap: 5px;
     width: 100%;
     height: 30%;
 }
@@ -35,8 +35,8 @@ div.sourcesSetTypeHeader {
     box-sizing: border-box;
     align-items: center;
     justify-content: center;
-    padding-top: 10px;
-    height: 40%;
+    /* padding-top: 10px; */
+    /* height: 40%; */
     width: 100%;
 }
 

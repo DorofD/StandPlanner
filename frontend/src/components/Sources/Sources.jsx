@@ -122,7 +122,7 @@ export default function Sources() {
 
     async function actualizeAllSources() {
         console.log(`bulk update sources: ${selectedType}`)
-        addMessage(`Массовое обновление источников может занять до нескольких минут, ожидайте`, 'info', 10000)
+        addMessage(`Массовое обновление источников, ожидайте`, 'info', 5000)
         setLoaderActive(true)
         const response = await apiActualizeAllSources(selectedType)
             .then(response => response.json())
@@ -132,7 +132,7 @@ export default function Sources() {
                 if (data.success) {
                     addMessage('Массовое обновление прошло успешно', 'success', 3000)
                 } else {
-                    addMessage(`Не удалось обновить данные источника: ${data.message}`, 'error', 10000)
+                    addMessage(`Не удалось обновить часть источников`, 'error', 3000)
                 }
                 setPickedSource({ id: 0 })
                 setNewSource({ value: '', description: '', source_type: selectedType })
@@ -217,7 +217,7 @@ export default function Sources() {
             <div className="sourcesLeft">
                 <div className="sourcesSetType">
                     <div className="sourcesSetTypeHeader">
-                        <p className="sourcesSetTypeHeader">Управление источниками информации о стендах</p>
+                        <p >Управление источниками информации о стендах</p>
                         <button
                             onClick={() => {
                                 setShowHint((prev) => !prev);
@@ -242,7 +242,11 @@ export default function Sources() {
                             </button>
                             <button onClick={() => { resetLocalChanges(); setSelectedType('confluence_page_id'); getSources('confluence_page_id'); setNewSource({ value: '', description: '', source_type: 'confluence_page_id' }) }}
                                 className={selectedType == 'confluence_page_id' ? "sourcesSetType picked" : "sourcesSetType"}>
-                                Confluence Page Id
+                                Confluence PageId
+                            </button>
+                            <button onClick={() => { resetLocalChanges(); setSelectedType('confluence_bulk_search'); setSources([]); setNewSource({ value: '', description: '', source_type: 'confluence_page_id' }) }}
+                                className={selectedType == 'confluence_bulk_search' ? "sourcesSetType picked" : "sourcesSetType"}>
+                                Confluence Массовый поиск
                             </button>
                         </>
                     }
@@ -261,7 +265,19 @@ export default function Sources() {
                             </div>
                         </div>
                     </>}
-                    {loading === 'start' && selectedType !== 'manual' &&
+                    {selectedType === 'confluence_bulk_search' && <>
+                        <div className="sourcesHint">
+                            <div className="hintBox">
+                                <p>
+                                    Автоматическое добавление источников PageId по указанному параметру
+                                </p>
+                                <p>
+                                    Работа механизма должна быть согласована перед реализацией
+                                </p>
+                            </div>
+                        </div>
+                    </>}
+                    {loading === 'start' && selectedType !== 'manual' && selectedType !== 'confluence_bulk_search' &&
                         <div className="sourcesHint">
                             <p> Выберите тип источника</p>
                         </div>

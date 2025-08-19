@@ -43,6 +43,7 @@ def stands():
                 except Exception as e:
                     current_app.logger.info(
                         f"Failed to json.loads page_layout from stand with id: {e}")
+            return jsonify(stand)
     if request.method == 'POST':
         data = request.json
         if data['action'] == 'add':
@@ -75,8 +76,10 @@ def sources():
             else:
                 return jsonify({'success': False, 'message': 'Something going wrong, check source description and service logs'}), 200, {'ContentType': 'application/json'}
         if data['action'] == 'process_all':
-            result = bulk_process_sources(data['source_type'])
-            return jsonify(result), 200, {'ContentType': 'application/json'}
+            if bulk_process_sources(data['source_type']):
+                return jsonify({'success': True, 'message': 'Source has ben successfully processed'}), 200, {'ContentType': 'application/json'}
+            else:
+                return jsonify({'success': False, 'message': 'Something going wrong, check source description and service logs'}), 200, {'ContentType': 'application/json'}
         if data['action'] == 'change':
             source_type = data['source_type']
             source_note = data['source_note']

@@ -86,7 +86,7 @@ button.sourcesSetType {
     font-size: 18px;
     margin: 4px;
     width: 70%;
-    height: 30px;
+    height: auto;
     border-radius: 10px;
     text-transform: none;
 }

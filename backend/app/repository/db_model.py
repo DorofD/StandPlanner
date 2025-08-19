@@ -25,6 +25,7 @@ def create_db():
                 "description"	TEXT,
                 "page_layout"	TEXT,
                 "last_update"	TEXT,
+                "source_status"	TEXT,
                 PRIMARY KEY("id" AUTOINCREMENT)
             );
             """

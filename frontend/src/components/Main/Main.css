@@ -1,5 +1,5 @@
 div.mainRightContainer {
-    width: 65%;
+    width: 70%;
     height: 100%;
     box-sizing: border-box;
     display: flex;
@@ -8,7 +8,7 @@ div.mainRightContainer {
 
 div.mainLeftContainer {
     height: 100%;
-    width: 35%;
+    width: 30%;
     display: flex;
     flex-direction: column;
     box-sizing: border-box;
@@ -34,7 +34,7 @@ div.mainLeft1 {
     gap: 10px;
     padding-left: 10px;
     overflow-y: auto;
-} */
+    } */
 
 div.mainLeft2 {
     width: 100%;
@@ -52,6 +52,33 @@ div.mainLeft2 {
     border-bottom: solid 3px var(--border-color);
 }
 
+div.mainRight1 {
+    width: 100%;
+    height: 40%;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+div.mainRight2 {
+    width: 100%;
+    height: 60%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 10px;
+}
+
+div.mainStandParams {
+    padding: 10px;
+    width: 100%;
+    height: 100%;
+    box-sizing: border-box;
+}
+
 div.mainLeftBody {
     width: 100%;
     height: 90%;
@@ -65,8 +92,8 @@ div.mainStandDescription {
 }
 
 div.mainStandLayout {
-    height: 70%;
-    width: 90%;
+    height: 100%;
+    width: 100%;
     box-sizing: border-box;
     text-align: center;
     padding: 5px;
@@ -77,9 +104,10 @@ div.mainStandLayout {
     color: var(--text-main-color);
 }
 
-div.mainStandLayout span,
-div.mainStandLayout li,
+/* div.mainStandLayout span, */
+/* div.mainStandLayout li, */
 div.mainStandLayout th,
+div.mainStandLayout td,
 div.mainStandLayout tr {
     color: var(--text-main-color);
     box-sizing: border-box;
@@ -87,6 +115,7 @@ div.mainStandLayout tr {
 }
 
 
+div.mainStandLayout li,
 div.mainStandLayout ul,
 div.mainStandLayout li {
     text-align: left;

@@ -113,7 +113,7 @@ export default function Stands() {
     return (
         <div className="stands">
             <div className="standsLeft">
-                <div className="standsLeft1">Стенды</div>
+                <div className="standsLeft1">Управление стендами</div>
                 <div className="standsLeft2">
                     {loading === 'loading' && <p> Loading ...</p>}
                     {loading === 'error' && <p> бекенд отвалился</p>}
@@ -128,8 +128,8 @@ export default function Stands() {
                                 source_type={stand.source_type}
                                 status={stand.status}
                                 last_update={stand.stand_last}
-                                onClick={() => { setNewStand({ name: '', description: '' }); setPickedStand(stand); getStand(stand.id) }}
-                                errorWarning={true}>
+                                errorWarning={stand.source_status === 'failed' && true || false}
+                                onClick={() => { setNewStand({ name: '', description: '' }); setPickedStand(stand); getStand(stand.id) }}>
                             </StandCard>)}</>}
                 </div>
 
@@ -212,7 +212,7 @@ export default function Stands() {
                                 <div className="standsManageStandButtons">
                                     <button onClick={() => { openAcceptModalWithAction(changeStand) }}> Применить изменения </button>
                                     <button onClick={() => { setPickedStand({ id: 0 }); setLoadedStand(false) }}> Отменить </button>
-                                    <button className="standsDeleteButton" onClick={() => { openAcceptModalWithAction(deleteStand) }}> Удалить </button>
+                                    <button className={pickedStand.source_type !== 'manual' && "standsDeleteButton disabled" || "standsDeleteButton"} disabled={pickedStand.source_type !== 'manual' && true || false} onClick={() => { openAcceptModalWithAction(deleteStand) }}> Удалить </button>
                                 </div>
                             </div>
                         </div> || <></>

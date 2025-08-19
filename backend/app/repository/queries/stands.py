@@ -7,7 +7,7 @@ class DBStands():
 
     def get_stands_list(self):
         query = f"""
-                SELECT id, name, source_type, status, last_update FROM {self.table_name};
+                SELECT id, name, source_type, status, last_update, source_status FROM {self.table_name};
                 """
         return execute_db_query(query)
 
@@ -41,14 +41,14 @@ class DBStands():
         else:
             return False
 
-    def add_stand(self, name: str, source_type: str, status: str = 'unknown', description: str = '', page_layout: str = '', last_update: str = 'never'):
+    def add_stand(self, name: str, source_type: str, status: str = 'unknown', description: str = '', page_layout: str = '', last_update: str = 'never', source_status: str = ''):
         """Возвращает int lastrowid"""
         query = f"""
-            INSERT INTO stands (name, source_type, status, description, page_layout, last_update)
-            VALUES (?, ?, ?, ?, ?, ?);
+            INSERT INTO stands (name, source_type, status, description, page_layout, last_update, 'source_status')
+            VALUES (?, ?, ?, ?, ?, ?, ?);
         """
         params = [name, source_type, status,
-                  description, page_layout, last_update]
+                  description, page_layout, last_update, source_status]
         return execute_parametrized_query(query, params)
 
     def update_stand_field(self, id: int, field: str, value: str):

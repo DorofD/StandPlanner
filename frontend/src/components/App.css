@@ -150,3 +150,7 @@ textarea:focus {
     color: var(--success-text-color);
     background-color: var(--success-background);
 }
+
+*.disabled {
+    color: var(--disabled-color);
+}
