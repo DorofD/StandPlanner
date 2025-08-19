@@ -9,7 +9,7 @@ import { useAuthContext } from "../../hooks/useAuthContext";
 export default function Main() {
     const [loading, setLoading] = useState('loading')
     const [stands, setStands] = useState([])
-    const [pickedStand, setPickedStand] = useState({ id: 'default', name: 'Стенд', source_type: '' })
+    const [pickedStand, setPickedStand] = useState({ id: '', name: 'Стенд', source_type: '' })
     const [standInfo, setStandInfo] = useState({ description: '', page_layout: '' })
     const [renderedElement, setRenderedElement] = useState(false)
 
@@ -135,7 +135,11 @@ export default function Main() {
                                 </div>
                                 <div className="param-row">
                                     <div className="param-key">Источник</div>
-                                    <div>{pickedStand.source_type || "Отсутствует"}</div>
+                                    <div>{pickedStand.source_type || pickedStand.id && "Отсутствует" || ""}</div>
+                                </div>
+                                <div className="param-row">
+                                    <div className="param-key">Статус источника</div>
+                                    <div>{pickedStand.source_status || pickedStand.id && !pickedStand.source_status && "Отсутствует"}</div>
                                 </div>
                                 <div className="param-row">
                                     <div className="param-key">Последнее обновление</div>
