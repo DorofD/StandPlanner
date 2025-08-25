@@ -101,7 +101,6 @@ div.mainStandLayout {
     border: solid 4px var(--border-color);
     border-radius: 10px;
     overflow-y: auto;
-    color: var(--text-main-color);
 }
 
 /* div.mainStandLayout span, */
@@ -109,7 +108,6 @@ div.mainStandLayout {
 div.mainStandLayout th,
 div.mainStandLayout td,
 div.mainStandLayout tr {
-    color: var(--text-main-color);
     box-sizing: border-box;
     border: solid 1px var(--border-color);
 }

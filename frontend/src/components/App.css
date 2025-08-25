@@ -34,15 +34,23 @@
     --scrollbar-thumb-color: #acacac;
     --scrollbar-thumb-hover-color: #4caf4f7c;
     --scrollbar-thumb-active-color: #4CAF50;
+
 }
 
-
-p {
+*:not(svg *) {
     color: var(--text-main-color);
 }
 
-h3 {
-    color: var(--text-main-color);
+.filterIconStyle {
+    color: var(--accent-color);
+    width: 40px;
+    height: 40px;
+}
+
+.standCardWarningIcon {
+    color: var(--error-background);
+    width: 40px;
+    height: 40px;
 }
 
 strong {
@@ -53,7 +61,6 @@ input {
     outline: none;
     font-size: large;
     background-color: var(--main-background-color);
-    color: var(--text-main-color);
     border: solid 2px var(--border-color);
     padding: 4px;
     border-radius: 10px;
@@ -67,7 +74,6 @@ select {
     outline: none;
     font-size: large;
     background-color: var(--main-background-color);
-    color: var(--text-main-color);
     border: solid 2px var(--border-color);
 }
 
@@ -80,7 +86,6 @@ textarea {
     font-size: 20px;
     border-radius: 10px;
     background-color: var(--main-background-color);
-    color: var(--text-main-color);
     border: solid 2px var(--border-color);
 }
 
@@ -109,7 +114,6 @@ textarea:focus {
 }
 
 .card {
-    color: var(--text-main-color);
     cursor: pointer;
     user-select: none;
     padding: 10px;

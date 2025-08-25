@@ -6,7 +6,7 @@
     padding: 10px;
     margin: 0;
     height: auto;
-    width: auto;
+    width: 100%;
 }
 
 p.standCardStatusFaded {
@@ -19,11 +19,6 @@ p.standCardValueFaded {
     display: inline;
     color: var(--text-secondary-color);
 }
-
-/*  */
-
-
-
 
 div.standCardBottom {
     display: block;
@@ -60,45 +55,18 @@ p.standCardName {
 div.standCardParams {
     display: flex;
     flex-direction: row;
-    width: 85%;
+    /* width: 85%; */
     text-align: left;
     display: inline;
 }
 
-div.standCardAlert {
-    text-align: center;
-    height: auto;
-    max-height: 40px;
-    background-color: var(--error-background);
-    color: var(--error-text-color);
-
-}
 
 div.standCardParamValue2 {
     display: flex;
     box-sizing: content-box;
     align-items: center;
     flex-direction: row;
-    padding-left: 0.4em;
-    padding-right: 0.4em;
-    padding-bottom: auto;
-    border-radius: 50%;
-    height: 30px;
-    width: 30px;
     margin-top: auto;
     margin-bottom: auto;
+    margin-left: auto;
 }
-
-/* div.standCardParamValue {
-    display: flex;
-    align-items: center;
-    flex-direction: row;
-    padding-left: 0.4em;
-    padding-right: 0.4em;
-    padding-bottom: auto;
-    border-radius: 1em;
-    height: 30px;
-    margin-top: auto;
-    margin-bottom: auto;
-}
- */

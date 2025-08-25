@@ -33,8 +33,6 @@ ul.admin {
 .adminHref {
     display: inline-block;
     padding-top: 8%;
-    /* color: #000; */
-    color: var(--text-main-color);
     padding-bottom: 8%;
     padding-left: 10%;
     text-decoration: none;

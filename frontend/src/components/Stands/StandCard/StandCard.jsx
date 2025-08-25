@@ -21,13 +21,9 @@ export default function StandCard({ id, name, source_type, status, onClick, pick
                             status === "maintenance" && <div className={"paramValue info-colors"}>Занят</div>}
 
                     </div>
-                    {/* <div className="standCardBottom">
-                        <p className="standCardStatusFaded">Источник: </p>{source_type}
-                    </div> */}
                 </div>
-                {/* {errorWarning === true && <div className="standCardParamValue error-colors">Проблема!</div>} */}
                 {errorWarning === true && <div className="standCardParamValue2 ">
-                    <WarningIcon style={{ color: 'var(--accent-color)', width: 40, height: 40 }} />
+                    <WarningIcon className="standCardWarningIcon" />
                 </div>}
             </div>
         </>

@@ -8,14 +8,6 @@ div.filterContainer {
     gap: 16px
 }
 
-div.filterLogo {
-    display: inline;
-}
-
-img.filterLogo {
-    width: 30px;
-    vertical-align: middle;
-}
 
 input.filter {
     width: 20%;

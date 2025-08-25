@@ -39,18 +39,14 @@ div.colorCircle.light-green {
     background: linear-gradient(90deg, #4CAF50 50%, #f1f1f1 50%);
 }
 
+
+div.colorCircle.dark-red {
+    background: linear-gradient(90deg, #e94f37 50%, #43477a 50%);
+
+}
+
 div.colorCircle.dark-purple {
     background: linear-gradient(90deg, #8774e1 50%, #2b2b2b 50%);
-
-}
-
-div.colorCircle.light-orange {
-    background: linear-gradient(90deg, #ff9027 50%, #f1f1f1 50%);
-
-}
-
-div.colorCircle.black-yellow {
-    background: linear-gradient(90deg, #ffd600 50%, #2b2b2b 50%);
 
 }
 

@@ -18,13 +18,11 @@ form.login {
 
 input.login {
   background-color: var(--main-background-color);
-  color: var(--text-main-color);
 }
 
 form.login input {
   outline: 0;
   background-color: var(--main-background-color);
-  color: var(--text-main-color);
   width: 100%;
   border: 0;
   margin: 0 0 15px;

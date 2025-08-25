@@ -17,21 +17,17 @@ export default function ColorSchemeSelector() {
                         setColorScheme('http');
                         localStorage.setItem("colorScheme", 'http')
                     }} ></div>
-                {/* <div className={colorScheme == 'light-orange' && "colorCircle light-orange active" || "colorCircle light-orange"}
+                <div className={colorScheme == 'dark-red' && "colorCircle dark-red active" || "colorCircle dark-red"}
                     onClick={() => {
-                        setColorScheme('light-orange');
-                        localStorage.setItem("colorScheme", 'light-orange')
-                    }} ></div> */}
-                <div className={colorScheme == 'dark-purple' && "colorCircle dark-purple active" || "colorCircle dark-purple"}
+                        setColorScheme('dark-red');
+                        localStorage.setItem("colorScheme", 'dark-red')
+                    }} ></div>
+                {/* <div className={colorScheme == 'dark-purple' && "colorCircle dark-purple active" || "colorCircle dark-purple"}
                     onClick={() => {
                         setColorScheme('dark-purple');
                         localStorage.setItem("colorScheme", 'dark-purple')
-                    }} ></div>
-                {/* <div className={colorScheme == 'black-yellow' && "colorCircle black-yellow active" || "colorCircle black-yellow"}
-                    onClick={() => {
-                        setColorScheme('black-yellow');
-                        localStorage.setItem("colorScheme", 'black-yellow')
                     }} ></div> */}
+
             </div>
         </div >
     );
