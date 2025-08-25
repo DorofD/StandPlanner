@@ -7,6 +7,7 @@ import logging
 import traceback
 from datetime import timedelta
 from dotenv import load_dotenv
+import traceback
 
 
 from app.domain.scheduler import Scheduler
@@ -55,8 +56,11 @@ def create_app():
     def handle_value_error(error):
         print(f"ERROR: {error}")
         traceback.print_exc()
-        current_app.logger.exception(
-            f'Backend has unknown error: {error}')
+        current_app.logger.error(
+            f"Unknown error: {str(error)} | {traceback.format_exc()}")
+        # current_app.logger.exception(
+        #     f'Backend has unknown error: {error}')
+
         return jsonify({'message': f'Backend error: {error}'}), 500
         # return jsonify({'success': True, 'message': 'Source has ben successfully processed'}), 200, {'ContentType': 'application/json'}
     handler = logging.FileHandler('data/app.log')

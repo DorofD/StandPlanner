@@ -1,6 +1,5 @@
 import os
 import requests
-from requests.exceptions import RequestException, JSONDecodeError
 from dotenv import load_dotenv
 
 
