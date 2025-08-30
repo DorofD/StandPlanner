@@ -9,6 +9,17 @@ div.baseSidebar {
     box-sizing: border-box
 }
 
+div.baseSidebar.collapsed {
+    /* background-color: var(--navbar-color); */
+    /* float: left; */
+    /* display: flex; */
+    /* flex-direction: column; */
+    /* align-items: stretch; */
+    /* height: 100%; */
+    width: 60px;
+    /* box-sizing: border-box */
+}
+
 div.baseContent {
     box-sizing: border-box;
     display: flex;
@@ -99,4 +110,15 @@ span.baseHeader {
 .active {
     background-color: var(--accent-color);
     color: var(--text-hover-color);
+}
+
+.randomImage {
+    /* width: 200px; */
+    width: 150px;
+    margin-top: auto;
+    margin-left: auto;
+    margin-right: auto;
+    /* height: 200px; */
+    /* width: 300px;
+    height: 420px; */
 }

@@ -3,15 +3,11 @@ import "./About.css";
 import spSources from './spSources.jpg'
 
 export default function About() {
-
     const [showHint, setShowHint] = useState(false);
-
-
     return (
         <div className="aboutMain">
             <div className="aboutLeft">
                 <div className="hintbuttonsContainer">
-
 
                     <button
                         onClick={() => {

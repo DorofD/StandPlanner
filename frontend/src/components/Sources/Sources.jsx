@@ -6,6 +6,8 @@ import { useAuthContext } from "../../hooks/useAuthContext";
 import { useTimedMessagesContext } from "../../hooks/useTimedMessagesContext";
 import AcceptModal from "../AcceptModal/AcceptModal";
 import Loader from "../Loader/Loader";
+import ExternalLinkIcon from './ExternalLink.svg'
+import CopyIcon from './Copy.svg'
 
 export default function Sources() {
     const { userName, userId } = useAuthContext();
@@ -64,6 +66,21 @@ export default function Sources() {
         }
         return null;
     }
+
+    const handleCopy = () => {
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+            navigator.clipboard.writeText(LINK)
+                .then(() => addMessage("Ссылка скопирована!", 'success', 2400))
+                .catch(() => addMessage("Сак май боллс понял да!", 'error', 2400));
+        } else {
+            addMessage("Ваш браузер не поддерживает копирование в буфер обмена.", 'warning', 5000);
+            // alert("Ваш браузер не поддерживает копирование в буфер обмена.");
+        }
+    };
+
+    const handleOpen = () => {
+        window.open(pickedSource.link, "_blank", "noopener,noreferrer");
+    };
 
     async function addSource() {
         if (newSource.value.length === 0) {
@@ -248,9 +265,9 @@ export default function Sources() {
                                 className={selectedType == 'confluence_page_id' ? "sourcesSetType picked" : "sourcesSetType"}>
                                 Confluence PageId
                             </button>
-                            <button onClick={() => { resetLocalChanges(); setSelectedType('confluence_bulk_search'); setSources([]); setNewSource({ value: '', description: '', source_type: 'confluence_page_id' }) }}
-                                className={selectedType == 'confluence_bulk_search' ? "sourcesSetType picked" : "sourcesSetType"}>
-                                Confluence Массовый поиск
+                            <button onClick={() => { resetLocalChanges(); setSelectedType('confluence_tag'); setSources([]); setNewSource({ value: '', description: '', source_type: 'confluence_tag' }) }}
+                                className={selectedType == 'confluence_tag' ? "sourcesSetType picked" : "sourcesSetType"}>
+                                Confluence Tag
                             </button>
                         </>
                     }
@@ -269,19 +286,10 @@ export default function Sources() {
                             </div>
                         </div>
                     </>}
-                    {selectedType === 'confluence_bulk_search' && <>
-                        <div className="sourcesHint">
-                            <div className="hintBox">
-                                <p>
-                                    Автоматическое добавление источников PageId по указанному параметру
-                                </p>
-                                <p>
-                                    Работа механизма должна быть согласована перед реализацией
-                                </p>
-                            </div>
-                        </div>
+                    {selectedType === 'confluence_tag' && <>
+
                     </>}
-                    {loading === 'start' && selectedType !== 'manual' && selectedType !== 'confluence_bulk_search' &&
+                    {loading === 'start' && selectedType !== 'manual' && selectedType !== 'confluence_tag' &&
                         <div className="sourcesHint">
                             <p> Выберите тип источника</p>
                         </div>
@@ -387,7 +395,18 @@ export default function Sources() {
                                 </div>
                                 <div className="param-row">
                                     <div className="param-key">Страница стенда</div>
-                                    <div>{pickedSource.link && <a href={pickedSource.link}>bibas</a> || "Ссылка отсутствует"}</div>
+
+                                    <div>{pickedSource.link && <div className="sourcesIconsContainer">
+                                        Ссылка доступна
+                                        <div className="iconWithTooltip" onClick={handleCopy}>
+                                            <CopyIcon className="externalLinkIconStyle" />
+                                            <span className="tooltip">Скопировать ссылку</span>
+                                        </div>
+                                        <div className="iconWithTooltip" onClick={handleOpen}>
+                                            <ExternalLinkIcon className="externalLinkIconStyle" />
+                                            <span className="tooltip">Открыть ссылку в новом окне</span>
+                                        </div>
+                                    </div> || "Ссылка отсутствует"}</div>
                                 </div>
                             </div>
                             <div className="textareaContainer">
