@@ -9,9 +9,9 @@ def get_stand(id):
     return DBStands().get_stand(id)
 
 
-def add_stand(name: str, description: str):
+def add_stand(name: str, description: str, current_user):
     DBStands().add_stand(name=name, source_type='manual',
-                         status='unknown', description=description)
+                         status='unknown', description=description, created_by=current_user)
 
 
 def delete_stand(id: int):

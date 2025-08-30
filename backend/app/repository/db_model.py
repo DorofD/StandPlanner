@@ -24,8 +24,10 @@ def create_db():
                 "status"	TEXT NOT NULL CHECK("status" IN ('free', 'busy', 'maintenance', 'unknown', 'error')),
                 "description"	TEXT,
                 "page_layout"	TEXT,
-                "last_update"	TEXT,
                 "source_status"	TEXT,
+                "source_link"	TEXT,
+                "updated_at"	TEXT,
+                "created_by"	TEXT,
                 PRIMARY KEY("id" AUTOINCREMENT)
             );
             """
@@ -72,10 +74,26 @@ def create_db():
                 "version"	TEXT,
                 "description"	TEXT,
                 "status"	TEXT,
+                "link"	TEXT,
                 "stand_id"	INTEGER,
-                "last_update"	TEXT,
+                "updated_at"	TEXT,
+                "created_by"	TEXT,
                 PRIMARY KEY("id" AUTOINCREMENT),
                 FOREIGN KEY("stand_id") REFERENCES "stands"("id")
+                );
+            """
+    cursor = conn.cursor()
+    cursor.execute(query)
+
+    query = """
+            CREATE TABLE IF NOT EXISTS "sources_confluence_tag" (
+                "id"	INTEGER NOT NULL UNIQUE,
+                "value"	TEXT NOT NULL UNIQUE,
+                "description"	TEXT,
+                "status"	TEXT,
+                "updated_at"	TEXT,
+                "created_by"	TEXT,
+                PRIMARY KEY("id" AUTOINCREMENT)
                 );
             """
     cursor = conn.cursor()

@@ -44,3 +44,21 @@ class ConfluenceAPI:
         data = self._request_get(api_path)
         version = f"{data['version']['when']}_{data['version']['number']}"
         return version
+
+    def get_pages_by_label(self, label):
+        """
+        Возвращает список словарей [{'title': str, 'id': str, ...}]
+        """
+        cql = f'type=page AND label="{label}"'
+        limit = 100
+        start = 0
+        all_results = []
+        while True:
+            api_path = f"/content/search?cql={cql}&limit={limit}&start={start}"
+            data = self._request_get(api_path)
+            results = data.get('results', [])
+            all_results.extend(results)
+            if len(results) < limit:
+                break
+            start += limit
+        return all_results

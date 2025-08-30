@@ -3,7 +3,7 @@ import Button from "../../Button/Button";
 import "./SourceCard.css";
 
 
-export default function SourceCard({ id, value, status, picked = false, last_update, onClick }) {
+export default function SourceCard({ id, value, status, picked = false, updated_at, onClick }) {
 
     return (
         <>
@@ -17,7 +17,7 @@ export default function SourceCard({ id, value, status, picked = false, last_upd
                     }>{status}</div>
                 </div>
                 <div className="sourceCardMiddle">
-                    <p className="sourceCardUpdateFaded">Последнее обновление: </p>{last_update}
+                    <p className="sourceCardUpdateFaded">Последнее обновление: </p>{updated_at}
                 </div>
             </div>
         </>

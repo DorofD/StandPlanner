@@ -54,13 +54,13 @@ div.sourcesHint {
 div.sourcesManageSourceWrapper {
     padding: 10px;
     width: 100%;
-    height: 40%;
+    /* height: 40%; */
     box-sizing: border-box;
 }
 
-div.sourcesManageSourceWrapper.changeSource {
+/* div.sourcesManageSourceWrapper.changeSource {
     height: 70%;
-}
+} */
 
 
 div.sourcesManageSource {
@@ -68,7 +68,7 @@ div.sourcesManageSource {
     border: solid 3px var(--border-color);
     border-radius: 10px;
     box-sizing: border-box;
-    height: 100%;
+    /* height: 100%; */
     width: 100%;
     display: flex;
     flex-direction: column;
@@ -78,37 +78,50 @@ div.sourcesManageSource {
 
 div.sourcesManageSourceTopLabel {
     width: 100%;
+    /* height: 10%; */
     font-weight: bolder;
-    margin-bottom: 10px;
+    padding-bottom: 10px;
     text-align: center;
 }
 
 
 
 input.manageSource.name {
-    width: 40%;
-    max-height: 40px;
+    width: 100%;
+    height: 42px;
     /* margin: 10px; */
     box-sizing: border-box;
-    flex: 20%;
+    /* flex: 20%; */
     padding-left: 10px;
+    justify-self: center;
 }
 
 textarea.manageSource.description {
     padding-left: 10px;
     padding-top: 10px;
-    font-size: large;
-    width: 95%;
-    height: auto;
+    width: 100%;
+    min-height: 130px;
     resize: none;
     box-sizing: border-box;
-    flex: 25%;
+    justify-self: center;
+    font-size: 16px;
+    /* flex: 15%; */
+}
+
+div.textareaContainer {
+    display: flex;
+    width: 100%;
+    height: 30%;
+    box-sizing: border-box;
+    justify-content: center;
+    text-align: center;
 }
 
 div.changeSourceParams {
+    /* height: 30%; */
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: 12px;
 }
 
 .param-row {
@@ -132,9 +145,10 @@ div.sourcesManageSourceButtons {
     align-items: flex-start;
     gap: 20px;
     width: 100%;
+    margin-top: auto;
 }
 
-button.sourcesDeleteButton {
+button.sourcesRightButton {
     margin-left: auto;
 }
 

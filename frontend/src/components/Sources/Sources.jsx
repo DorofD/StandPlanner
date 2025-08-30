@@ -24,7 +24,7 @@ export default function Sources() {
     const [isAcceptModalOpen, setIsAcceptModalOpen] = useState(false);
     const [showHint, setShowHint] = useState(false);
     const [serverResponse, setServerResponse] = useState([]);
-
+    const [isChanged, setIsChanged] = useState(false)
 
     const openAcceptModalWithAction = (action) => {
         setActionFunction(() => action);
@@ -52,18 +52,34 @@ export default function Sources() {
         }
     }
 
+    function extractPageId(value) {
+        // Только цифры, от 1 до 30 символов
+        if (/^\d{1,30}$/.test(value)) {
+            return value;
+        }
+        // pageId=число (1-30 цифр) в конце строки
+        const match = value.match(/pageId=(\d{1,30})$/);
+        if (match) {
+            return match[1];
+        }
+        return null;
+    }
+
     async function addSource() {
         if (newSource.value.length === 0) {
-            addMessage('Введите Page ID', 'error', 3000)
+            addMessage('Введите ссылку на страницу или её PageId ', 'warning', 3200)
             return 1
         }
-        // console.log(newSource)
         if (!newSource.source_type) {
             newSource.source_type = selectedType
         }
         let noteToAdd = {}
         noteToAdd.source_type = selectedType
-        noteToAdd.value = newSource.value
+        if (!extractPageId(newSource.value)) {
+            addMessage(`Введите либо ссылку, содержащую pageId=12345, либо число, соответствующее желаемому pageId`, 'warning', 5000)
+            return false;
+        }
+        noteToAdd.value = extractPageId(newSource.value)
         noteToAdd.description = newSource.description
 
         try {
@@ -122,7 +138,7 @@ export default function Sources() {
 
     async function actualizeAllSources() {
         console.log(`bulk update sources: ${selectedType}`)
-        addMessage(`Массовое обновление источников, ожидайте`, 'info', 5000)
+        addMessage(`Ожидайте`, 'info', 3200)
         setLoaderActive(true)
         const response = await apiActualizeAllSources(selectedType)
             .then(response => response.json())
@@ -148,38 +164,25 @@ export default function Sources() {
     }
 
     async function changeSource() {
-        if (changedSource.description === pickedSource.description) {
-            addMessage(`Внесите изменения чтобы их применить`, 'info', 3000)
+        if (pickedSource.id !== changedSource.id) {
+            addMessage("Внутренняя ошибка: pickedSource.id !== changedSource.id", 'error', 10000)
             return 1
         }
-        const response = await apiChangeSource(selectedType, changedSource)
-            .then(response => {
-                console.log("response on changeSource:", response.status);
-                return { status: response.status, body: response.json() }
-            })
-            .then(data => {
-                if (data.status == 200) {
-                    resetLocalChanges()
-                    getSources(selectedType)
-                    addMessage('Источник изменен', 'success', 3000)
-                    setNewSource({ value: '', description: '', source_type: selectedType })
-                    closeAcceptModal()
-                } else {
-                    console.log(data.body.success);
-                    console.log(data.body.message);
-                    addMessage(`Ответ от сервера: ${data.message}`, 'error', 3000)
-                }
-            })
-            .catch(error => {
-                console.log('Error:', error)
-                resetLocalChanges()
-                setPickedSource({ id: 0 })
-                setNewSource({ value: '', description: '', source_type: selectedType })
-                closeAcceptModal()
-                addMessage(`Не удалось изменить источник: ${error}`, 'info', 10000)
-                getSources(selectedType)
-                return 1
-            });
+        if (!isChanged.name && !isChanged.description) {
+            addMessage("Внесите изменения, чтобы их применить", 'warning', 3000)
+            return 1
+        }
+        let fields_to_update = {}
+        if (isChanged.name) { fields_to_update.name = loadedStand.name }
+        if (isChanged.description) { fields_to_update.description = loadedStand.description }
+        const response = await apiChangeStand(pickedStand['id'], fields_to_update)
+        if (response.status == 200) {
+            getStands()
+            addMessage('Стенд изменён', 'success', 3000)
+
+        } else {
+            addMessage('Не удалось изменить стенд', 'error', 3000)
+        }
     }
 
     async function deleteSource() {
@@ -209,6 +212,7 @@ export default function Sources() {
                 return 1
             });
     }
+
 
     return (
 
@@ -292,8 +296,8 @@ export default function Sources() {
                                 version={source.version === '' && "Отсутствует" || source.version}
                                 status={source.status}
                                 picked={pickedSource.id === source.id && true || false}
-                                last_update={source.last_update === 'never' && "Отсутствует" || source.last_update}
-                                onClick={() => { setPickedSource(source); setNewSource({ value: '', description: '', source_type: 'confluence_page_id' }); setChangedSource({ id: source.id, description: source.description }) }}
+                                updated_at={source.updated_at === 'never' && "Отсутствует" || source.updated_at}
+                                onClick={() => { setNewSource({ value: '', description: '', source_type: 'confluence_page_id' }); setPickedSource(source); setChangedSource({ id: source.id, description: source.description }) }}
                             ></SourceCard>
                         )}
                     </>}
@@ -332,24 +336,26 @@ export default function Sources() {
                         <div className="sourcesManageSource">
                             <div className="sourcesManageSourceTopLabel">Добавить новый источник Confluence Page ID</div>
                             <input type="text"
-                                maxLength={100}
-                                placeholder='Page ID'
+                                maxLength={150}
+                                placeholder='Ссылка на страницу Confluence либо PageId'
                                 className="manageSource name"
                                 value={newSource.value}
                                 onChange={e => setNewSource({ ...newSource, value: e.target.value })}
                             />
-
-                            <textarea name="newSource"
-                                maxLength={4000}
-                                placeholder='Описание'
-                                className="manageSource description"
-                                value={newSource.description}
-                                onChange={e => setNewSource({ ...newSource, description: e.target.value })}
-                            >
-                            </textarea>
+                            <div className="textareaContainer">
+                                <textarea name="newSource"
+                                    maxLength={4000}
+                                    placeholder='Описание'
+                                    className="manageSource description"
+                                    value={newSource.description}
+                                    onChange={e => setNewSource({ ...newSource, description: e.target.value })}
+                                >
+                                </textarea>
+                            </div>
                             <div className="sourcesManageSourceButtons">
                                 <button onClick={() => addSource()}> Добавить </button>
-                                <button onClick={() => { actualizeAllSources() }}> Обновить данные всех ресурсов</button>
+                                <button onClick={() => setNewSource({ value: '', description: '', source_type: 'confluence_page_id' })}> Очистить </button>
+                                <button className="sourcesRightButton" onClick={() => { actualizeAllSources() }}> Массовое обновление</button>
                             </div>
                         </div>
                     </div>
@@ -373,26 +379,32 @@ export default function Sources() {
                                 </div>
                                 <div className="param-row">
                                     <div className="param-key">Последнее обновление</div>
-                                    <div>{pickedSource.last_update === "never" && "Отсутствует" || pickedSource.last_update}</div>
+                                    <div>{pickedSource.updated_at === "never" && "Отсутствует" || pickedSource.updated_at}</div>
                                 </div>
                                 <div className="param-row">
-                                    <div className="param-key">Привязанный стенд</div>
+                                    <div className="param-key">Созданный стенд</div>
                                     <div>{pickedSource.stand_id && pickedSource.stand_name || "Отсутствует"}</div>
                                 </div>
+                                <div className="param-row">
+                                    <div className="param-key">Страница стенда</div>
+                                    <div>{pickedSource.link && <a href={pickedSource.link}>bibas</a> || "Ссылка отсутствует"}</div>
+                                </div>
                             </div>
-                            <textarea name="newSource"
-                                maxLength={4000}
-                                placeholder='Описание'
-                                className="manageSource description"
-                                value={changedSource.description}
-                                onChange={e => setChangedSource({ ...changedSource, description: e.target.value })}
-                            >
-                            </textarea>
+                            <div className="textareaContainer">
+                                <textarea name="newSource"
+                                    maxLength={4000}
+                                    placeholder='Описание'
+                                    className="manageSource description"
+                                    value={pickedSource.description}
+                                    onChange={e => setPickedSource({ ...pickedSource, description: e.target.value })}
+                                >
+                                </textarea>
+                            </div>
                             <div className="sourcesManageSourceButtons">
                                 <button onClick={() => { openAcceptModalWithAction(changeSource) }}> Применить изменения </button>
                                 <button onClick={() => { actualizeSource() }}>Обновить данные</button>
                                 <button onClick={() => { setPickedSource({ id: 0 }), setChangedSource({ id: 0, description: '' }) }}> Отменить </button>
-                                <button className="sourcesDeleteButton" onClick={() => { openAcceptModalWithAction(deleteSource) }}> Удалить </button>
+                                <button className="sourcesRightButton" onClick={() => { openAcceptModalWithAction(deleteSource) }}> Удалить </button>
                             </div>
                         </div>
                     </div> || <></>

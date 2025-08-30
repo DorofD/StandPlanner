@@ -127,7 +127,7 @@ export default function Stands() {
                                 picked={pickedStand['id'] === stand.id && true || false}
                                 source_type={stand.source_type}
                                 status={stand.status}
-                                last_update={stand.stand_last}
+                                updated_at={stand.stand_last}
                                 errorWarning={stand.source_status === 'failed' && true || false}
                                 onClick={() => { setNewStand({ name: '', description: '' }); setPickedStand(stand); getStand(stand.id) }}>
                             </StandCard>)}</>}
@@ -195,7 +195,7 @@ export default function Stands() {
                                     </div>
                                     <div className="param-row">
                                         <div className="param-key">Последнее обновление</div>
-                                        <div>{pickedStand.last_update === "never" && "Отсутствует" || pickedStand.last_update}</div>
+                                        <div>{pickedStand.updated_at === "never" && "Отсутствует" || pickedStand.updated_at}</div>
                                     </div>
                                 </div>
                                 <textarea name="newStand"

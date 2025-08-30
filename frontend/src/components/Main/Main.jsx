@@ -39,23 +39,46 @@ export default function Main() {
             setLoading('error')
         }
     }
-
+    const VOID_ELEMENTS = new Set([
+        'area', 'base', 'br', 'col', 'embed', 'hr', 'img',
+        'input', 'link', 'meta', 'param', 'source', 'track', 'wbr'
+    ]);
 
     function renderFromJson(node) {
         if (!node) return null;
-        if (typeof node === 'string') return node;
+        if (typeof node === 'string') return node; // <--- важно!
         if (typeof node !== 'object') return null;
-
         if ('text' in node) return node.text;
         if (!('tag' in node)) return null;
 
         const { tag, children = [], attrs = {} } = node;
+
+        if (VOID_ELEMENTS.has(tag)) {
+            return React.createElement(tag, attrs);
+        }
+
         return React.createElement(
             tag,
             attrs,
             ...(Array.isArray(children) ? children.map(renderFromJson) : [])
         );
     }
+
+    // function renderFromJson(node) {
+    //     if (!node) return null;
+    //     if (typeof node === 'string') return node;
+    //     if (typeof node !== 'object') return null;
+
+    //     if ('text' in node) return node.text;
+    //     if (!('tag' in node)) return null;
+
+    //     const { tag, children = [], attrs = {} } = node;
+    //     return React.createElement(
+    //         tag,
+    //         attrs,
+    //         ...(Array.isArray(children) ? children.map(renderFromJson) : [])
+    //     );
+    // }
 
     const filteredStands = stands.filter(item => {
         return (
@@ -134,7 +157,7 @@ export default function Main() {
                                 </div>
                                 <div className="param-row">
                                     <div className="param-key">Последнее обновление</div>
-                                    <div>{pickedStand.last_update === "never" && "Отсутствует" || pickedStand.last_update}</div>
+                                    <div>{pickedStand.updated_at === "never" && "Отсутствует" || pickedStand.updated_at}</div>
                                 </div>
                             </div>
                             <textarea name="newStand"

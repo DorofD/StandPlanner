@@ -67,7 +67,8 @@ input {
 }
 
 input:focus {
-    border: solid 3px var(--border-picked-color);
+    border: solid 2px var(--border-picked-color);
+    box-sizing: border-box;
 }
 
 select {
@@ -79,18 +80,21 @@ select {
 
 select:focus {
     border: solid 3px var(--border-picked-color);
+    box-sizing: border-box;
 }
 
 textarea {
     outline: none;
-    font-size: 20px;
+    font-size: 16px;
     border-radius: 10px;
     background-color: var(--main-background-color);
     border: solid 2px var(--border-color);
+    box-sizing: border-box;
 }
 
 textarea:focus {
     border: solid 2px var(--border-picked-color);
+    box-sizing: border-box;
 }
 
 
@@ -133,6 +137,12 @@ textarea:focus {
     border: 3px solid var(--border-picked-color);
     background-color: var(--card-background-picked-color);
     cursor: auto;
+}
+
+.card:active {
+    box-shadow: 0 2px 6x rgba(0, 0, 0, 0.10), 0 1px 3px var(--accent-color);
+    transform: scale(0.99);
+    box-sizing: border-box;
 }
 
 *.error-colors {

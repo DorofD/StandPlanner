@@ -1,13 +1,13 @@
 from app.repository.queries.base_query import execute_db_query
 
 
-class DBSourcesConfluencePageId():
+class DBSourcesConfluenceTag():
     def __init__(self):
-        self.table_name = 'sources_confluence_page_id'
+        self.table_name = 'sources_confluence_tag'
 
-    def add_source(self, value, description='', link='', created_by=''):
+    def add_source(self, value, description='', created_by=''):
         query = f"""
-                INSERT INTO {self.table_name} ('value', 'version', 'description', 'status', 'link', 'stand_id', 'updated_at', 'created_by') VALUES('{value}', '', '{description}', 'new', '{link}', '', 'never', '{created_by}');
+                INSERT INTO {self.table_name} ('value', 'description', 'status', 'updated_at', 'created_by') VALUES('{value}', '{description}', 'new', 'never', '{created_by}');
                 """
         return execute_db_query(query)
 
@@ -22,13 +22,6 @@ class DBSourcesConfluencePageId():
         query = f"""
                 UPDATE {self.table_name}
                 SET description = description || '{adding_text}' 
-                WHERE id = {id};
-                """
-        return execute_db_query(query)
-
-    def set_source_stand_id(self, id, stand_id):
-        query = f"""
-                UPDATE {self.table_name} SET stand_id = '{stand_id}' 
                 WHERE id = {id};
                 """
         return execute_db_query(query)

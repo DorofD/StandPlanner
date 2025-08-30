@@ -1,4 +1,5 @@
 from flask import Blueprint, request, current_app, jsonify
+from flask_jwt_extended import create_access_token, create_refresh_token, set_refresh_cookies, jwt_required, get_jwt_identity, get_jwt
 from app.services.stands import get_stands, get_stand, add_stand, delete_stand, change_stand
 from app.services.reservations import add_reservaiton, get_reservations_for_planner, change_reservation, delete_reservation
 from app.services.sources import add_source, get_sources, process_source, bulk_process_sources, delete_source, change_source
@@ -27,7 +28,9 @@ def reservations():
 
 
 @main.route('/stands', methods=(['GET', 'POST']))
+@jwt_required()
 def stands():
+    current_username = get_jwt_identity()
     if request.method == 'GET':
         if request.args.get('action') == 'get_list':
             result = jsonify(get_stands())
@@ -47,7 +50,10 @@ def stands():
     if request.method == 'POST':
         data = request.json
         if data['action'] == 'add':
-            add_stand(name=data['name'], description=data['description'])
+            add_stand(
+                name=data['name'], description=data['description'], current_user=current_username)
+            current_app.logger.info(
+                f"{current_username} created stand {data['name']}")
         if data['action'] == 'change':
             change_stand(data['id'], data['fields_to_update'])
         if data['action'] == 'delete':
@@ -57,7 +63,9 @@ def stands():
 
 
 @main.route('/sources', methods=(['GET', 'POST']))
+@jwt_required()
 def sources():
+    current_username = get_jwt_identity()
     if request.method == 'GET':
         source_type = request.args.get('source_type')
         result = jsonify(get_sources(source_type))
@@ -67,6 +75,8 @@ def sources():
         if data['action'] == 'add':
             result = add_source(data['source_note'])
             if result['success']:
+                current_app.logger.info(
+                    f"{current_username} created source {data['source_note']['source_type']} {data['source_note']['value']}")
                 return jsonify(result), 200, {'ContentType': 'application/json'}
             else:
                 return jsonify(result), 400, {'ContentType': 'application/json'}
