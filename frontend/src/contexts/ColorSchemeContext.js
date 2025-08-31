@@ -5,7 +5,7 @@ export const ColorSchemeContext = createContext();
 export const ColorSchemeProvider = ({ children }) => {
 
     const getInitialScheme = () => {
-        const saved = localStorage.getItem("colorScheme") || "http";
+        const saved = localStorage.getItem("colorScheme") || "default";
         return saved;
     };
 

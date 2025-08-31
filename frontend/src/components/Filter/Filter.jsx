@@ -1,5 +1,5 @@
 import React from "react";
-import FilterIcon from './filter.svg';
+import FilterIcon from '../../svg_images/Filter.svg';
 import "./Filter.css"
 /**
  * Компонент фильтрации логов.

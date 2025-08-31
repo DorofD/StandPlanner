@@ -19,7 +19,7 @@ export default function About() {
                         onClick={() => {
                             setShowHint(3);
                         }}
-                        className={showHint === 3 ? "active" : ""}
+                        className={showHint === 3 ? "aboutActive" : ""}
                     >Актуальный реализованный функционал
                     </button>
 
@@ -27,7 +27,7 @@ export default function About() {
                         onClick={() => {
                             setShowHint(1);
                         }}
-                        className={showHint === 1 ? "active" : ""}
+                        className={showHint === 1 ? "aboutActive" : ""}
                     >Источники информации
                     </button>
 
@@ -35,21 +35,21 @@ export default function About() {
                         onClick={() => {
                             setShowHint(2);
                         }}
-                        className={showHint === 2 ? "active" : ""}
+                        className={showHint === 2 ? "aboutActive" : ""}
                     >Статусы стендов и источников
                     </button>
                     <button
                         onClick={() => {
                             setShowHint(4);
                         }}
-                        className={showHint === 4 ? "active" : ""}
+                        className={showHint === 4 ? "aboutActive" : ""}
                     >Логика обработки данных
                     </button>
                     <button
                         onClick={() => {
                             setShowHint(5);
                         }}
-                        className={showHint === 5 ? "active" : ""}
+                        className={showHint === 5 ? "aboutActive" : ""}
                     >Логика резервирования стендов
                     </button>
                 </div>

@@ -1,20 +1,27 @@
-div.admin-sidebar {
-    /* background-color: #f1f1f1; */
+/* div.admin-sidebar {
     background-color: var(--navbar-color);
     float: left;
-    display: inline-flex;
+    display: flex;
+    flex-direction: column;
     align-items: stretch;
     height: 100%;
     width: 15%;
+    box-sizing: border-box
 }
 
-
+div.admin-sidebar.collapsed {
+    width: 4%;
+}
 
 div.admin-content {
     display: inline-flex;
     align-items: stretch;
     height: 100%;
     width: 85%;
+}
+
+div.admin-content.collapsed {
+    width: 96%;
 }
 
 nav.admin-sidebar {
@@ -42,18 +49,14 @@ ul.admin {
 }
 
 .adminHref:hover {
-    /* background-color: #6e8399e3; */
     background-color: var(--hover-color);
-    /* color: #ffffff; */
     color: var(--text-hover-color);
 }
 
 .activeAdminHref {
-    /* background-color: #4CAF50; */
     background-color: var(--accent-color);
     display: inline-block;
     padding-top: 8%;
-    /* color: #ffffff; */
     color: var(--text-hover-color);
     padding-bottom: 8%;
     padding-left: 10%;
@@ -64,8 +67,30 @@ ul.admin {
 }
 
 .activeAdminHref:hover {
-    /* background-color: #6e8399e3; */
-    /* background-color: var(--hover-color); */
-    /* color: #ffffff; */
     color: var(--text-hover-color);
+} */
+
+.randomImage {
+    width: 150px;
+    margin-top: auto;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.adminSidebarTooltip {
+    visibility: hidden;
+    background-color: var(--info-background);
+    color: var(--info-text-color);
+    text-align: center;
+    border-radius: 4px;
+    padding: 4px 8px;
+    position: absolute;
+    z-index: 1;
+    bottom: 120%;
+    left: 50%;
+    transform: translateX(-50%);
+    white-space: nowrap;
+    opacity: 0;
+    transition: opacity 0.5s;
+    font-size: 18px;
 }

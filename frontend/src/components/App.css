@@ -3,7 +3,7 @@
     --accent-color: #4CAF50;
     --text-accent-color: #ffffff;
 
-    --hover-color: #6e8399e3;
+    --hover-color: #6e8399;
     --text-hover-color: #ffffff;
 
     --navbar-color: #f1f1f1;
@@ -41,6 +41,10 @@
     color: var(--text-main-color);
 }
 
+/* * {
+    color: var(--text-main-color);
+} */
+
 .filterIconStyle {
     color: var(--accent-color);
     width: 40px;
@@ -60,11 +64,26 @@
 }
 
 .externalLinkIconStyle:active {
-    /* box-shadow: 0 2px 4px var(--accent-color); */
-
     box-shadow: 0 1px 2px 0 var(--accent-color);
 
 }
+
+.colorSchemeIconStyle {
+    color: var(--border-color);
+    width: 35px;
+    height: 35px;
+    cursor: pointer;
+}
+
+.colorSchemeIconStyle:hover {
+    color: var(--accent-color);
+}
+
+/* .baseSidebarIcon {
+    width: 28px;
+    height: 28px;
+    
+} */
 
 strong {
     color: var(--strong-text-color);

@@ -6,8 +6,8 @@ import { useAuthContext } from "../../hooks/useAuthContext";
 import { useTimedMessagesContext } from "../../hooks/useTimedMessagesContext";
 import AcceptModal from "../AcceptModal/AcceptModal";
 import Loader from "../Loader/Loader";
-import ExternalLinkIcon from './ExternalLink.svg'
-import CopyIcon from './Copy.svg'
+import ExternalLinkIcon from '../../svg_images/ExternalLink.svg'
+import CopyIcon from '../../svg_images/Copy.svg'
 
 export default function Sources() {
     const { userName, userId } = useAuthContext();
