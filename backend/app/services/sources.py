@@ -90,12 +90,14 @@ def handle_confluence_page_id(source_id):
             # stand_data['name']
             # stand_data['page_layout']
             # stand_data['description']
+            # stand_data['created_by']
+            # stand_data['source_link']
             # fields_to_update['status']
             # fields_to_update['version']
             # fields_to_update['updated_at']
             # print(stand_data['name'])
             added_stand_id = db_stands.add_stand(
-                stand_data['name'], source_type, "unknown", stand_data['description'], '', stand_data['updated_at'], 'relevant', f"PageId_{processed_note['value']}")
+                stand_data['name'], source_type, "unknown", stand_data['description'], '', stand_data['updated_at'], 'relevant', stand_data['source_link'], stand_data['created_by'])
             if not added_stand_id:
                 raise Exception(
                     'Fail to add stand')

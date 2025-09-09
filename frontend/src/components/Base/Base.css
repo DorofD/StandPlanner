@@ -28,8 +28,12 @@ div.baseContent.collapsed {
 
 div.baseUserName {
     font-size: 20px;
-    margin-right: 10px;
     user-select: none;
+    display: inline-block;
+    text-align: center;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
 }
 
 nav.baseSidebar {
@@ -71,6 +75,25 @@ nav.baseSidebar.collapsed>* {
     visibility: visible;
 }
 
+.baseSidebarExpandContainer {
+    width: 100%;
+    height: 4%;
+    box-sizing: border-box;
+    user-select: none;
+    color: var(--text-main-color);
+    display: flex;
+    flex-direction: row;
+    margin-top: auto;
+    cursor: pointer;
+    justify-content: center;
+    align-items: center;
+}
+
+.baseSidebarExpandContainer:hover {
+    background-color: var(--hover-color);
+    color: var(--text-hover-color);
+}
+
 .baseSidebarTextDiv {
     pointer-events: none;
     visibility: hidden;
@@ -99,10 +122,14 @@ nav.baseSidebar.collapsed>* {
 
 div.baseHrefText {
     color: inherit;
+    box-sizing: border-box;
     width: 100%;
     padding-top: 8%;
     padding-bottom: 8%;
     padding-left: 10%;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
 }
 
 div.baseHeader {
@@ -114,6 +141,7 @@ div.baseHeader {
     align-items: center;
     justify-content: right;
     gap: 15px;
+    box-sizing: border-box;
 }
 
 div.baseBody {
@@ -133,4 +161,38 @@ span.baseHeader {
     width: 50%;
     height: 50%;
     color: inherit;
+}
+
+.baseSidebarExpandIcon {
+    height: 90%;
+    color: inherit;
+    box-sizing: border-box;
+}
+
+div.baseLogoutIconContainer {
+    height: 100%;
+    padding-left: 20px;
+    padding-right: 20px;
+    box-sizing: border-box;
+    user-select: none;
+    color: var(--text-main-color);
+    background-color: var(--navbar-color);
+    display: flex;
+    flex-direction: row;
+    margin-top: auto;
+    cursor: pointer;
+    justify-content: center;
+    align-items: center;
+}
+
+div.baseLogoutIconContainer:hover {
+    background-color: var(--hover-color);
+    color: var(--text-hover-color)
+}
+
+.baseLogoutIconStyle {
+    color: inherit;
+    width: 35px;
+    height: 35px;
+    cursor: pointer;
 }

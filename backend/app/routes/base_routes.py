@@ -39,13 +39,15 @@ def stands():
             stand_id = request.args.get('stand_id')
             stand = get_stand(stand_id)
             if stand['page_layout']:
-                try:
-                    stand['page_layout'] = json.loads(stand['page_layout'])
-                    result = jsonify(stand)
-                    return result
-                except Exception as e:
-                    current_app.logger.info(
-                        f"Failed to json.loads page_layout from stand with id: {e}")
+                # try:
+                stand['page_layout'] = json.loads(stand['page_layout'])
+                result = jsonify(stand)
+                return result
+                # except Exception as e:
+                #     current_app.logger.info(
+                #         f"Failed to json.loads page_layout from stand with id: {stand['id']}, error: {e}")
+                #     print(
+                #         f"Failed to json.loads page_layout from stand with id: {stand['id']}, error: {e}")
             return jsonify(stand)
     if request.method == 'POST':
         data = request.json

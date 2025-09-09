@@ -11,6 +11,9 @@ import HomeIcon from "../../svg_images/Home.svg"
 import ScheduleIcon from "../../svg_images/Schedule.svg"
 import GearIcon from "../../svg_images/Gear.svg"
 import ManualIcon from "../../svg_images/Manual.svg"
+import ExpandRightIcon from "../../svg_images/ExpandRight.svg"
+import ExpandLeftIcon from "../../svg_images/ExpandLeft.svg"
+import LogoutIcon from "../../svg_images/Logout.svg"
 const NavLink = React.forwardRef((props, ref) => {
     return (
         <NavLinkBase
@@ -27,17 +30,33 @@ export default function Base() {
     const { messages, addMesage } = useTimedMessagesContext();
     const { sidebarCollapsed, setSidebarCollapsed } = useSidebarState();
     const location = useLocation();
+    useEffect(() => {
+        const mediaQuery = window.matchMedia('(min-width: 992px)');
+
+        const handleMediaChange = (e) => {
+            if (!e.matches) {
+                localStorage.setItem("sidebar-state", 'collapsed')
+                setSidebarCollapsed(true)
+            }
+
+        };
+
+        handleMediaChange(mediaQuery);
+
+        mediaQuery.addEventListener('change', handleMediaChange);
+
+        return () => {
+            mediaQuery.removeEventListener('change', handleMediaChange);
+        };
+    }, []);
+
     return (
         <>
             <div className="baseHeader" id="modal-root">
-                {sidebarCollapsed &&
-                    <button onClick={() => { localStorage.setItem("sidebar-state", 'default'); setSidebarCollapsed(false) }}>Развернуть</button>
-                    ||
-                    <button onClick={() => { localStorage.setItem("sidebar-state", 'collapsed'); setSidebarCollapsed(true) }}>Свернуть</button>
-                }
                 <ColorSchemeSelector></ColorSchemeSelector>
                 <div className="baseUserName">{userName}</div>
-                <Button style={"logout"} type={"submit"} onClick={toogleAuth}> Выйти </Button>
+                <div className="baseLogoutIconContainer" onClick={toogleAuth}><LogoutIcon className='baseLogoutIconStyle '></LogoutIcon></div>
+
             </div>
             <div className="baseBody">
                 <div className={!sidebarCollapsed && "baseSidebar" || "baseSidebar collapsed"}>
@@ -70,8 +89,16 @@ export default function Base() {
                                 ||
                                 <ManualIcon className="baseSidebarIcon"></ManualIcon>} {sidebarCollapsed && <div className="baseSidebarTextDiv">О приложении</div>}
                         </NavLink>
-
                     </nav>
+                    {!sidebarCollapsed &&
+                        <div className="baseSidebarExpandContainer" onClick={() => { localStorage.setItem("sidebar-state", 'collapsed'); setSidebarCollapsed(true) }}>
+                            <ExpandLeftIcon className="baseSidebarExpandIcon" ></ExpandLeftIcon>
+                        </div>
+                        ||
+                        <div className="baseSidebarExpandContainer" onClick={() => { localStorage.setItem("sidebar-state", 'default'); setSidebarCollapsed(false) }}>
+                            <ExpandRightIcon className="baseSidebarExpandIcon" ></ExpandRightIcon>
+                        </div>
+                    }
                 </div>
                 <div className={!sidebarCollapsed && "baseContent" || "baseContent collapsed"}>
                     <Outlet />

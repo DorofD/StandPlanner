@@ -66,6 +66,8 @@ class ConfluencePageIdSource():
         self.stand_data['page_layout'] = parsed_json_layout
         self.stand_data[
             'description'] = f"Created by Confluence source (pageId={self.source['value']})"
+        self.stand_data[
+            'created_by'] = f"ConfluencePageId={self.source['value']})"
         self.stand_data['source_link'] = full_link
         return {'success': True, 'fields_to_update': self.fields_to_update, 'stand_data': self.stand_data}
 

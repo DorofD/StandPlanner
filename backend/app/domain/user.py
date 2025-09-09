@@ -1,7 +1,8 @@
 import json
 import os
-from ldap3 import Connection
+from ldap3 import Connection, ALL_ATTRIBUTES
 from dotenv import load_dotenv
+import traceback
 # from app.repository.queries.users import get_user_db, get_users_db, add_user_db, delete_user_db, change_user_db
 
 
@@ -17,20 +18,49 @@ class User():
 
     def ldap_auth(self, login: str, password: str):
         load_dotenv('.env')
+        # реализовать добавление информации о доменном пользователе в вывод ldap
         try:
             conn = Connection(server=self.server, user=self.user_cn,
                               auto_bind=True, password=self.password)
 
-            conn.search(search_filter=f'(sAMAccountName={login})',
-                        search_base=self.search_base, )
+            search_filter = f'(sAMAccountName={login})'
+            attributes_to_search = [
+                "sAMAccountName",
+                "userPrincipalName",
+                "displayName",
+                "givenName",
+                "sn",
+                "mail",
+                "telephoneNumber",
+                "department",
+                "title",
+                "memberOf",
+                "distinguishedName",
+                "objectGUID",
+                "whenCreated",
+                "whenChanged",
+            ]
+            conn.search(search_base=self.search_base,
+                        search_filter=search_filter,
+                        attributes=attributes_to_search)
+            if not conn.entries:
+                return {'success': False, 'error': f"User {login} not found"}
+
+            entry = conn.entries[0]
+            user_dn = entry.distinguishedName.value
+
             entry = json.loads(conn.entries[0].entry_to_json())
             user_dn = entry['dn']
+
+            # for i in attributes_to_search:
+            #     print(i, '---', entry['attributes'][i])
             conn = Connection(server=self.server, user=user_dn,
                               password=password, raise_exceptions=True)
             if conn.bind():
                 return True
             return False
-        except:
+        except Exception as exc:
+            print(exc, '--', traceback.format_exc())
             return False
 
     def get_password_hash(self, password):

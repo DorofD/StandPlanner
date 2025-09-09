@@ -48,23 +48,6 @@ export default function Admin() {
     const randomImage = getRandomImage(images);
     return (
         <>
-            {/* <div className={!sidebarCollapsed && "admin-sidebar" || "admin-sidebar collapsed"}>
-                <nav className="admin-sidebar">
-                    <ul className="admin">
-                        <li className="admin"> <NavLink to="/admin/users" >Пользователи</NavLink></li>
-                        <li className="admin"> <NavLink to="/admin/sources" >Источники</NavLink></li>
-                        <li className="admin"> <NavLink to="/admin/stands" >Стенды</NavLink></li>
-                        <li className="admin"> <NavLink to="/admin/bots" >Боты</NavLink></li>
-                        <li className="admin"> <NavLink to="/admin/logs" >Логи</NavLink></li>
-                        <li className="admin"> <NavLink to="/admin/apscheduler" >APScheduler</NavLink></li>
-                    </ul>
-                </nav>
-                {colorScheme == 'dark-red' && !sidebarCollapsed &&
-                    <img className="randomImage" src={randomImage} alt="" />}
-            </div>
-            <div className={!sidebarCollapsed && "admin-content" || "admin-content collapsed"}>
-                <Outlet />
-            </div> */}
             <div className={!sidebarCollapsed && "baseSidebar" || "baseSidebar collapsed"}>
                 <nav className={!sidebarCollapsed && "baseSidebar" || "baseSidebar collapsed"}>
                     <NavLink to="/admin/users" >
@@ -109,7 +92,8 @@ export default function Admin() {
                             <PythonGearIcon className="baseSidebarIcon"></PythonGearIcon>}
                         {sidebarCollapsed && <div className="baseSidebarTextDiv">APScheduler</div>}
                     </NavLink>
-
+                    {/* {colorScheme == 'dark-red' && !sidebarCollapsed &&
+                        <img className="randomImage" src={randomImage} alt="" />} */}
                 </nav>
             </div>
             <div className={!sidebarCollapsed && "baseContent" || "baseContent collapsed"}>

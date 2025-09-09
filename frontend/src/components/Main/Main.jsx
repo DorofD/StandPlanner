@@ -5,6 +5,9 @@ import { apiGetStands, apiGetStand } from "../../services/apiStands";
 import StandCard from "../Stands/StandCard/StandCard";
 import Filter from "../Filter/Filter";
 import { useAuthContext } from "../../hooks/useAuthContext";
+import ExternalLinkIcon from '../../svg_images/ExternalLink.svg'
+import CopyIcon from '../../svg_images/Copy.svg'
+import { useTimedMessagesContext } from "../../hooks/useTimedMessagesContext";
 
 export default function Main() {
     const [loading, setLoading] = useState('loading')
@@ -12,6 +15,7 @@ export default function Main() {
     const [pickedStand, setPickedStand] = useState({ id: '', name: 'Стенд', source_type: '' })
     const [standInfo, setStandInfo] = useState({ description: '', page_layout: '' })
     const [renderedElement, setRenderedElement] = useState(false)
+    const { messages, addMessage } = useTimedMessagesContext();
 
     const [filterStands, setFilterStands] = useState({ status: '', source_type: '' });
     const [standStatuses, setStandStatuses] = useState([['free', "Свободен"], ['busy', "Занят"], ['maintenance', "Обслуживание"], ['unknown', "Неизвестен"]])
@@ -46,7 +50,7 @@ export default function Main() {
 
     function renderFromJson(node) {
         if (!node) return null;
-        if (typeof node === 'string') return node; // <--- важно!
+        if (typeof node === 'string') return node;
         if (typeof node !== 'object') return null;
         if ('text' in node) return node.text;
         if (!('tag' in node)) return null;
@@ -87,7 +91,19 @@ export default function Main() {
         );
     }
     )
+    const handleCopy = () => {
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+            navigator.clipboard.writeText(LINK)
+                .then(() => addMessage("Ссылка скопирована!", 'success', 2400))
+                .catch(() => addMessage("Сак май боллс понял да!", 'error', 2400));
+        } else {
+            addMessage("Ваш браузер не поддерживает копирование в буфер обмена.", 'warning', 5000);
+        }
+    };
 
+    const handleOpen = () => {
+        window.open(standInfo.source_link, "_blank", "noopener,noreferrer");
+    };
 
     useEffect(() => {
         getStands()
@@ -131,6 +147,7 @@ export default function Main() {
                                 errorWarning={stand.source_status == 'failed' && true || false}
                                 picked={pickedStand['id'] === stand.id && true || false}
                                 onClick={() => {
+                                    setStandInfo({ description: '', page_layout: '' });
                                     getStand(stand.id).then(() => setPickedStand(stand));
                                 }}>
                             </StandCard>)}
@@ -158,6 +175,21 @@ export default function Main() {
                                 <div className="param-row">
                                     <div className="param-key">Последнее обновление</div>
                                     <div>{pickedStand.updated_at === "never" && "Отсутствует" || pickedStand.updated_at}</div>
+                                </div>
+                                <div className="param-row">
+                                    <div className="param-key">Ссылка на страницу стенда</div>
+                                    {console.log('link is:', pickedStand.source_link)}
+                                    <div>{standInfo.source_link && <div className="sourcesIconsContainer">
+                                        Доступна
+                                        <div className="iconWithTooltip" onClick={handleCopy}>
+                                            <CopyIcon className="externalLinkIconStyle" />
+                                            <span className="tooltip">Скопировать ссылку</span>
+                                        </div>
+                                        <div className="iconWithTooltip" onClick={handleOpen}>
+                                            <ExternalLinkIcon className="externalLinkIconStyle" />
+                                            <span className="tooltip">Открыть ссылку в новом окне</span>
+                                        </div>
+                                    </div> || "Отсутствует"}</div>
                                 </div>
                             </div>
                             <textarea name="newStand"

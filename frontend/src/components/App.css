@@ -68,23 +68,6 @@
 
 }
 
-.colorSchemeIconStyle {
-    color: var(--border-color);
-    width: 35px;
-    height: 35px;
-    cursor: pointer;
-}
-
-.colorSchemeIconStyle:hover {
-    color: var(--accent-color);
-}
-
-/* .baseSidebarIcon {
-    width: 28px;
-    height: 28px;
-    
-} */
-
 strong {
     color: var(--strong-text-color);
 }
