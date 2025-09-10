@@ -20,14 +20,16 @@ export async function apiAddSource(source_note) {
     })
     return response
 }
-export async function apiChangeSource(source_type, source_note) {
+
+export async function apiChangeSource(source_type, id, fields_to_update) {
     const response = await authFetch(`${process.env.BACKEND_URL}/sources`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
             action: 'change',
             source_type: source_type,
-            source_note: source_note
+            source_id: id,
+            fields_to_update: fields_to_update
         })
     })
     return response

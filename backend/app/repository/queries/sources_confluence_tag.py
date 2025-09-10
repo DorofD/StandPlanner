@@ -27,20 +27,23 @@ class DBSourcesConfluenceTag():
         return execute_db_query(query)
 
     def get_all_sources(self):
+        # query = f"""
+        #         SELECT {self.table_name}.*, COALESCE(stands.name, '') AS stand_name
+        #         FROM {self.table_name}
+        #         LEFT JOIN stands ON {self.table_name}.stand_id = stands.id;
+        #         """
         query = f"""
-                SELECT {self.table_name}.*, COALESCE(stands.name, '') AS stand_name
-                FROM {self.table_name}
-                LEFT JOIN stands ON {self.table_name}.stand_id = stands.id;
+                SELECT * FROM {self.table_name};
                 """
         return execute_db_query(query)
 
-    def get_all_sources_short_info(self):
-        """Вернет список словарей формата {id: int, value: str, status: str}"""
-        query = f"""
-                SELECT {self.table_name}.id, {self.table_name}.value, {self.table_name}.status
-                FROM {self.table_name};
-                """
-        return execute_db_query(query)
+    # def get_all_sources_short_info(self):
+    #     """Вернет список словарей формата {id: int, value: str, status: str}"""
+    #     query = f"""
+    #             SELECT {self.table_name}.id, {self.table_name}.value, {self.table_name}.status
+    #             FROM {self.table_name};
+    #             """
+    #     return execute_db_query(query)
 
     def get_source(self, id):
         query = f"""

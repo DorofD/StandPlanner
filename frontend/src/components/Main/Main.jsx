@@ -95,9 +95,9 @@ export default function Main() {
         if (navigator.clipboard && navigator.clipboard.writeText) {
             navigator.clipboard.writeText(LINK)
                 .then(() => addMessage("Ссылка скопирована!", 'success', 2400))
-                .catch(() => addMessage("Сак май боллс понял да!", 'error', 2400));
+                .catch(() => addMessage("Ошибка при копировании ссылки", 'error', 2400));
         } else {
-            addMessage("Ваш браузер не поддерживает копирование в буфер обмена.", 'warning', 5000);
+            addMessage("Копирование не выполнено, проверьте window.location.protocol и navigator.clipboard", 'warning', 5000);
         }
     };
 
@@ -178,7 +178,7 @@ export default function Main() {
                                 </div>
                                 <div className="param-row">
                                     <div className="param-key">Ссылка на страницу стенда</div>
-                                    {console.log('link is:', pickedStand.source_link)}
+                                    {console.log('link is:', standInfo.source_link)}
                                     <div>{standInfo.source_link && <div className="sourcesIconsContainer">
                                         Доступна
                                         <div className="iconWithTooltip" onClick={handleCopy}>

@@ -18,6 +18,10 @@ def add_source(source_note, user: str = ''):
         DBSourcesConfluencePageId().add_source(
             source_note['value'], source_note['description'], '', user)
         return {'success': True, 'message': "Source added"}
+    if source_note['source_type'] == 'confluence_tag':
+        DBSourcesConfluenceTag().add_source(
+            source_note['value'], source_note['description'], user)
+        return {'success': True, 'message': "Source added"}
 
 
 def process_source(source_type, source_id):
@@ -163,19 +167,20 @@ def get_sources(source_type):
         return DBSourcesConfluenceTag().get_all_sources()
 
 
-def change_source(source_type, source_note):
+def change_source(source_type, source_id, fields_to_update):
     if source_type == 'confluence_page_id':
-        try:
-            source_id = source_note['id']
-        except KeyError as e:
-            raise Exception("Field id didn't found in source_note to change")
-
-        if 'description' in source_note:
+        if 'description' in fields_to_update:
             DBSourcesConfluencePageId().update_source_field(
-                source_id, 'description', source_note['description'])
+                source_id, 'description', fields_to_update['description'])
         return True
 
-    raise Exception('Unknown source_type')
+    if source_type == 'confluence_tag':
+        if 'description' in fields_to_update:
+            DBSourcesConfluenceTag().update_source_field(
+                source_id, 'description', fields_to_update['description'])
+        return True
+    print("Nothing changed")
+    return False
 
 
 def delete_source(source_id, source_type):
@@ -184,5 +189,9 @@ def delete_source(source_id, source_type):
         if source['stand_id']:
             DBStands().delete_stand(source['stand_id'])
         DBSourcesConfluencePageId().delete_source(source_id)
+        return True
+    if source_type == 'confluence_tag':
+        source = DBSourcesConfluenceTag().get_source(source_id)
+        DBSourcesConfluenceTag().delete_source(source_id)
         return True
     raise Exception('Unknown source_type')

@@ -75,7 +75,7 @@ def sources():
     if request.method == 'POST':
         data = request.json
         if data['action'] == 'add':
-            result = add_source(data['source_note'])
+            result = add_source(data['source_note'], current_username)
             if result['success']:
                 current_app.logger.info(
                     f"{current_username} created source {data['source_note']['source_type']} {data['source_note']['value']}")
@@ -94,8 +94,9 @@ def sources():
                 return jsonify({'success': False, 'message': 'Something going wrong, check source description and service logs'}), 200, {'ContentType': 'application/json'}
         if data['action'] == 'change':
             source_type = data['source_type']
-            source_note = data['source_note']
-            change_source(source_type, source_note)
+            source_id = data['source_id']
+            fields_to_update = data['fields_to_update']
+            change_source(source_type, source_id, fields_to_update)
         if data['action'] == 'delete':
             delete_source(data['id'], data['source_type'])
     return jsonify({'success': True}), 200, {'ContentType': 'application/json'}
