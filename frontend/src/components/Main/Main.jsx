@@ -75,9 +75,9 @@ export default function Main() {
         );
     }
     )
-    const handleCopy = () => {
+    const handleCopy = (link) => {
         if (navigator.clipboard && navigator.clipboard.writeText) {
-            navigator.clipboard.writeText(pickedStand.source_link)
+            navigator.clipboard.writeText(link)
                 .then(() => addMessage("Ссылка скопирована!", 'success', 2400))
                 .catch(() => addMessage("Ошибка при копировании ссылки", 'error', 2400));
         } else {
@@ -168,7 +168,7 @@ export default function Main() {
                                         {console.log('link is:', standInfo.source_link)}
                                         <div>{standInfo.source_link && <div className="sourcesIconsContainer">
                                             Доступна
-                                            <div className="iconWithTooltip" onClick={handleCopy}>
+                                            <div className="iconWithTooltip" onClick={() => handleCopy(standInfo.source_link)}>
                                                 <CopyIcon className="externalLinkIconStyle" />
                                                 <span className="tooltip">Скопировать ссылку</span>
                                             </div>
