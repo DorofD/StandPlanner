@@ -1,4 +1,4 @@
-from app.repository.queries.base_query import execute_db_query
+from app.repository.queries.base_query import execute_db_query, execute_parametrized_query
 
 
 class DBSourcesConfluenceTag():
@@ -6,10 +6,13 @@ class DBSourcesConfluenceTag():
         self.table_name = 'sources_confluence_tag'
 
     def add_source(self, value, description='', created_by=''):
+        """Возвращает int lastrowid"""
         query = f"""
-                INSERT INTO {self.table_name} ('value', 'description', 'status', 'updated_at', 'created_by') VALUES('{value}', '{description}', 'new', 'never', '{created_by}');
+                INSERT INTO sources_confluence_tag ('value', 'description', 'status', 'child_sources', 'updated_at', 'created_by')
+                VALUES(?, ?, ?, ?, ?, ?);
                 """
-        return execute_db_query(query)
+        params = [value, description, 'new', '', 'never', created_by]
+        return execute_parametrized_query(query, params)
 
     def update_source_field(self, id: int, field_name: str, value: str):
         query = f"""

@@ -91,6 +91,7 @@ def create_db():
                 "value"	TEXT NOT NULL UNIQUE,
                 "description"	TEXT,
                 "status"	TEXT,
+                "child_sources"	TEXT,
                 "updated_at"	TEXT,
                 "created_by"	TEXT,
                 PRIMARY KEY("id" AUTOINCREMENT)

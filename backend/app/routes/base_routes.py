@@ -98,7 +98,10 @@ def sources():
             fields_to_update = data['fields_to_update']
             change_source(source_type, source_id, fields_to_update)
         if data['action'] == 'delete':
-            delete_source(data['id'], data['source_type'])
+            deleted_source_value = delete_source(
+                data['id'], data['source_type'])
+            current_app.logger.info(
+                f"{current_username} deleted source {data['source_type']} with value {deleted_source_value}")
     return jsonify({'success': True}), 200, {'ContentType': 'application/json'}
 
 

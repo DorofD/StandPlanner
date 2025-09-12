@@ -343,6 +343,7 @@ export default function Sources() {
                         {sources.map(source =>
                             <SourceCard id={source.id}
                                 value={source.value}
+                                valueName={'PageId'}
                                 version={source.version === '' && "Отсутствует" || source.version}
                                 status={source.status}
                                 picked={pickedSource.id === source.id && true || false}
@@ -355,6 +356,7 @@ export default function Sources() {
                         {sources.map(source =>
                             <SourceCard id={source.id}
                                 value={source.value}
+                                valueName={'Tag'}
                                 version={source.version === '' && "Отсутствует" || source.version}
                                 status={source.status}
                                 picked={pickedSource.id === source.id && true || false}
@@ -442,6 +444,10 @@ export default function Sources() {
                                 <div className="param-row">
                                     <div className="param-key">Последнее обновление</div>
                                     <div>{pickedSource.updated_at === "never" && "Отсутствует" || pickedSource.updated_at}</div>
+                                </div>
+                                <div className="param-row">
+                                    <div className="param-key">Кем создан</div>
+                                    <div>{pickedSource.stand_id && pickedSource.created_by || "Неизвестно"}</div>
                                 </div>
                                 <div className="param-row">
                                     <div className="param-key">Созданный стенд</div>
@@ -533,8 +539,12 @@ export default function Sources() {
                                     <div>{pickedSource.updated_at === "never" && "Отсутствует" || pickedSource.updated_at}</div>
                                 </div>
                                 <div className="param-row">
-                                    <div className="param-key">Созданныe источники PageId</div>
-                                    <div>{pickedSource.child_sources && pickedSource.child_sources || "Отсутствуют"}</div>
+                                    <div className="param-key">Кол-во дочерних PageId</div>
+                                    <div>{pickedSource.child_sources &&
+                                        <>{pickedSource.child_sources.length}</>
+                                        // <>{pickedSource.child_sources.map(biba => <div>{biba.id}</div>)}
+                                        // </>
+                                        || "Отсутствуют"}</div>
                                 </div>
                             </div>
                             <div className="textareaContainer">
@@ -553,6 +563,7 @@ export default function Sources() {
                             </div>
                             <div className="sourcesManageSourceButtons">
                                 <button onClick={() => { openAcceptModalWithAction(changeSource) }}> Применить изменения </button>
+                                <button onClick={() => { actualizeSource() }}>Обновить данные</button>
                                 <button onClick={() => { setPickedSource({ id: 0 }), setChangedSource({ id: 0, description: '' }) }}> Отменить </button>
                                 <button className="sourcesRightButton" onClick={() => { openAcceptModalWithAction(deleteSource) }}> Удалить </button>
                             </div>

@@ -12,17 +12,6 @@ import BotIcon from "../../svg_images/Bot.svg"
 import CatalogIcon from "../../svg_images/Catalog.svg"
 import PythonGearIcon from "../../svg_images/PythonGear.svg"
 
-import img1 from "./easter_imgs/img1.webp"
-import img2 from "./easter_imgs/img2.webp"
-import img3 from "./easter_imgs/img3.webp"
-import img4 from "./easter_imgs/img4.webp"
-import img5 from "./easter_imgs/img5.webp"
-import img6 from "./easter_imgs/img6.webp"
-import img7 from "./easter_imgs/img7.webp"
-import img8 from "./easter_imgs/img8.webp"
-import img9 from "./easter_imgs/img9.webp"
-import img10 from "./easter_imgs/img10.webp"
-
 const NavLink = React.forwardRef((props, ref) => {
     return (
         <NavLinkAdmin
@@ -40,12 +29,6 @@ export default function Admin() {
     const { colorScheme } = useColorScheme();
     const { sidebarCollapsed } = useSidebarState();
 
-    const images = [img1, img2, img3, img4, img5, img6, img7, img8, img9, img10];
-    function getRandomImage(images) {
-        const randomIndex = Math.floor(Math.random() * images.length);
-        return images[randomIndex];
-    }
-    const randomImage = getRandomImage(images);
     return (
         <>
             <div className={!sidebarCollapsed && "baseSidebar" || "baseSidebar collapsed"}>

@@ -8,6 +8,7 @@ export default function Bots() {
         <div className="botsMain">
             <div className="botsSection">
                 <div className="logsFilterContainer1">
+                    Здесь будет интерфейс управления ботами
                 </div>
                 <div className="logsNotes1">
 

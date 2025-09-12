@@ -100,7 +100,7 @@ export default function Stands() {
         if (response.status == 200) {
             getStands()
             setPickedStand({ id: '', name: '', description: '' })
-            addMessage('Стенд удалён', 'success', 3000)
+            addMessage('Стенд удалён', 'info', 3000)
 
         } else {
             addMessage('Не удалось удалить стенд', 'error', 3000)

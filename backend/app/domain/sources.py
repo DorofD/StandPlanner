@@ -67,7 +67,7 @@ class ConfluencePageIdSource():
         self.stand_data[
             'description'] = f"Created by Confluence source (pageId={self.source['value']})"
         self.stand_data[
-            'created_by'] = f"ConfluencePageId={self.source['value']})"
+            'created_by'] = f"ConfluencePageId={self.source['value']}"
         self.stand_data['source_link'] = full_link
         return {'success': True, 'fields_to_update': self.fields_to_update, 'stand_data': self.stand_data}
 
@@ -122,7 +122,7 @@ class ConfluenceTagSource():
         self.confluence = ConfluenceAPI()
         self.source = source_note
         self.fields_to_update = {}
-        self.new_sources = []
+        self.found_sources = []
         self.outdated_sources = []
 
     def validate_source(self):
@@ -130,39 +130,36 @@ class ConfluenceTagSource():
 
     def process_source_dispatcher(self):
         """
-        Вернёт {'success': True, fields_to_update: {}, new_sources: [], outdated_sources: []}
+        Вернёт {'success': True, fields_to_update: {}, found_sources: [], outdated_sources: []}
         fields_to_update - обновленные поля источника
-        new_sources - найденые по тегу источники, которые нужно добавить
+        found_sources - найденые по тегу источники, которые нужно добавить
         outdated_sources - источники, которые были найдены по тегу, но сейчас не ищутся
         """
 
         if self.source['status'] == 'new':
-            result_dict = self._process_new()
+            result_dict = self._process()
             return result_dict
         if self.source['status'] == 'relevant':
-            self._check_pages_relevance()
-            return False
+            result_dict = self._process()
+            return result_dict
         if self.source['status'] == 'failed':
-            pass
-            return False
+            result_dict = self._process()
+            return result_dict
 
     def _get_pages_by_tag(self):
         return self.confluence.get_pages_by_label(self.source['value'])
 
-    def _process_new(self):
+    def _process(self):
         pages = self._get_pages_by_tag()
         for note in pages:
             tmp = {}
             tmp['value'] = note['id']
-            tmp['description'] = "Created by Confluence Tag Source"
+            tmp['description'] = f"Created by ConfluenceTag source with tag {self.source['value']}"
             tmp['link'] = f"{self.confluence.base_url.replace('/rest/api', '')}/pages/viewpage.action?pageId={note['id']}"
             tmp['created_by'] = f"confluence_tag_{self.source['value']}"
-            self.new_sources.append(tmp)
+            self.found_sources.append(tmp)
         self.fields_to_update['status'] = 'relevant'
         now = datetime.now()
         formatted_now = now.strftime("%d.%m.%Y-%H:%M")
         self.fields_to_update['updated_at'] = formatted_now
-        return {'success': True, 'fields_to_update': self.fields_to_update, 'new_sources': self.new_sources}
-
-    def _check_pages_relevance(self):
-        pass
+        return {'success': True, 'fields_to_update': self.fields_to_update, 'found_sources': self.found_sources}

@@ -6,8 +6,8 @@ export const SidebarStateProvider = ({ children }) => {
 
     const getInitialSidebarState = () => {
         const temp = localStorage.getItem("sidebar-state");
-        console.log('temp', temp)
-        if (!temp) return true;
+        // console.log('temp', temp)
+        if (!temp) return false; // значение по умолчанию
         if (temp == 'default') return false;
         if (temp == 'collapsed') return true;
     };

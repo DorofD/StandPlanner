@@ -1,4 +1,4 @@
-from app.repository.queries.base_query import execute_db_query
+from app.repository.queries.base_query import execute_db_query, execute_parametrized_query
 
 
 class DBSourcesConfluencePageId():
@@ -6,10 +6,13 @@ class DBSourcesConfluencePageId():
         self.table_name = 'sources_confluence_page_id'
 
     def add_source(self, value, description='', link='', created_by=''):
+        """Возвращает int lastrowid"""
         query = f"""
-                INSERT INTO {self.table_name} ('value', 'version', 'description', 'status', 'link', 'stand_id', 'updated_at', 'created_by') VALUES('{value}', '', '{description}', 'new', '{link}', '', 'never', '{created_by}');
+                INSERT INTO sources_confluence_page_id ('value', 'version', 'description', 'status', 'link', 'stand_id', 'updated_at', 'created_by')
+                VALUES(?, ?, ?, ?, ?, ?, ?, ?);
                 """
-        return execute_db_query(query)
+        params = [value, '', description, 'new', link, '', 'never', created_by]
+        return execute_parametrized_query(query, params)
 
     def update_source_field(self, id: int, field_name: str, value: str):
         query = f"""
@@ -53,6 +56,17 @@ class DBSourcesConfluencePageId():
         query = f"""
                 SELECT * FROM {self.table_name}
                 WHERE id = {id};
+                """
+        result = execute_db_query(query)
+        if result:
+            return result[0]
+        else:
+            return False
+
+    def get_source_by_value(self, value):
+        query = f"""
+                SELECT id, value, created_by FROM {self.table_name}
+                WHERE value = {value};
                 """
         result = execute_db_query(query)
         if result:

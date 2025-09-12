@@ -4,6 +4,7 @@ from app.repository.queries.sources_confluence_tag import DBSourcesConfluenceTag
 from app.repository.queries.stands import DBStands
 from app.domain.sources import ConfluencePageIdSource, ConfluenceTagSource
 import traceback
+import json
 # logger = current_app.logger
 # logger.error(f"User failed to log in: {user['login']}")
 # logger.info(f"User is logged in: {user['login']}")
@@ -151,11 +152,65 @@ def handle_confluence_tag(source_id):
             db_source.update_source_field(
                 processed_note['id'], field_name, updated_fields[field_name])
 
-    if 'new_sources' in process_result and process_result['new_sources']:
-        child_sources = process_result['new_sources']
-        for src in child_sources:
-            db_child_source.add_source(
-                src['value'], src['description'], src['link'], src['created_by'])
+    if 'found_sources' in process_result and process_result['found_sources']:
+        found_sources = process_result['found_sources']
+
+        # добавление новых дочерних источников PageId
+        current_tag_source = db_source.get_source(source_id)
+        current_child_sources = current_tag_source['child_sources']
+        if current_child_sources:
+            current_child_sources = json.loads(current_child_sources)
+        else:
+            current_child_sources = []
+        for found_src in found_sources:
+            # удаление дубликатов, созданных не текущим ConfluenceTag
+            duplicate_source = db_child_source.get_source_by_value(
+                found_src['value'])
+            # print(duplicate_source)
+            if duplicate_source and current_tag_source['value'] in duplicate_source['created_by']:
+                delete_source(duplicate_source['id'], 'confluence_page_id')
+                current_app.logger.info(
+                    f"ConfluencePageId source with PageId {found_src['value']} was deleted due to duplication in the ConfluenceTag source with Tag {current_tag_source['value']}")
+            # добавление дочернего источника в БД и в список дочерних источников ConfluenceTag
+            exist = False
+            for existing_source in current_child_sources:
+                if existing_source['value'] == found_src['value']:
+                    exist = True
+            if not exist:
+                added_source_id = db_child_source.add_source(
+                    found_src['value'], found_src['description'], found_src['link'], found_src['created_by'])
+                current_child_sources.append(
+                    {'id': added_source_id, 'value': found_src['value']})
+        # обновление списка текущих дочерних источников
+        db_source.update_source_field(
+            current_tag_source['id'], 'child_sources', json.dumps(current_child_sources))
+
+        # удаление дочерних источников PageId, отсутствующих в найденных источниках
+        current_tag_source = db_source.get_source(source_id)
+        current_child_sources = current_tag_source['child_sources']
+        if current_child_sources:
+            current_child_sources = json.loads(current_child_sources)
+        else:
+            current_child_sources = []
+        sources_to_delete = []
+        for found_src in found_sources:
+            exist = False
+            for existing_source in current_child_sources:
+                if found_src['value'] == existing_source['value']:
+                    exist = True
+            if exist:
+                continue
+            else:
+                sources_to_delete.append(
+                    {'id': existing_source['id'], 'value': existing_source['value']})
+
+        if sources_to_delete:
+            for src_to_del in sources_to_delete:
+                delete_source(src_to_del['id'], 'confluence_page_id')
+                current_child_sources.remove(src_to_del)
+        # обновление списка текущих дочерних источников
+        db_source.update_source_field(
+            current_tag_source['id'], 'child_sources', json.dumps(current_child_sources))
 
     return True
 
@@ -164,7 +219,12 @@ def get_sources(source_type):
     if source_type == 'confluence_page_id':
         return DBSourcesConfluencePageId().get_all_sources()
     if source_type == 'confluence_tag':
-        return DBSourcesConfluenceTag().get_all_sources()
+        sources = DBSourcesConfluenceTag().get_all_sources()
+        for src in sources:
+            if src['child_sources']:
+                src['child_sources'] = json.loads(src['child_sources'])
+
+        return sources
 
 
 def change_source(source_type, source_id, fields_to_update):
@@ -189,9 +249,13 @@ def delete_source(source_id, source_type):
         if source['stand_id']:
             DBStands().delete_stand(source['stand_id'])
         DBSourcesConfluencePageId().delete_source(source_id)
-        return True
+        return source['value']
     if source_type == 'confluence_tag':
         source = DBSourcesConfluenceTag().get_source(source_id)
+        if source['child_sources']:
+            child_sources = json.loads(source['child_sources'])
+            for child_src in child_sources:
+                delete_source(child_src['id'], 'confluence_page_id')
         DBSourcesConfluenceTag().delete_source(source_id)
-        return True
+        return source['value']
     raise Exception('Unknown source_type')

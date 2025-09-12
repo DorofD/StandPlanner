@@ -7,13 +7,13 @@ class DBStands():
 
     def get_stands_list(self):
         query = f"""
-                SELECT id, name, source_type, status, updated_at, source_status FROM {self.table_name};
+                SELECT id, name, source_type, status, updated_at, created_by, source_status FROM {self.table_name};
                 """
         return execute_db_query(query)
 
     def get_stands_list_by_source_type(self, source_type):
         query = f"""
-                SELECT id, name, source_type, status, updated_at FROM {self.table_name}
+                SELECT id, name, source_type, status, updated_at, created_by FROM {self.table_name}
                 WHERE source_type = '{source_type}';
                 """
         return execute_db_query(query)

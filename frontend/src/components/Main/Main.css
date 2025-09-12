@@ -54,7 +54,7 @@ div.mainLeft2 {
 
 div.mainRight1 {
     width: 100%;
-    height: 40%;
+    height: 35%;
     box-sizing: border-box;
     display: flex;
     flex-direction: column;
@@ -64,7 +64,7 @@ div.mainRight1 {
 
 div.mainRight2 {
     width: 100%;
-    height: 60%;
+    height: 65%;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -83,12 +83,6 @@ div.mainLeftBody {
     width: 100%;
     height: 90%;
     box-sizing: border-box;
-}
-
-div.mainStandDescription {
-    height: 10%;
-    width: 65%;
-    text-align: center;
 }
 
 div.mainStandLayout {
@@ -145,6 +139,38 @@ textarea.mainStands {
     color: black;
 }
 
+div.standsManageStandAllParams {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    height: 70%;
+    width: 100%;
+}
+
+textarea.mainStandDescription {
+    padding-left: 10px;
+    padding-top: 10px;
+    font-size: large;
+    width: 100%;
+    height: 100%;
+    resize: none;
+    box-sizing: border-box;
+    margin-right: auto;
+}
+
+div.mainStandsParamsLeft {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 100%;
+    padding: 10px;
+}
+
+div.mainStandsParamsRight {
+    width: 100%;
+    height: 100%;
+    padding: 10px;
+}
 
 textarea.mainComments {
     font-size: 18px;

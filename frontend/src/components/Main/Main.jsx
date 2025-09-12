@@ -17,7 +17,7 @@ export default function Main() {
     const [renderedElement, setRenderedElement] = useState(false)
     const { messages, addMessage } = useTimedMessagesContext();
 
-    const [filterStands, setFilterStands] = useState({ status: '', source_type: '' });
+    const [filterStands, setFilterStands] = useState({ status: '', name: '' });
     const [standStatuses, setStandStatuses] = useState([['free', "Свободен"], ['busy', "Занят"], ['maintenance', "Обслуживание"], ['unknown', "Неизвестен"]])
     const [sourceTypes, setSourceTypes] = useState([['manual', "Добавлены вручную"], ['confluence_page_id', 'Confluence PageId'], ['page_idsearch',]])
 
@@ -68,26 +68,10 @@ export default function Main() {
         );
     }
 
-    // function renderFromJson(node) {
-    //     if (!node) return null;
-    //     if (typeof node === 'string') return node;
-    //     if (typeof node !== 'object') return null;
-
-    //     if ('text' in node) return node.text;
-    //     if (!('tag' in node)) return null;
-
-    //     const { tag, children = [], attrs = {} } = node;
-    //     return React.createElement(
-    //         tag,
-    //         attrs,
-    //         ...(Array.isArray(children) ? children.map(renderFromJson) : [])
-    //     );
-    // }
-
     const filteredStands = stands.filter(item => {
         return (
             (filterStands.status === '' || item.status.includes(filterStands.status)) &&
-            (filterStands.source_type === '' || item.source_type.includes(filterStands.source_type))
+            (filterStands.name === '' || item.name.includes(filterStands.name))
         );
     }
     )
@@ -119,16 +103,14 @@ export default function Main() {
 
                     {loading === 'loaded' && <>
 
-                        <Filter onClick={() => setFilterStands({ status: '', source_type: '' })} closeText="X">
+                        <Filter onClick={() => setFilterStands({ status: '', name: '' })} closeText="X">
                             <select className='filter adaptive' onChange={e => setFilterStands({ ...filterStands, status: e.target.value })}>
                                 {loading === 'loaded' && <>{<option className='' value="" selected={filterStands.status === '' && true || false}>Все статусы </option>}
                                     {standStatuses.map((type, index) => <option id={index} value={type[0]}>{type[1]}</option>)}</>}
                                 {loading === 'error' && <>{<option value="" selected={filterStands.status === '' && true || false}>Бекенд отвалился</option>}</>}
                             </select>
-                            <select className='filter adaptive' adaptive onChange={e => setFilterStands({ ...filterStands, source_type: e.target.value })}>
-                                {loading === 'loaded' && <>{<option className='' value="" selected={filterStands.status === '' && true || false}>Все источники</option>}
-                                    {sourceTypes.map((type, index) => <option id={index} value={type[0]}>{type[1]}</option>)}</>}
-                            </select>
+                            <input type="text" className="filter mainStandsFilter" placeholder="Название"
+                                onChange={e => setFilterStands({ ...filterStands, name: e.target.value })} value={filterStands.name} />
                         </Filter>
                     </>}
                 </div>
@@ -159,46 +141,55 @@ export default function Main() {
                     <div className="mainStandParams">
                         <div className="standsManageStand">
                             <div className="standsManageStandTopLabel">{pickedStand.name}</div>
-                            <div className="changeStandParams">
-                                <div className="param-row">
-                                    <div className="param-key">Статус</div>
-                                    <div>{pickedStand.status}</div>
+                            <div className="standsManageStandAllParams">
+                                <div className="mainStandsParamsLeft">
+                                    <div className="param-row">
+                                        <div className="param-key">Статус</div>
+                                        <div>{pickedStand.status}</div>
+                                    </div>
+                                    <div className="param-row">
+                                        <div className="param-key">Источник</div>
+                                        <div>{pickedStand.source_type || pickedStand.id && "Отсутствует" || ""}</div>
+                                    </div>
+                                    <div className="param-row">
+                                        <div className="param-key">Кем создан</div>
+                                        <div>{pickedStand.created_by || pickedStand.id && "Неизвестно" || ""}</div>
+                                    </div>
+                                    <div className="param-row">
+                                        <div className="param-key">Статус источника</div>
+                                        <div>{pickedStand.source_status || pickedStand.id && !pickedStand.source_status && "Отсутствует"}</div>
+                                    </div>
+                                    <div className="param-row">
+                                        <div className="param-key">Последнее обновление</div>
+                                        <div>{pickedStand.updated_at === "never" && "Отсутствует" || pickedStand.updated_at}</div>
+                                    </div>
+                                    <div className="param-row">
+                                        <div className="param-key">Ссылка на страницу стенда</div>
+                                        {console.log('link is:', standInfo.source_link)}
+                                        <div>{standInfo.source_link && <div className="sourcesIconsContainer">
+                                            Доступна
+                                            <div className="iconWithTooltip" onClick={handleCopy}>
+                                                <CopyIcon className="externalLinkIconStyle" />
+                                                <span className="tooltip">Скопировать ссылку</span>
+                                            </div>
+                                            <div className="iconWithTooltip" onClick={handleOpen}>
+                                                <ExternalLinkIcon className="externalLinkIconStyle" />
+                                                <span className="tooltip">Открыть ссылку в новом окне</span>
+                                            </div>
+                                        </div> || pickedStand.id && "Отсутствует" || ""}</div>
+                                    </div>
                                 </div>
-                                <div className="param-row">
-                                    <div className="param-key">Источник</div>
-                                    <div>{pickedStand.source_type || pickedStand.id && "Отсутствует" || ""}</div>
+                                <div className="mainStandsParamsRight">
+                                    <textarea name="newStand"
+                                        maxLength={4000}
+                                        placeholder='Описание'
+                                        className="mainStandDescription"
+                                        value={standInfo.description}
+                                    >
+                                    </textarea>
                                 </div>
-                                <div className="param-row">
-                                    <div className="param-key">Статус источника</div>
-                                    <div>{pickedStand.source_status || pickedStand.id && !pickedStand.source_status && "Отсутствует"}</div>
-                                </div>
-                                <div className="param-row">
-                                    <div className="param-key">Последнее обновление</div>
-                                    <div>{pickedStand.updated_at === "never" && "Отсутствует" || pickedStand.updated_at}</div>
-                                </div>
-                                <div className="param-row">
-                                    <div className="param-key">Ссылка на страницу стенда</div>
-                                    {console.log('link is:', standInfo.source_link)}
-                                    <div>{standInfo.source_link && <div className="sourcesIconsContainer">
-                                        Доступна
-                                        <div className="iconWithTooltip" onClick={handleCopy}>
-                                            <CopyIcon className="externalLinkIconStyle" />
-                                            <span className="tooltip">Скопировать ссылку</span>
-                                        </div>
-                                        <div className="iconWithTooltip" onClick={handleOpen}>
-                                            <ExternalLinkIcon className="externalLinkIconStyle" />
-                                            <span className="tooltip">Открыть ссылку в новом окне</span>
-                                        </div>
-                                    </div> || "Отсутствует"}</div>
-                                </div>
+
                             </div>
-                            <textarea name="newStand"
-                                maxLength={4000}
-                                placeholder='Описание'
-                                className="manageStand description"
-                                value={standInfo.description}
-                            >
-                            </textarea>
                         </div>
 
                     </div>
