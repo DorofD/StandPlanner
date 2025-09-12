@@ -77,7 +77,7 @@ export default function Main() {
     )
     const handleCopy = () => {
         if (navigator.clipboard && navigator.clipboard.writeText) {
-            navigator.clipboard.writeText(LINK)
+            navigator.clipboard.writeText(pickedStand.source_link)
                 .then(() => addMessage("Ссылка скопирована!", 'success', 2400))
                 .catch(() => addMessage("Ошибка при копировании ссылки", 'error', 2400));
         } else {
