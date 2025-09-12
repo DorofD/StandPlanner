@@ -25,10 +25,10 @@ class ConfluenceAPI:
         Возвращает словарь
         {'title': str, 'version': str, 'layout': str}
         """
-        api_path = f"/content/{str(page_id)}?expand=body.export,version"
+        api_path = f"/content/{str(page_id)}?expand=body.export_view,version"
         data = self._request_get(api_path)
 
-        layout = data['body']['export']['value']
+        layout = data['body']['export_view']['value']
         result = {
             'title': data['title'],
             'version': f"{data['version']['when']}_{data['version']['number']}",
