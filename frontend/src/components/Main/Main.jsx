@@ -25,7 +25,6 @@ export default function Main() {
         try {
             setLoading('loading')
             const stands = await apiGetStands()
-            console.log(stands)
             setStands(stands)
             setLoading('loaded')
         } catch (err) {
@@ -165,7 +164,6 @@ export default function Main() {
                                     </div>
                                     <div className="param-row">
                                         <div className="param-key">Ссылка на страницу стенда</div>
-                                        {console.log('link is:', standInfo.source_link)}
                                         <div>{standInfo.source_link && <div className="sourcesIconsContainer">
                                             Доступна
                                             <div className="iconWithTooltip" onClick={() => handleCopy(standInfo.source_link)}>

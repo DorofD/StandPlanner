@@ -5,7 +5,7 @@ from app.repository.queries.users import DBUsers
 def signin(login: str, password: str):
     user_note = DBUsers().get_user(login)
     if not user_note:
-        return False
+        return {'success': False, 'error':  f"User '{login}' not found in local DatabBase"}
     return User().signin(login, password, user_note[0])
 
 

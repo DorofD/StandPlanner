@@ -15,6 +15,8 @@ export default function Login() {
     const { userRole, setUserRole } = useAuthContext()
     const { userId, setUserId } = useAuthContext()
     const { accessToken, setaccessToken } = useAuthContext()
+    const { userAuthType, setUserAuthType } = useAuthContext()
+    const { userLdapInfo, setUserLdapInfo } = useAuthContext()
     const [status, setStatus] = useState('')
     const navigate = useNavigate();
     async function getAuth(e) {
@@ -33,8 +35,23 @@ export default function Login() {
                 setUserName(user.body.login)
                 setUserRole(user.body.role)
                 setUserId(user.body.id)
+                setUserAuthType(user.body.auth_type)
+                if (user.body.auth_type === 'ldap') {
+                    // console.log(user.body.auth_type)
+                    // console.log(user.body.displayName)
+                    // console.log(user.body.givenName)
+                    // console.log(user.body.sn)
+                    // console.log(user.body.mail)
+                    setUserLdapInfo({
+                        displayName: user.body.displayName,
+                        givenName: user.body.givenName,
+                        sn: user.body.sn,
+                        mail: user.body.mail,
+                    })
+                }
                 setaccessToken(user.access_token)
                 localStorage.setItem('accessToken', user.access_token);
+                // console.log(userLdapInfo)
                 toogleAuth()
                 navigate('/');
             } else {

@@ -3,7 +3,6 @@ import os
 from ldap3 import Connection, ALL_ATTRIBUTES
 from dotenv import load_dotenv
 import traceback
-# from app.repository.queries.users import get_user_db, get_users_db, add_user_db, delete_user_db, change_user_db
 
 
 class User():
@@ -18,50 +17,51 @@ class User():
 
     def ldap_auth(self, login: str, password: str):
         load_dotenv('.env')
-        # реализовать добавление информации о доменном пользователе в вывод ldap
         try:
             conn = Connection(server=self.server, user=self.user_cn,
                               auto_bind=True, password=self.password)
 
             search_filter = f'(sAMAccountName={login})'
             attributes_to_search = [
-                "sAMAccountName",
-                "userPrincipalName",
+                # "sAMAccountName",
+                # "userPrincipalName",
                 "displayName",
                 "givenName",
                 "sn",
                 "mail",
-                "telephoneNumber",
-                "department",
-                "title",
-                "memberOf",
-                "distinguishedName",
-                "objectGUID",
-                "whenCreated",
-                "whenChanged",
+                # "telephoneNumber",
+                # "department",
+                # "title",
+                # "memberOf,
             ]
+
+            # отсеивание атрибутов, отсутствующих в схеме LDAP сервера
+            schema = conn.server.schema
+            available_attrs = list(schema.attribute_types.keys())
+            filtered_attrs = [
+                attr for attr in attributes_to_search if attr in available_attrs]
+
             conn.search(search_base=self.search_base,
                         search_filter=search_filter,
-                        attributes=attributes_to_search)
+                        attributes=filtered_attrs)
             if not conn.entries:
-                return {'success': False, 'error': f"User {login} not found"}
-
-            entry = conn.entries[0]
-            user_dn = entry.distinguishedName.value
+                return {'success': False, 'error':  f"User '{login}' not found in LDAP"}
 
             entry = json.loads(conn.entries[0].entry_to_json())
             user_dn = entry['dn']
 
-            # for i in attributes_to_search:
-            #     print(i, '---', entry['attributes'][i])
-            conn = Connection(server=self.server, user=user_dn,
-                              password=password, raise_exceptions=True)
+            conn = Connection(server=self.server,
+                              user=user_dn, password=password)
             if conn.bind():
-                return True
-            return False
+                for atr in entry['attributes']:
+                    # аттрибуты из ldap приходят в виде списков
+                    if entry['attributes'][atr] and type(entry['attributes'][atr]) == list:
+                        entry['attributes'][atr] = entry['attributes'][atr][0]
+                return {'success': True, 'user_data': entry['attributes']}
+            return {'success': False, 'error': f"Bind failed for user {login}"}
         except Exception as exc:
             print(exc, '--', traceback.format_exc())
-            return False
+            return {'success': False, 'error': f"Exception in ldap_auth: {exc} -- {traceback.format_exc()}"}
 
     def get_password_hash(self, password):
         pass
@@ -69,15 +69,21 @@ class User():
     def local_auth(self, login: str, password: str):
         pass
 
-    def signin(self, login, password, user):
-        if user['auth_type'] == 'ldap':
-            if self.ldap_auth(login, password):
-                return {'id': user['id'], 'login': login, 'role': user['role']}
-            return False
-        elif user['auth_type'] == 'local':
-            if password == user['password']:
-                return {'id': user['id'], 'login': login, 'role': user['role']}
-            return False
-        else:
-            raise Exception(
-                f"Unknown user auth_type in function signin: {user['auth_type']}")
+    def signin(self, login, password, user_note):
+        if user_note['auth_type'] == 'ldap':
+            auth_result = self.ldap_auth(login, password)
+            if auth_result['success']:
+                auth_result['user_data']['id'] = user_note['id']
+                auth_result['user_data']['login'] = login
+                auth_result['user_data']['role'] = user_note['role']
+                auth_result['user_data']['auth_type'] = user_note['auth_type']
+            return auth_result
+        if user_note['auth_type'] == 'local':
+            if password == user_note['password']:
+                user_data = {'id': user_note['id'],
+                             'login': login,
+                             'role': user_note['role'],
+                             'auth_type': user_note['auth_type']}
+                return {'success': True, 'user_data': user_data}
+            return {'success': False, 'error': "Wrong password"}
+        return {'success': False, 'error': f"User {login} has unknown auth_type - {user_note['auth_type']}"}

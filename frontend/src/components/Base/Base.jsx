@@ -1,7 +1,6 @@
 import React, { Component, useState, useEffect } from "react";
 import "./Base.css";
 import { NavLink as NavLinkBase, Outlet, useLocation } from "react-router-dom";
-import Button from "../Button/Button";
 import TimedMessages from "../TimedMessages/TimedMessages";
 import { useTimedMessagesContext } from "../../hooks/useTimedMessagesContext";
 import { useAuthContext } from "../../hooks/useAuthContext";
@@ -14,6 +13,7 @@ import ManualIcon from "../../svg_images/Manual.svg"
 import ExpandRightIcon from "../../svg_images/ExpandRight.svg"
 import ExpandLeftIcon from "../../svg_images/ExpandLeft.svg"
 import LogoutIcon from "../../svg_images/Logout.svg"
+import UserIcon from "../../svg_images/User.svg"
 const NavLink = React.forwardRef((props, ref) => {
     return (
         <NavLinkBase
@@ -26,10 +26,11 @@ const NavLink = React.forwardRef((props, ref) => {
 
 export default function Base() {
     const { isAuthenticated, toogleAuth } = useAuthContext();
-    const { userName, userRole, accessToken } = useAuthContext();
+    const { userName, userRole, userId, userAuthType, userLdapInfo, accessToken } = useAuthContext();
     const { messages, addMesage } = useTimedMessagesContext();
     const { sidebarCollapsed, setSidebarCollapsed } = useSidebarState();
-    const location = useLocation();
+    const [userHintActive, setUserHintActive] = useState(false);
+    // const location = useLocation();
     useEffect(() => {
         const mediaQuery = window.matchMedia('(min-width: 992px)');
 
@@ -54,9 +55,60 @@ export default function Base() {
         <>
             <div className="baseHeader" id="modal-root">
                 <ColorSchemeSelector></ColorSchemeSelector>
-                <div className="baseUserName">{userName}</div>
+                <div className={userHintActive && "baseUserIconContainer activated" || "baseUserIconContainer"}>
+                    <UserIcon className="baseUserIconStyle" onClick={() => setUserHintActive((prev) => !prev)} />
+                </div>
+                {/* <div className="baseUserName">{userName}</div> */}
+                <div className="baseUserName">
+                    {userAuthType === 'ldap' && `${userLdapInfo.givenName} ${userLdapInfo.sn[0]}.` || userName}
+                </div>
+                {userHintActive && userAuthType === 'ldap' && <div className="baseUsernameTooltip">
+                    <b>{userLdapInfo.displayName}</b>
+                    <div className="base-param-row">
+                        <div className="base-param-key">Логин</div>
+                        <div>{userName}</div>
+                    </div>
+                    <div className="base-param-row">
+                        <div className="base-param-key">E-mail</div>
+                        <div>{userLdapInfo.mail}</div>
+                    </div>
+                    <div className="base-param-row">
+                        <div className="base-param-key">Аутентификация</div>
+                        <div>LDAP</div>
+                    </div>
+                    <div className="base-param-row">
+                        <div className="base-param-key">Роль</div>
+                        <div>{userRole}</div>
+                    </div>
+                    <div className="base-param-row">
+                        <div className="base-param-key">ID в сервисе</div>
+                        <div>{userId}</div>
+                    </div>
+                </div>}
+                {userHintActive && userAuthType === 'local' && <div className="baseUsernameTooltip">
+                    <b>{userName}</b>
+                    <div className="base-param-row">
+                        <div className="base-param-key">Логин</div>
+                        <div>{userName}</div>
+                    </div>
+                    <div className="base-param-row">
+                        <div className="base-param-key">E-mail</div>
+                        <div>Отсутствует</div>
+                    </div>
+                    <div className="base-param-row">
+                        <div className="base-param-key">Аутентификация</div>
+                        <div>Локальная</div>
+                    </div>
+                    <div className="base-param-row">
+                        <div className="base-param-key">Роль</div>
+                        <div>{userRole}</div>
+                    </div>
+                    <div className="base-param-row">
+                        <div className="base-param-key">ID в сервисе</div>
+                        <div>{userId}</div>
+                    </div>
+                </div>}
                 <div className="baseLogoutIconContainer" onClick={toogleAuth}><LogoutIcon className='baseLogoutIconStyle '></LogoutIcon></div>
-
             </div>
             <div className="baseBody">
                 <div className={!sidebarCollapsed && "baseSidebar" || "baseSidebar collapsed"}>
