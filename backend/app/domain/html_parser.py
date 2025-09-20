@@ -140,7 +140,7 @@ import json
 
 class HTMLParser():
     def __init__(self, page_layout):
-        print(type(page_layout))
+        # print(type(page_layout))
         self.soup = BeautifulSoup(page_layout, 'html.parser')
         self.remove_styles_and_classes(self.soup)
 

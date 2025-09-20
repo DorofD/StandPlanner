@@ -6,5 +6,5 @@ __pycache__
 *.db
 dist
 *.log
-./backend/data
+backend/data
 *.sql

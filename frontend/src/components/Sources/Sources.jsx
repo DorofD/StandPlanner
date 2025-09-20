@@ -447,7 +447,8 @@ export default function Sources() {
                                 </div>
                                 <div className="param-row">
                                     <div className="param-key">Кем создан</div>
-                                    <div>{pickedSource.stand_id && pickedSource.created_by || "Неизвестно"}</div>
+                                    {console.log(pickedSource.created_by)}
+                                    <div>{pickedSource.created_by && pickedSource.created_by || "Неизвестно"}</div>
                                 </div>
                                 <div className="param-row">
                                     <div className="param-key">Созданный стенд</div>

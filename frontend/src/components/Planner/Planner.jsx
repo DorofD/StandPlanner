@@ -181,12 +181,12 @@ export default function Planner() {
   }
 
 
-  useEffect(() => {
-    getStands()
-    getReservations()
-    const interval = setInterval(getReservations, 60000);
-    return () => clearInterval(interval);
-  }, [])
+  // useEffect(() => {
+  //   getStands()
+  //   getReservations()
+  //   const interval = setInterval(getReservations, 60000);
+  //   return () => clearInterval(interval);
+  // }, [])
 
 
   async function addReservation() {

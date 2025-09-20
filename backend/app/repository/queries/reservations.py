@@ -87,7 +87,3 @@ def delete_reservation_db(id: int):
             WHERE id = '{id}'
             """
     return execute_db_query(query)
-
-
-# print(add_reservation_db(1, 2, '10:00', '2 часа нахуй', 'planned'))
-# print(change_reservation_job_db(3, 'start_job', 'adfgsedgertgzdf'))

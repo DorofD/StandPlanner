@@ -1,12 +1,52 @@
 services:
+
   backend:
     image: sp-backend:latest
+    container_name: sp-backend
     volumes:
       - ./data:/app/data
+    depends_on:
+      - postgres
     ports:
       - 5000:5000
+    restart: always
+    depends_on:
+      - postgres
+
+
+  postgres:
+    image: postgres:16
+    container_name: sp-postgres
+    environment:
+      POSTGRES_DB: sp-db
+      POSTGRES_USER: sp-db-user
+      POSTGRES_PASSWORD: sp-db-password
+    volumes:
+        -./postgres_data:/var/lib/postgresql/data
+    # ports:
+      # - "5480:5432"
+    restart: always
+
 
   frontend:
     image: sp-frontend:latest
+    container_name: sp-frontend
+    volumes:
+      - ./nginx/conf.d:/etc/nginx/conf.d
+      - ./nginx/ssl:/etc/nginx/ssl
+      - ./nginx/logs:/var/log/nginx
     ports:
       - 80:80
+      - 443:443
+    restart: always
+  
+
+  redis:
+    image: redis:7.2
+    container_name: sp-redis
+    restart: always
+    # ports:
+    #   - "6379:6379"
+    volumes:
+      - ./redis_data:/data
+    command: ["redis-server", "--appendonly", "yes", "--appendfsync", "everysec"]

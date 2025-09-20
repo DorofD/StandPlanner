@@ -15,10 +15,10 @@ export default function StandCard({ id, name, source_type, status, onClick, pick
                     <div className="standCardBottom">
                         <p className="standCardValueFaded">Статус: </p>
 
-                        {status === "free" && <div className={"paramValue success-colors"}>Свободен</div> ||
-                            status === "busy" && <div className={"paramValue info-colors"}>Занят</div> ||
-                            status === "unknown" && <div className={"paramValue warning-colors"}>Неизвестен</div> ||
-                            status === "maintenance" && <div className={"paramValue info-colors"}>Занят</div>}
+                        {status === "Free" && <div className={"paramValue success-colors"}>Свободен</div> ||
+                            status === "Busy" && <div className={"paramValue info-colors"}>Занят</div> ||
+                            status === "Unknown" && <div className={"paramValue warning-colors"}>Неизвестен</div> ||
+                            status === "Maintenance" && <div className={"paramValue info-colors"}>Занят</div>}
 
                     </div>
                 </div>

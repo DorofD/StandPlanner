@@ -35,6 +35,7 @@ p.logDatetime {
 
 .logContentPicked {
     white-space: pre-wrap;
+    user-select: text;
     /* Учитывает переносы строк и пробелы в тексте */
     overflow: hidden;
     text-overflow: ellipsis;

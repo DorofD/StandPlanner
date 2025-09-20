@@ -1,17 +1,50 @@
 from app.repository.queries.stands import DBStands
+from app.redis_repository.stands import RedisStands
+import uuid
+import sqlite3
 
 
 def get_stands():
-    return DBStands().get_stands_list()
+    stands_list = DBStands().get_stands_list()
+    # redis_stands_list = RedisStands().get_all_stands()
+    for i in range(len(stands_list)):
+        r_stand = RedisStands(
+        ).get_stand(stands_list[i]['name'])
+        if r_stand:
+            status = r_stand['status']
+        else:
+            status = 'Unknown'
+        stands_list[i]['status'] = status
+    return stands_list
 
 
 def get_stand(id):
-    return DBStands().get_stand(id)
+    stand = DBStands().get_stand(id)
+    if not stand:
+        return stand
+    r_stand = RedisStands(
+    ).get_stand(stand['name'])
+    if r_stand:
+        status = r_stand['status']
+    else:
+        status = 'Unknown'
+    stand['status'] = status
+    return stand
 
 
 def add_stand(name: str, description: str, current_user):
-    DBStands().add_stand(name=name, source_type='manual',
-                         status='unknown', description=description, created_by=current_user)
+    stand_uuid = str(uuid.uuid4())
+    try:
+        DBStands().add_stand(stand_uuid, name=name, source_type='manual',
+                             description=description, created_by=current_user)
+    except sqlite3.IntegrityError as e:
+        if "UNIQUE constraint failed: stands.uuid" in str(e):
+            stand_uuid = str(uuid.uuid4())
+            DBStands().add_stand(stand_uuid, name=name, source_type='manual',
+                                 description=description, created_by=current_user)
+        else:
+            raise
+    RedisStands().set_stand(stand_uuid)
 
 
 def delete_stand(id: int):

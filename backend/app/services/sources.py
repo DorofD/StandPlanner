@@ -2,9 +2,12 @@ from flask import current_app
 from app.repository.queries.sources_confluence_page_id import DBSourcesConfluencePageId
 from app.repository.queries.sources_confluence_tag import DBSourcesConfluenceTag
 from app.repository.queries.stands import DBStands
+from app.redis_repository.stands import RedisStands
 from app.domain.sources import ConfluencePageIdSource, ConfluenceTagSource
 import traceback
 import json
+import uuid
+import sqlite3
 # logger = current_app.logger
 # logger.error(f"User failed to log in: {user['login']}")
 # logger.info(f"User is logged in: {user['login']}")
@@ -101,8 +104,35 @@ def handle_confluence_page_id(source_id):
             # fields_to_update['version']
             # fields_to_update['updated_at']
             # print(stand_data['name'])
-            added_stand_id = db_stands.add_stand(
-                stand_data['name'], source_type, "unknown", stand_data['description'], '', stand_data['updated_at'], 'relevant', stand_data['source_link'], stand_data['created_by'])
+            stand_uuid = str(uuid.uuid4())
+            try:
+                added_stand_id = db_stands.add_stand(
+                    stand_uuid,
+                    stand_data['name'],
+                    source_type,
+                    stand_data['description'],
+                    '',
+                    stand_data['updated_at'],
+                    'relevant',
+                    stand_data['source_link'],
+                    stand_data['created_by']
+                )
+            except sqlite3.IntegrityError as e:
+                if "UNIQUE constraint failed: stands.uuid" in str(e):
+                    stand_uuid = str(uuid.uuid4())
+                    added_stand_id = db_stands.add_stand(
+                        stand_uuid,
+                        stand_data['name'],
+                        source_type,
+                        stand_data['description'],
+                        '',
+                        stand_data['updated_at'],
+                        'relevant',
+                        stand_data['source_link'],
+                        stand_data['created_by']
+                    )
+                else:
+                    raise
             if not added_stand_id:
                 raise Exception(
                     'Fail to add stand')
@@ -110,6 +140,7 @@ def handle_confluence_page_id(source_id):
                 added_stand_id, stand_data['page_layout'])
             db_source.set_source_stand_id(
                 processed_note['id'], added_stand_id)
+            RedisStands().set_stand(stand_uuid)
 
         else:
             for field_name in stand_data:
@@ -167,7 +198,7 @@ def handle_confluence_tag(source_id):
             duplicate_source = db_child_source.get_source_by_value(
                 found_src['value'])
             # print(duplicate_source)
-            if duplicate_source and current_tag_source['value'] in duplicate_source['created_by']:
+            if duplicate_source and current_tag_source['value'] not in duplicate_source['created_by']:
                 delete_source(duplicate_source['id'], 'confluence_page_id')
                 current_app.logger.info(
                     f"ConfluencePageId source with PageId {found_src['value']} was deleted due to duplication in the ConfluenceTag source with Tag {current_tag_source['value']}")
@@ -246,9 +277,9 @@ def change_source(source_type, source_id, fields_to_update):
 def delete_source(source_id, source_type):
     if source_type == 'confluence_page_id':
         source = DBSourcesConfluencePageId().get_source(source_id)
+        DBSourcesConfluencePageId().delete_source(source_id)
         if source['stand_id']:
             DBStands().delete_stand(source['stand_id'])
-        DBSourcesConfluencePageId().delete_source(source_id)
         return source['value']
     if source_type == 'confluence_tag':
         source = DBSourcesConfluenceTag().get_source(source_id)

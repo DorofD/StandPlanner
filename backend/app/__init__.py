@@ -12,6 +12,8 @@ import traceback
 
 from app.domain.scheduler import Scheduler
 from app.repository.db_model import create_db
+from app.repository.queries.stands import DBStands
+from app.redis_repository.stands import RedisStands
 from app.services.users import add_user, get_users
 from app.errors.reservation_errors import IntersectionError, ReservationError
 scheduler = None
@@ -58,11 +60,8 @@ def create_app():
         traceback.print_exc()
         current_app.logger.error(
             f"Unknown error: {str(error)} | {traceback.format_exc()}")
-        # current_app.logger.exception(
-        #     f'Backend has unknown error: {error}')
-
         return jsonify({'message': f'Backend error: {error}'}), 500
-        # return jsonify({'success': True, 'message': 'Source has ben successfully processed'}), 200, {'ContentType': 'application/json'}
+
     handler = logging.FileHandler('data/app.log')
     formatter = logging.Formatter(
         '%(asctime)s %(levelname)s: %(message)s', datefmt='%Y-%m-%d %H:%M:%S')
@@ -94,5 +93,13 @@ def create_app():
     users = get_users()
     if not users:
         add_user('admin', 'local', 'admin', 'admin')
+
+    db_uuids_dict = DBStands().get_uuids_to_names_dict()
+    redis_stands = RedisStands().get_all_stands()
+    for stand in redis_stands:
+        if stand['stand_uuid'] not in db_uuids_dict:
+            RedisStands().delete_stand(stand['stand_uuid'])
+    for stand_uuid in db_uuids_dict:
+        RedisStands().set_stand(stand_uuid, db_uuids_dict[stand_uuid])
 
     return app
