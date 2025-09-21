@@ -50,3 +50,15 @@ services:
     volumes:
       - ./redis_data:/data
     command: ["redis-server", "--appendonly", "yes", "--appendfsync", "everysec"]
+
+
+  rocket-bot:
+    image: sp-rocket-bot:latest
+    container_name: sp-rocket-bot
+    depends_on:
+      - backend
+    ports:
+      - 5000:5000
+    restart: always
+    depends_on:
+      - postgres

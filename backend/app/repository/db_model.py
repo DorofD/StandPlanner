@@ -181,5 +181,18 @@ def create_db():
     """
     cursor.execute(query)
 
+    query = """
+        CREATE TABLE IF NOT EXISTS sources_confluence_tag (
+            id SERIAL PRIMARY KEY,
+            value TEXT NOT NULL UNIQUE,
+            description TEXT,
+            status TEXT,
+            child_sources TEXT,
+            updated_at TEXT,
+            created_by TEXT
+        );
+    """
+    cursor.execute(query)
+
     cursor.close()
     conn.close()

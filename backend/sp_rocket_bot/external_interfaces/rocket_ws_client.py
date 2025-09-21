@@ -1,16 +1,13 @@
 import os
-import requests
 import json
-import threading
-import time
 import uuid
 from websocket import WebSocketApp
 from dotenv import load_dotenv
 
 
 class RocketChatWSClient:
-    def __init__(self, channels):
-        load_dotenv('.env')
+    def __init__(self):
+        load_dotenv('.env.rocket_bot')
         self.base_url = os.environ['ROCKET_BASE_URL']
         self.user_id = os.environ['ROCKET_USER_ID']
         self.user_token = os.environ['ROCKET_USER_TOKEN']
@@ -30,10 +27,8 @@ class RocketChatWSClient:
         self.ws_login_id = ''
         self.connected = False
         self.ws = None
-        self.channels_to_sub = channels
-        self.subscribes = []
-        self.room_id_to_channel_dict = {}
-        self.sub_id_to_channel_dict = {}
+        self.channels_to_sub = []
+        self.room_id_to_channel_dict = []
 
     def on_open(self, ws):
         print("WebSocket: соединение открыто")
@@ -85,22 +80,15 @@ class RocketChatWSClient:
                         "id": sub_id,
                         "name": "stream-room-messages",
                         "params": [
-                            channel['id'],
+                            channel['rid'],
                             False
                         ]
                     }))
-                    self.subscribes.append({'channel_name': channel['name'],
-                                            'channel_id': channel['id'],
-                                            'sub_id': sub_id,
-                                            })
-                    self.room_id_to_channel_dict[channel['id']] = {'channel_name': channel['name'],
-                                                                   'channel_id': channel['id'],
-                                                                   'sub_id': sub_id,
-                                                                   }
-                    self.sub_id_to_channel_dict[sub_id] = {'channel_name': channel['name'],
-                                                           'channel_id': channel['id'],
-                                                           'sub_id': sub_id
-                                                           }
+
+                    self.room_id_to_channel_dict[channel['rid']] = {'channel_name': channel['name'],
+                                                                    'channel_id': channel['rid'],
+                                                                    'sub_id': sub_id,
+                                                                    }
 
         # Получаем сообщения из комнаты
         if msg.get("collection") == "stream-room-messages":
@@ -121,7 +109,8 @@ class RocketChatWSClient:
         print(f"WebSocket: ошибка: {error}")
         self.connected = False
 
-    def connect(self):
+    def connect(self, target_channels):
+        self.channels_to_sub = target_channels
         self.ws = WebSocketApp(
             self.ws_url + "/websocket",
             header=[f"{k}: {v}" for k, v in self.headers.items()],
@@ -130,8 +119,6 @@ class RocketChatWSClient:
             on_close=self.on_close,
             on_error=self.on_error
         )
-        # Запускаем статус-принтер в отдельном потоке
-        # Запускаем основной цикл WebSocket
         self.ws.run_forever(ping_interval=20, ping_payload='PING', ping_timeout=10,
                             sslopt={"cert_reqs": 0 if not self.verify_cert else 2})
 
@@ -152,6 +139,12 @@ class RocketChatWSClient:
 #         channels_to_sub.append({'name': i['fname'], 'id': i['_id']})
 #     # break
 
-
-# client = RocketChatWSClient(channels_to_sub)
-# client.connect()
+channels = [
+    {'rid': '68ce03dbf531ef2b877926b6',
+            'name': 'sp_test_private_channel', 'type': 'group'},
+    {'rid': '6890d0fd169b88fc700cc5fa', 'name': 'sp_test', 'type': 'channel'},
+    {'rid': '68cd4b11de482d41e3b557ce', 'name': 'sp_test2', 'type': 'channel'},
+    {'rid': '68cd4b4d70869ceac01f61e0', 'name': 'sp_test3', 'type': 'channel'}
+]
+client = RocketChatWSClient()
+client.connect(channels)

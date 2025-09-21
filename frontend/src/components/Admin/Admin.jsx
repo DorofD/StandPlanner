@@ -8,9 +8,9 @@ import { useSidebarState } from "../../hooks/useSidebarStateContext";
 import UsersGearIcon from "../../svg_images/UsersGear.svg"
 import ConfluenceIcon from "../../svg_images/Confluence.svg"
 import BareMetalIcon from "../../svg_images/BareMetal.svg"
-import BotIcon from "../../svg_images/Bot.svg"
 import CatalogIcon from "../../svg_images/Catalog.svg"
 import PythonGearIcon from "../../svg_images/PythonGear.svg"
+import RocketChatIcon from "../../svg_images/RocketChat.svg"
 
 const NavLink = React.forwardRef((props, ref) => {
     return (
@@ -54,12 +54,13 @@ export default function Admin() {
                             <BareMetalIcon className="baseSidebarIcon"></BareMetalIcon>}
                         {sidebarCollapsed && <div className="baseSidebarTextDiv">Стенды</div>}
                     </NavLink>
-                    <NavLink to="/admin/bots" >
+                    <NavLink to="/admin/rocket" >
                         {!sidebarCollapsed &&
-                            <div className="baseHrefText">Боты</div>
+                            <div className="baseHrefText">Rocket.Chat</div>
                             ||
-                            <BotIcon className="baseSidebarIcon"></BotIcon>}
-                        {sidebarCollapsed && <div className="baseSidebarTextDiv">Боты</div>}
+                            <RocketChatIcon className="baseSidebarIcon"></RocketChatIcon>}
+                        {/* <BotIcon className="baseSidebarIcon"></BotIcon>} */}
+                        {sidebarCollapsed && <div className="baseSidebarTextDiv">Rocket.Chat</div>}
                     </NavLink>
                     <NavLink to="/admin/logs" >
                         {!sidebarCollapsed &&

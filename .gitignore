@@ -2,6 +2,7 @@ node_modules
 dist/main.js
 venv
 .env
+.env.rocket_bot
 __pycache__
 *.db
 dist

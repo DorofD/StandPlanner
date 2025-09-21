@@ -6,7 +6,7 @@ from dotenv import load_dotenv
 
 class RedisExecutor:
     def __init__(self):
-        load_dotenv('.env')
+        load_dotenv('.env.rocket_bot')
         redis_host = os.environ['REDIS_HOST']
         redis_port = os.environ['REDIS_PORT']
         self.redis_url = f"redis://{redis_host}:{redis_port}/0"

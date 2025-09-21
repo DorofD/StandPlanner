@@ -7,7 +7,7 @@ import Planner from "./Planner/Planner"
 import Admin from "./Admin/Admin"
 import About from "./About/About"
 import Users from "./Users/Users";
-import Bots from "./Bots/Bots";
+import Rocket from "./Rocket/Rocket";
 import Logs from "./Logs/Logs";
 import Apscheduler from "./Apscheduler/Apscheduler";
 import Login from "./Login/Login";
@@ -31,7 +31,7 @@ export default function App() {
                             <Route path="/admin/users" element={<Users />} />
                             <Route path="/admin/sources" element={<Sources />} />
                             <Route path="/admin/stands" element={<Stands />} />
-                            <Route path="/admin/bots" element={<Bots />} />
+                            <Route path="/admin/rocket" element={<Rocket />} />
                             <Route path="/admin/logs" element={<Logs />} />
                             <Route path="/admin/apscheduler" element={<Apscheduler />} />
                             {/* <Route path="/admin/test" element={<TestComponent />} /> */}

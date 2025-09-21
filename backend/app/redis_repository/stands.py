@@ -2,10 +2,10 @@ from app.redis_repository import RedisBase
 
 
 class RedisStands(RedisBase):
-    def set_stand(self, stand_uuid, stand_name='', status='Unknown', busy_by=''):
+    def set_stand(self, stand_uuid, name='', status='Unknown', busy_by=''):
         stand_key = f'stand:{stand_uuid}'
         return self.r.hset(stand_key, mapping={
-            'stand_uuid': stand_uuid, "stand_name": stand_name, 'status': status, 'busy_by': busy_by})
+            'stand_uuid': stand_uuid, "name": name, 'status': status, 'busy_by': busy_by})
 
     def get_stand(self, stand_uuid):
         key = f'stand:{stand_uuid}'

@@ -62,17 +62,17 @@ class RocketChatAPI:
         if channels_data['channels']:
 
             for i in channels_data['channels']:
-                # print(i, '\n')
-                result.append(
-                    {'rid': i['_id'], 'name': i['fname'], 'type': 'channel'})
+                print(i, '\n')
+                # result.append(
+                #     {'rid': i['_id'], 'name': i['fname'], 'type': 'channel'})
 
         groups_data = self.get_groups()
         if groups_data['groups']:
 
             for i in groups_data['groups']:
-                # print(i, '\n')
-                result.append(
-                    {'rid': i['_id'], 'name': i['fname'], 'type': 'channel'})
+                print(i, '\n')
+                # result.append(
+                #     {'rid': i['_id'], 'name': i['fname'], 'type': 'group'})
         return result
 
 
