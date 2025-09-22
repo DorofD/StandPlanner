@@ -1,12 +1,11 @@
 import os
 import requests
-# from websocket import WebSocketApp
 from dotenv import load_dotenv
 
 
 class RocketChatAPI:
     def __init__(self):
-        load_dotenv('.env.rocket_bot')
+        load_dotenv('.env')
         self.base_url = os.environ['ROCKET_BASE_URL']
         self.user_id = os.environ['ROCKET_USER_ID']
         self.user_token = os.environ['ROCKET_USER_TOKEN']
@@ -73,9 +72,9 @@ class RocketChatAPI:
         return result
 
 
-biba = RocketChatAPI()
-for i in biba.get_all_reachable_rooms():
-    print(i)
+# biba = RocketChatAPI()
+# for i in biba.get_all_reachable_rooms():
+#     print(i)
 # channels = rocket.get_channels()
 # groups = rocket.get_groups()
 # group_messages = rocket.get_group_messages('67b876007cbd361f69bd0b22', 10)

@@ -1,12 +1,14 @@
 
 import redis
 import os
+import json
 from dotenv import load_dotenv
+from services.logger import logger
 
 
-class RedisExecutor:
+class RedisApi:
     def __init__(self):
-        load_dotenv('.env.rocket_bot')
+        load_dotenv('.env')
         redis_host = os.environ['REDIS_HOST']
         redis_port = os.environ['REDIS_PORT']
         self.redis_url = f"redis://{redis_host}:{redis_port}/0"
@@ -47,3 +49,12 @@ class RedisExecutor:
     def delete_stand_queue(self, stand_uuid):
         queue_key = f'stand:{stand_uuid}:queue'
         return self.r.delete(queue_key)
+
+    def push_message_to_queue(self, queue_name, message: dict):
+        msg_str = json.dumps(message)
+        try:
+            result = self.r.rpush(queue_name, msg_str)
+            return result > 0   # True если добавлено
+        except redis.RedisError as e:
+            logger.error(f"Redis error: {e}")
+            return False

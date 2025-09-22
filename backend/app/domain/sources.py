@@ -54,7 +54,7 @@ class ConfluencePageIdSource():
         parsed_json_layout = HTMLParser(
             page_data['layout']).convert_to_json()
         now = datetime.now()
-        formatted_now = now.strftime("%d.%m.%Y-%H:%M")
+        formatted_now = now.strftime("%Y-%m-%d %H:%M:%S")
         full_link = f"{self.confluence.base_url.replace('/rest/api', '')}/pages/viewpage.action?pageId={self.source['value']}"
 
         self.fields_to_update['status'] = 'relevant'
@@ -76,7 +76,7 @@ class ConfluencePageIdSource():
         confluence_version = self._get_page_version()
         if local_version == confluence_version:
             now = datetime.now()
-            formatted_now = now.strftime("%d.%m.%Y-%H:%M")
+            formatted_now = now.strftime("%Y-%m-%d %H:%M:%S")
             self.fields_to_update['updated_at'] = formatted_now
             self.stand_data['updated_at'] = formatted_now
 
@@ -88,7 +88,7 @@ class ConfluencePageIdSource():
                 page_data['layout']).convert_to_json()
 
             now = datetime.now()
-            formatted_now = now.strftime("%d.%m.%Y-%H:%M")
+            formatted_now = now.strftime("%Y-%m-%d %H:%M:%S")
             self.fields_to_update['updated_at'] = formatted_now
             self.fields_to_update['version'] = page_data['version']
             self.stand_data['page_layout'] = parsed_json_layout
@@ -160,6 +160,6 @@ class ConfluenceTagSource():
             self.found_sources.append(tmp)
         self.fields_to_update['status'] = 'relevant'
         now = datetime.now()
-        formatted_now = now.strftime("%d.%m.%Y-%H:%M")
+        formatted_now = now.strftime("%Y-%m-%d %H:%M:%S")
         self.fields_to_update['updated_at'] = formatted_now
         return {'success': True, 'fields_to_update': self.fields_to_update, 'found_sources': self.found_sources}

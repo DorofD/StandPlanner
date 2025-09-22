@@ -80,11 +80,13 @@ def create_app():
         app.logger.setLevel(logging.INFO)
 
     from app.routes.base_routes import main as main_blueprint
+    from app.routes.rocket import rocket_bp
     from app.routes.login import login_bp
     from app.routes.users import users_bp
     from app.routes.logs import logs_bp
 
     app.register_blueprint(main_blueprint)
+    app.register_blueprint(rocket_bp)
     app.register_blueprint(login_bp)
     app.register_blueprint(users_bp)
     app.register_blueprint(logs_bp)
