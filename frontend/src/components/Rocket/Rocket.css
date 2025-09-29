@@ -6,30 +6,184 @@ div.rocketMain {
 }
 
 div.rocketLeft {
-    width: 30%;
+    width: 25%;
     height: 100%;
-    display: flex;
+    /* display: flex;
     flex-direction: table;
     box-sizing: border-box;
-    border-right: solid 2px var(--border-color);
+    border-right: solid 2px var(--border-color); */
+}
+
+div.rocketCenter {
+    width: 35%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
 }
 
 div.rocketRight {
-    width: 70%;
+    width: 40%;
     height: 100%;
-    display: flex;
-    flex-direction: table;
+    /* display: flex; */
     box-sizing: border-box;
-    /* border: solid 2px var(--border-color); */
 }
 
 
 div.rocketLeft1 {
     width: 100%;
-    height: 10%;
+    height: 30%;
     box-sizing: border-box;
     display: flex;
-    flex-direction: row;
-    justify-content: center;
+    flex-direction: column;
+}
+
+div.rocketLeft2 {
+    width: 100%;
+    height: 40%;
+    box-sizing: border-box;
+}
+
+div.rocketLeft3 {
+    width: 100%;
+    height: 30%;
+    box-sizing: border-box;
+}
+
+
+div.rocketCenter1 {
+    width: 100%;
+    height: 20%;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    /* padding: 20px;
+    gap: 10px; */
     align-items: center;
+}
+
+div.rocketLeft2Buttons {
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    gap: 10px;
+    /* align-items: center; */
+}
+
+div.rocketCenter2 {
+    width: 100%;
+    height: 80%;
+    box-sizing: border-box;
+    display: flex;
+    overflow: auto;
+    padding: 20px;
+    flex-direction: column;
+    gap: 2px;
+    border-top: solid 3px var(--border-color);
+    border-bottom: solid 3px var(--border-color);
+    border-left: solid 1px var(--border-color);
+}
+
+div.rocketRight1 {
+    width: 100%;
+    height: 20%;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    gap: 2px;
+    align-items: center;
+}
+
+div.rocketRight2 {
+    width: 100%;
+    height: 80%;
+    box-sizing: border-box;
+    display: flex;
+    overflow: auto;
+    padding: 20px;
+    flex-direction: column;
+    gap: 2px;
+    border-top: solid 3px var(--border-color);
+    border-bottom: solid 3px var(--border-color);
+    /* border-left: solid 1px var(--border-color); */
+}
+
+
+.rocketMainTitle {
+    padding: 15px;
+    box-sizing: border-box;
+    text-align: center;
+}
+
+div.rocketParams {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    width: 100%;
+    padding: 10px;
+    height: 100%;
+    box-sizing: border-box;
+}
+
+.rocketParamTitle {
+    /* margin-left: auto;
+    margin-right: auto;
+    padding-bottom: 12px;
+    font-weight: bold; */
+    text-align: center;
+}
+
+.rocketLeft2Title {
+    text-align: center;
+}
+
+.rocketParam-row {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 2px;
+    border-bottom: 2px solid var(--border-color);
+}
+
+.rocketParam-key {
+    min-width: 170px;
+    color: var(--text-secondary-color);
+}
+
+.rocketBotCurrentSettings {
+    width: 100%;
+    height: 80%;
+    box-sizing: border-box;
+    display: flex;
+    overflow: auto;
+    padding: 20px;
+    flex-direction: column;
+    gap: 2px;
+    border-top: solid 3px var(--border-color);
+    border-bottom: solid 3px var(--border-color);
+    border-left: solid 1px var(--border-color);
+}
+
+
+.rocketHintBox {
+    box-sizing: border-box;
+    height: 100%;
+    width: 100%;
+    overflow: auto;
+    margin: 10px;
+    padding: 5px;
+    border: solid 3px var(--border-color);
+    background-color: var(--main-background-color);
+    border-radius: 12px;
+}
+
+.rocketHintBox h3 {
+    margin-top: 0;
+}
+
+.rocketHintBox p {
+    text-indent: 15px;
+    text-align: justify;
 }

@@ -21,26 +21,10 @@ class RedisApi:
         except redis.ConnectionError as e:
             return False
 
-    # def set_stand(self, stand_uuid, status='Unknown', last_modified_by=''):
-    #     stand_key = f'stand:{stand_uuid}'
-    #     return self.r.hset(stand_key, mapping={
-    #         'stand_uuid': stand_uuid, 'status': status, 'last_modified_by': last_modified_by})
     def set_stand(self, stand_uuid, status='Unknown', last_modified_by=''):
         stand_key = f'stand:{stand_uuid}'
-        try:
-            self.r.hset(stand_key, mapping={
-                'stand_uuid': stand_uuid,
-                'status': status,
-                'last_modified_by': last_modified_by
-            })
-            stored = self.r.hgetall(stand_key)
-            if stored.get('status') == status and stored.get('last_modified_by') == last_modified_by:
-                return True
-            else:
-                return False
-        except redis.ConnectionError as e:
-            logger.error(f"Redis error: {e}")
-            return False
+        return self.r.hset(stand_key, mapping={
+            'stand_uuid': stand_uuid, 'status': status, 'last_modified_by': last_modified_by})
 
     def get_stand(self, stand_uuid):
         key = f'stand:{stand_uuid}'

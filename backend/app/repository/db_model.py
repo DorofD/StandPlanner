@@ -194,5 +194,46 @@ def create_db():
     """
     cursor.execute(query)
 
+    query = """
+        CREATE TABLE IF NOT EXISTS rocket_rooms (
+            id SERIAL PRIMARY KEY,
+            rocket_id TEXT UNIQUE,
+            rocket_link TEXT UNIQUE,
+            room_type TEXT,
+            name TEXT UNIQUE,
+            fname TEXT UNIQUE,
+            stand_uuid TEXT,
+            description TEXT,
+            status TEXT,
+            updated_at TEXT,
+            FOREIGN KEY(stand_uuid) REFERENCES stands(uuid)
+        );
+    """
+    cursor.execute(query)
+
+    # """
+    # "target_rooms": [{'rid':str, 'name': str, 'stand_uuid'}, ...],
+    # "target_strings": {
+    #     "busy": [str, str, ...],
+    #     "free": [str, str, ...],
+    #     "maintenance": [str, str, ...],
+    #     "lining_up": [str, str, ...]
+    # },
+    # "reply_on_messages": bool
+    # """
+
+    query = """
+        CREATE TABLE IF NOT EXISTS rocket_bot_settings (
+            id SERIAL PRIMARY KEY,
+            target_rooms JSONB,
+            target_strings JSONB,
+            reply_on_messages BOOLEAN,
+            profile_name TEXT, 
+            active BOOLEAN,
+            updated_at TEXT
+        );
+    """
+    cursor.execute(query)
+
     cursor.close()
     conn.close()

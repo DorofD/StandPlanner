@@ -1,10 +1,5 @@
 import os
 import requests
-import json
-import threading
-import time
-import uuid
-from websocket import WebSocketApp
 from dotenv import load_dotenv
 
 
@@ -25,6 +20,7 @@ class RocketChatAPI:
             "X-Auth-Token": self.user_token
         }
         self.api_prefix = '/api/v1/'
+        print(self.verify_cert)
 
     def _request_get(self, api_path):
         """Возвращает словарь или список, декодированный из json"""
@@ -62,22 +58,23 @@ class RocketChatAPI:
         if channels_data['channels']:
 
             for i in channels_data['channels']:
-                print(i, '\n')
-                # result.append(
-                #     {'rid': i['_id'], 'name': i['fname'], 'type': 'channel'})
+                # print(i, '\n')
+                result.append(
+                    {'rid': i['_id'], 'name': i['fname'], 'type': 'channel'})
 
         groups_data = self.get_groups()
         if groups_data['groups']:
 
             for i in groups_data['groups']:
-                print(i, '\n')
-                # result.append(
-                #     {'rid': i['_id'], 'name': i['fname'], 'type': 'group'})
+                # print(i, '\n')
+                result.append(
+                    {'rid': i['_id'], 'name': i['fname'], 'type': 'group'})
         return result
 
 
-rocket = RocketChatAPI()
-rocket.get_all_reachable_rooms()
+# biba = RocketChatAPI()
+# for i in biba.get_all_reachable_rooms():
+#     print(i)
 # channels = rocket.get_channels()
 # groups = rocket.get_groups()
 # group_messages = rocket.get_group_messages('67b876007cbd361f69bd0b22', 10)

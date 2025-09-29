@@ -32,7 +32,8 @@ class RocketChatAPI:
 
     # каналы могут быть публичными или приватными
     def get_channels(self):
-        api_path = f"channels.list?count=0"
+        # api_path = f"channels.list?count=0"
+        api_path = f"channels.list"
         data = self._request_get(api_path)
         return data
 
@@ -43,7 +44,8 @@ class RocketChatAPI:
 
     # группы только приватные
     def get_groups(self):
-        api_path = f"groups.list?count=0"
+        # api_path = f"groups.list?count=0"
+        api_path = f"groups.list"
         data = self._request_get(api_path)
         return data
 
@@ -52,27 +54,89 @@ class RocketChatAPI:
         data = self._request_get(api_path)
         return data
 
-    def get_all_reachable_rooms(self):
-        result = []
-        channels_data = self.get_channels()
-        if channels_data['channels']:
+    def get_rooms(self):
+        """
+        't' - type
+        't':'p' - private
+        't':'c' - public
+        't':'d' - direct
+        """
+        api_path = f"rooms.get"
+        data = self._request_get(api_path)
+        return data
 
-            for i in channels_data['channels']:
-                # print(i, '\n')
-                result.append(
-                    {'rid': i['_id'], 'name': i['fname'], 'type': 'channel'})
+    def get_users_info(self):
+        # api_path = f"users.list"
+        # api_path = f"users.getPreferences"
+        # api_path = f"permissions.listAll"
+        api_path = f"users.info?userId=a2P4iJqpfKTW74Dhw"
+        data = self._request_get(api_path)
+        return data
 
-        groups_data = self.get_groups()
-        if groups_data['groups']:
+    def get_user_info_by_name(self, userName):
+        api_path = f"users.info?userName={userName}"
+        data = self._request_get(api_path)
+        return data
 
-            for i in groups_data['groups']:
-                # print(i, '\n')
-                result.append(
-                    {'rid': i['_id'], 'name': i['fname'], 'type': 'group'})
-        return result
+    def get_user_info_by_id(self, userId):
+        api_path = f"users.info?userId={userId}"
+        data = self._request_get(api_path)
+        return data
+    # def get_all_reachable_rooms(self):
+    #     result = []
+    #     channels_data = self.get_channels()
+    #     if channels_data['channels']:
+
+    #         for i in channels_data['channels']:
+    #             # print(i, '\n')
+    #             result.append(
+    #                 {'rid': i['_id'], 'name': i['fname'], 'type': 'channel'})
+
+    #     groups_data = self.get_groups()
+    #     if groups_data['groups']:
+
+    #         for i in groups_data['groups']:
+    #             # print(i, '\n')
+    #             result.append(
+    #                 {'rid': i['_id'], 'name': i['fname'], 'type': 'group'})
+    #     return result
 
 
 # biba = RocketChatAPI()
+
+
+# rocket = RocketChatAPI()
+# rooms = rocket.get_rooms()
+
+# for room in rooms['update']:
+#     tmp = ''
+#     if 'name' in room:
+#         tmp = room['name']
+#     print(room['t'], tmp)
+# print(len(rooms['update']))
+
+
+# bebs = rocket.get_user_info_by_id("DkEFtsCK3yJGhSNqy")
+# print(bebs)
+# bebs = rocket.get_user_info_by_name('Bot')
+# bebs = biba.get_user_info_by_name('tni_sbis_standbot')
+# print(bebs)
+
+
+# sas = biba.get_groups()
+# count = 0
+# for i in sas['groups']:
+#     if 'fname' in i:
+#         count += 1
+#         print(i['fname'])
+#         all_names.append(i['fname'])
+#     else:
+#         print(i)
+
+
+#     print(i, len(i))
+# print(i['fname'])
+# break
 # for i in biba.get_all_reachable_rooms():
 #     print(i)
 # channels = rocket.get_channels()

@@ -32,7 +32,7 @@ class User():
                 # "telephoneNumber",
                 # "department",
                 # "title",
-                # "memberOf,
+                # "memberOf",
             ]
 
             # отсеивание атрибутов, отсутствующих в схеме LDAP сервера

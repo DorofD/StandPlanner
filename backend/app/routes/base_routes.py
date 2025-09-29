@@ -84,14 +84,14 @@ def sources():
                 return jsonify(result), 400, {'ContentType': 'application/json'}
         if data['action'] == 'process_one':
             if process_source(data['source_type'], data['source_id']):
-                return jsonify({'success': True, 'message': 'Source has ben successfully processed'}), 200, {'ContentType': 'application/json'}
+                return jsonify({'success': True, 'message': 'Processed successfully'}), 200, {'ContentType': 'application/json'}
             else:
-                return jsonify({'success': False, 'message': 'Something going wrong, check source description and service logs'}), 200, {'ContentType': 'application/json'}
+                return jsonify({'success': False, 'message': 'Failed, check logs'}), 200, {'ContentType': 'application/json'}
         if data['action'] == 'process_all':
             if bulk_process_sources(data['source_type']):
-                return jsonify({'success': True, 'message': 'Source has ben successfully processed'}), 200, {'ContentType': 'application/json'}
+                return jsonify({'success': True, 'message': 'Processed successfully'}), 200, {'ContentType': 'application/json'}
             else:
-                return jsonify({'success': False, 'message': 'Something going wrong, check source description and service logs'}), 200, {'ContentType': 'application/json'}
+                return jsonify({'success': False, 'message': 'Failed, check logs'}), 200, {'ContentType': 'application/json'}
         if data['action'] == 'change':
             source_type = data['source_type']
             source_id = data['source_id']

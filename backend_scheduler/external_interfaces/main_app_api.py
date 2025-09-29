@@ -24,5 +24,14 @@ class MainAppAPI:
 
     def get_settings(self):
         api_path = f"/rocket_bot?action=get_settings"
-        data = self._request_get(api_path)
-        return data
+        try:
+            data = self._request_get(api_path)
+            print(data)
+            if data['success']:
+                return data['settings']
+            if 'error' in data:
+                print(data['error'])
+            return False
+        except Exception as e:
+            print(f"Error when get settings: {e}")
+            return False

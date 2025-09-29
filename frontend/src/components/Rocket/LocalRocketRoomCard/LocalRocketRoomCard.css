@@ -1,0 +1,63 @@
+.card.rocketRoom {
+    /* box-sizing: border-box;
+    display: flex;
+    flex-direction: row; */
+    box-sizing: border-box;
+    user-select: none;
+    padding: 4px;
+    margin: 0;
+    margin: 2px;
+    /* height: auto; */
+    width: 98%;
+
+}
+
+p.rocketRoomCardFaded {
+    box-sizing: border-box;
+    display: inline;
+    color: var(--text-secondary-color);
+}
+
+p.rocketRoomCardValueFaded {
+    display: inline;
+    color: var(--text-secondary-color);
+    min-width: 130px;
+    margin: 0;
+}
+
+div.rocketRoomBottom {
+    padding: 2px;
+    overflow-wrap: break-word;
+    display: flex;
+    flex-direction: row;
+}
+
+
+div.rocketRoomCardParams {
+    display: flex;
+    flex-direction: row;
+    text-align: left;
+    display: inline;
+}
+
+.roomLongContent {
+    max-width: 60%;
+    white-space: pre-wrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+}
+
+.roomLongContent.picked {
+    user-select: text;
+    -webkit-line-clamp: unset;
+}
+
+div.rocketRoomCardClose {
+    text-align: right;
+    display: flex;
+    flex-direction: row-reverse;
+    gap: 10px;
+}

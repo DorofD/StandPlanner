@@ -12,8 +12,6 @@ export default function TimedMessages() {
                     style={{ '--animation-duration': `${msg.duration}ms` }}
                 >
                     {msg.text}
-                    {/* <div className="progress-bar" style={{ '--animation-duration': `${msg.duration}ms` }}>
-                    </div> */}
                 </div>
             ))}
         </div>

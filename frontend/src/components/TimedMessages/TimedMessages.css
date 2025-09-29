@@ -21,16 +21,6 @@
     }
 }
 
-/* .progress-bar {
-    height: 40px;
-    background-color: #fd6811;
-    width: 100%;
-    border-radius: 2px;
-    animation-name: progressBar;
-    animation-timing-function: linear;
-    animation-duration: var(--animation-duration, 500ms);
-} */
-
 .tmc-messages {
     position: absolute;
     bottom: 0;
@@ -38,12 +28,15 @@
     width: auto;
     display: flex;
     flex-direction: column-reverse;
-    top: 90%;
+    top: 95%;
     right: 5%;
     padding: 10px;
+    visibility: hidden;
+
 }
 
 .tmc-message {
+    visibility: visible;
     animation-name: fadeInOut;
     animation-duration: var(--animation-duration, 3000ms);
     margin-bottom: 8px;
@@ -51,7 +44,7 @@
     background: var(--info-background);
     border-radius: 4px;
     transition: all 300ms;
-    z-index: 1001;
+    z-index: 2001;
 
 }
 
