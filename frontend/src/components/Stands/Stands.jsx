@@ -1,44 +1,30 @@
 import React, { Component, useState, useEffect } from "react";
 import "./Stands.css";
 import StandCard from "./StandCard/StandCard";
-import { useAuthContext } from "../../hooks/useAuthContext";
-// // import { useNotificationContext } from "../../hooks/useNotificationContext";
 import { useTimedMessagesContext } from "../../hooks/useTimedMessagesContext";
-import AcceptModal from "../AcceptModal/AcceptModal";
-import { apiGetStands, apiGetStand, apiChangeStand, apiAddStand, apiDeleteStand } from "../../services/apiStands";
+import { apiGetStands, apiGetStand } from "../../services/apiStands";
+import Filter from "../Filter/Filter";
+import ExternalLinkIcon from '../../svg_images/ExternalLink.svg'
+import CopyIcon from '../../svg_images/Copy.svg'
+
 
 export default function Stands() {
-    const { userName, userId } = useAuthContext();
+    const [loading, setLoading] = useState('loading')
+    const [stands, setStands] = useState([])
+    const [pickedStand, setPickedStand] = useState({ id: '', name: 'Стенд', source_type: '' })
+    const [standInfo, setStandInfo] = useState({ description: '', page_layout: '' })
+    const [renderedElement, setRenderedElement] = useState(false)
     const { messages, addMessage } = useTimedMessagesContext();
 
-    const [loading, setLoading] = useState('start')
-
-    const [newStand, setNewStand] = useState({ name: '', description: '' })
-    const [stands, setStands] = useState([])
-    const [pickedStand, setPickedStand] = useState({ id: '', name: '', source_type: '' })
-    const [actionFunction, setActionFunction] = useState(null);
-    const [isAcceptModalOpen, setIsAcceptModalOpen] = useState(false);
-    const [showHint, setShowHint] = useState(false);
-    const [loadedStand, setLoadedStand] = useState(false)
-    const [isChanged, setIsChanged] = useState(false)
-
-
-
-    const openAcceptModalWithAction = (action) => {
-        setActionFunction(() => action);
-        setIsAcceptModalOpen(true);
-    };
-
-    function closeAcceptModal() {
-        setIsAcceptModalOpen(false);
-    };
+    const [filterStands, setFilterStands] = useState({ status: '', name: '' });
+    const [standStatuses, setStandStatuses] = useState([['free', "Свободен"], ['busy', "Занят"], ['maintenance', "Обслуживание"], ['unknown', "Неизвестен"]])
+    const [sourceTypes, setSourceTypes] = useState([['manual', "Добавлены вручную"], ['confluence_page_id', 'Confluence PageId'], ['page_idsearch',]])
 
     async function getStands() {
         try {
             setLoading('loading')
-            const result = await apiGetStands()
-            const loadedStands = Array.isArray(result) ? result : [];
-            setStands(loadedStands)
+            const stands = await apiGetStands()
+            setStands(stands)
             setLoading('loaded')
         } catch (err) {
             setLoading('error')
@@ -47,190 +33,177 @@ export default function Stands() {
 
     async function getStand(id) {
         try {
-            const lStand = await apiGetStand(id)
+            const info = await apiGetStand(id)
+            setStandInfo(info)
+            // setRenderedElement(renderFromJson(info.page_layout[2]))
 
-            setLoadedStand(lStand)
-            setIsChanged({ name: false, description: false })
         } catch (err) {
             setLoading('error')
         }
     }
+    const VOID_ELEMENTS = new Set([
+        'area', 'base', 'br', 'col', 'embed', 'hr', 'img',
+        'input', 'link', 'meta', 'param', 'source', 'track', 'wbr'
+    ]);
 
-    async function addStand() {
-        if (!newStand['name'] || !newStand['description']) {
-            addMessage('Заполните доступные поля', 'warning', 3000)
-            return false
-        }
-        const response = await apiAddStand(newStand['name'], newStand['description'])
-        if (response.status == 200) {
-            setNewStand({ name: '', description: '' })
-            setPickedStand({ id: '', name: '', description: '' })
-            getStands()
-            addMessage('Стенд добавлен', 'success', 3000)
+    function renderFromJson(node) {
+        if (!node) return null;
+        if (typeof node === 'string') return node;
+        if (typeof node !== 'object') return null;
+        if ('text' in node) return node.text;
+        if (!('tag' in node)) return null;
 
-        } else {
-            addMessage('Не удалось добавить стенд', 'error', 3000)
+        const { tag, children = [], attrs = {} } = node;
+
+        if (VOID_ELEMENTS.has(tag)) {
+            return React.createElement(tag, attrs);
         }
+
+        return React.createElement(
+            tag,
+            attrs,
+            ...(Array.isArray(children) ? children.map(renderFromJson) : [])
+        );
     }
 
-    async function changeStand() {
-        if (pickedStand.id !== loadedStand.id) {
-            addMessage("Внутренняя ошибка: pickedStand.id !== loadedStand.id", 'error', 10000)
-            return 1
-        }
-        if (!isChanged.name && !isChanged.description) {
-            addMessage("Внесите изменения, чтобы их применить", 'warning', 3000)
-            return 1
-        }
-        let fields_to_update = {}
-        if (isChanged.name) { fields_to_update.name = loadedStand.name }
-        if (isChanged.description) { fields_to_update.description = loadedStand.description }
-        const response = await apiChangeStand(pickedStand['id'], fields_to_update)
-        if (response.status == 200) {
-            getStands()
-            addMessage('Стенд изменён', 'success', 3000)
-
-        } else {
-            addMessage('Не удалось изменить стенд', 'error', 3000)
-        }
+    const filteredStands = stands.filter(item => {
+        return (
+            (filterStands.status === '' || item.status.includes(filterStands.status)) &&
+            (filterStands.name === '' || item.name.includes(filterStands.name))
+        );
     }
-
-    async function deleteStand() {
-        const response = await apiDeleteStand(pickedStand['id'])
-        if (response.status == 200) {
-            getStands()
-            setPickedStand({ id: '', name: '', description: '' })
-            addMessage('Стенд удалён', 'info', 3000)
-
+    )
+    const handleCopy = (link) => {
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+            navigator.clipboard.writeText(link)
+                .then(() => addMessage("Ссылка скопирована!", 'success', 2400))
+                .catch(() => addMessage("Ошибка при копировании ссылки", 'error', 2400));
         } else {
-            addMessage('Не удалось удалить стенд', 'error', 3000)
+            addMessage("Копирование не выполнено, проверьте window.location.protocol и navigator.clipboard", 'warning', 5000);
         }
-    }
+    };
+
+    const handleOpen = () => {
+        window.open(standInfo.source_link, "_blank", "noopener,noreferrer");
+    };
+
     useEffect(() => {
         getStands()
     }, [])
 
     return (
-        <div className="stands">
-            <div className="standsLeft">
-                <div className="standsLeft1">Управление стендами</div>
-                <div className="standsLeft2">
+        <>
+            <div className="standsLeftContainer">
+                <div className="standsLeft1">
+                    {/* <div>Стенды</div> */}
                     {loading === 'loading' && <p> Loading ...</p>}
                     {loading === 'error' && <p> бекенд отвалился</p>}
-                    {loading === 'loaded' && stands.length == 0 && <p>Пока не добавлено ни одного стенда</p>}
+
                     {loading === 'loaded' && <>
-                        {stands.map(stand =>
+
+                        <Filter onClick={() => setFilterStands({ status: '', name: '' })} closeText="X">
+                            <select className='filter adaptive' onChange={e => setFilterStands({ ...filterStands, status: e.target.value })}>
+                                {loading === 'loaded' && <>{<option className='' value="" selected={filterStands.status === '' && true || false}>Все статусы </option>}
+                                    {standStatuses.map((type, index) => <option id={index} value={type[0]}>{type[1]}</option>)}</>}
+                                {loading === 'error' && <>{<option value="" selected={filterStands.status === '' && true || false}>Бекенд отвалился</option>}</>}
+                            </select>
+                            <input type="text" className="filter standsStandsFilter" placeholder="Название"
+                                onChange={e => setFilterStands({ ...filterStands, name: e.target.value })} value={filterStands.name} />
+                        </Filter>
+                    </>}
+                </div>
+                {loading === 'loading' && <p> Loading ...</p>}
+                {loading === 'error' && <p> бекенд отвалился</p>}
+                {loading === 'loaded' && stands.length == 0 && <> <p>Пока не добавлено ни одного стенда</p></>}
+                {loading === 'loaded' && <>
+                    <div className="standsLeft2">
+                        {filteredStands.map(stand =>
                             <StandCard
                                 key={stand.id}
                                 id={stand.id}
                                 name={stand.name}
-                                picked={pickedStand['id'] === stand.id && true || false}
-                                source_type={stand.source_type}
                                 status={stand.status}
-                                updated_at={stand.stand_last}
-                                errorWarning={stand.source_status === 'failed' && true || false}
-                                onClick={() => { setNewStand({ name: '', description: '' }); setPickedStand(stand); getStand(stand.id) }}>
-                            </StandCard>)}</>}
-                </div>
-
+                                source_type={stand.source_type}
+                                errorWarning={stand.source_status == 'failed' && true || false}
+                                picked={pickedStand['id'] === stand.id && true || false}
+                                onClick={() => {
+                                    setStandInfo({ description: '', page_layout: '' });
+                                    getStand(stand.id).then(() => setPickedStand(stand));
+                                }}>
+                            </StandCard>)}
+                    </div>
+                </>}
             </div>
-            <div className="standsRight">
-                {loading === 'loading' && <p> Loading ...</p>}
-                {loading === 'error' && <p> бекенд отвалился</p>}
-                {loading === 'loaded' && <>
-                    {stands && !pickedStand.id &&
-                        <div className="standsManageStandWrapper">
-                            <div className="standsManageStand">
-                                <div className="standsManageStandTopLabel">Добавить новый стенд</div>
-                                <input type="text"
-                                    maxLength={100}
-                                    placeholder='Название'
-                                    className="manageStand newName"
-                                    value={newStand.value}
-                                    onChange={e => setNewStand({ ...newStand, name: e.target.value })}
-                                />
-
-                                <textarea name="newStand"
-                                    maxLength={4000}
-                                    placeholder='Описание'
-                                    className="manageStand description"
-                                    value={newStand.description}
-                                    onChange={e => setNewStand({ ...newStand, description: e.target.value })}
-                                >
-                                </textarea>
-                                <div className="standsManageStandButtons">
-                                    <button onClick={() => { addStand() }}> Добавить </button>
-                                </div>
-                            </div>
-                        </div>
-
-                    }
-
-                    {stands && pickedStand.id && loadedStand &&
-                        <div className="standsManageStandWrapper changeStand">
-                            <div className="standsManageStand">
-                                <div className="standsManageStandTopLabel">Редактировать стенд</div>
-                                <div className="changeStandParams">
-                                    <input type="text"
-                                        maxLength={100}
-                                        placeholder='Название'
-                                        className="manageStand name"
-                                        value={loadedStand.name}
-                                        onChange={e => {
-                                            setLoadedStand({ ...loadedStand, name: e.target.value });
-                                            setIsChanged({ ...isChanged, name: true })
-                                        }}
-                                    />
-                                    {/* <div className="param-row">
-                                        <div className="param-key">Name</div>
-                                        <div>{pickedStand.name}</div>
-                                    </div> */}
+            <div className="standsRightContainer">
+                <div className="standsRight1">
+                    <div className="standsStandParams">
+                        <div className="standsManageStand">
+                            <div className="standsManageStandTopLabel">{pickedStand.name}</div>
+                            <div className="standsManageStandAllParams">
+                                <div className="standsStandsParamsLeft">
                                     <div className="param-row">
                                         <div className="param-key">Статус</div>
                                         <div>{pickedStand.status}</div>
                                     </div>
                                     <div className="param-row">
                                         <div className="param-key">Источник</div>
-                                        <div>{pickedStand.source_type || "Отсутствует"}</div>
+                                        <div>{pickedStand.source_type || pickedStand.id && "Отсутствует" || ""}</div>
+                                    </div>
+                                    <div className="param-row">
+                                        <div className="param-key">Кем создан</div>
+                                        <div>{pickedStand.created_by || pickedStand.id && "Неизвестно" || ""}</div>
+                                    </div>
+                                    <div className="param-row">
+                                        <div className="param-key">Статус источника</div>
+                                        <div>{pickedStand.source_status || pickedStand.id && !pickedStand.source_status && "Отсутствует"}</div>
                                     </div>
                                     <div className="param-row">
                                         <div className="param-key">Последнее обновление</div>
                                         <div>{pickedStand.updated_at === "never" && "Отсутствует" || pickedStand.updated_at}</div>
                                     </div>
+                                    <div className="param-row">
+                                        <div className="param-key">Ссылка на страницу стенда</div>
+                                        <div>{standInfo.source_link && <div className="sourcesIconsContainer">
+                                            Доступна
+                                            <div className="iconWithTooltip" onClick={() => handleCopy(standInfo.source_link)}>
+                                                <CopyIcon className="externalLinkIconStyle" />
+                                                <span className="tooltip">Скопировать ссылку</span>
+                                            </div>
+                                            <div className="iconWithTooltip" onClick={handleOpen}>
+                                                <ExternalLinkIcon className="externalLinkIconStyle" />
+                                                <span className="tooltip">Открыть ссылку в новом окне</span>
+                                            </div>
+                                        </div> || pickedStand.id && "Отсутствует" || ""}</div>
+                                    </div>
                                 </div>
-                                <textarea name="newStand"
-                                    maxLength={4000}
-                                    placeholder='Описание'
-                                    className="manageStand description"
-                                    value={loadedStand.description}
-                                    onChange={e => {
-                                        setLoadedStand({ ...loadedStand, description: e.target.value });
-                                        setIsChanged({ ...isChanged, description: true });
-                                    }}
-                                >
-                                </textarea>
-                                <div className="standsManageStandButtons">
-                                    <button onClick={() => { openAcceptModalWithAction(changeStand) }}> Применить изменения </button>
-                                    <button onClick={() => { setPickedStand({ id: 0 }); setLoadedStand(false) }}> Отменить </button>
-                                    <button className={pickedStand.source_type !== 'manual' && "standsDeleteButton disabled" || "standsDeleteButton"} disabled={pickedStand.source_type !== 'manual' && true || false} onClick={() => { openAcceptModalWithAction(deleteStand) }}> Удалить </button>
+                                <div className="standsStandsParamsRight">
+                                    <textarea name="newStand"
+                                        maxLength={4000}
+                                        placeholder='Описание'
+                                        className="standsStandDescription"
+                                        value={standInfo.description}
+                                    >
+                                    </textarea>
                                 </div>
-                            </div>
-                        </div> || <></>
-                    }
-                </>}
 
-            </div>
-            <AcceptModal isOpen={isAcceptModalOpen} onClose={closeAcceptModal}>
-                <div className="acceptModal">
-                    <div className="acceptModalText">
-                        <p>Вы уверены?</p>
-                    </div>
-                    <div className="acceptModalButtons">
-                        <button className={"acceptModal positive"} onClick={() => { actionFunction(); closeAcceptModal(); }}> Да </button>
-                        <button className={"acceptModal critical"} onClick={closeAcceptModal}> Нет </button>
+                            </div>
+                        </div>
+
                     </div>
                 </div>
-            </AcceptModal>
-        </div>
+                <div className="standsRight2">
+                    <div className="standsStandLayout">
+                        {standInfo.page_layout && <>
+                            {standInfo.page_layout.map(element =>
+                                renderFromJson(element)
+                            )
+                            }
+                        </>
+                        }
+                    </div>
+                </div>
+            </div>
+
+        </>
     );
 }

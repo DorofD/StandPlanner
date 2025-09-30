@@ -1,4 +1,4 @@
-from app.domain.confluence_api import ConfluenceAPI
+from app.external_interfaces.confluence_api import ConfluenceAPI
 from app.domain.html_parser import HTMLParser
 from datetime import datetime
 

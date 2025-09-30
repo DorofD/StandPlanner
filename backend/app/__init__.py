@@ -11,6 +11,7 @@ import traceback
 
 
 from app.domain.scheduler import Scheduler
+from app.domain.data_sync import DataSyncManager
 from app.repository.db_model import create_db
 from app.repository.queries.stands import DBStands
 from app.redis_repository.stands import RedisStands
@@ -96,12 +97,12 @@ def create_app():
     if not users:
         add_user('admin', 'local', 'admin', 'admin')
 
-    db_uuids_dict = DBStands().get_uuids_to_names_dict()
-    redis_stands = RedisStands().get_all_stands()
-    for stand in redis_stands:
-        if stand['stand_uuid'] not in db_uuids_dict:
-            RedisStands().delete_stand(stand['stand_uuid'])
-    for stand_uuid in db_uuids_dict:
-        RedisStands().set_stand(stand_uuid, db_uuids_dict[stand_uuid])
-
+    # db_uuids_dict = DBStands().get_uuids_to_names_dict()
+    # redis_stands = RedisStands().get_all_stands()
+    # for stand in redis_stands:
+    #     if stand['stand_uuid'] not in db_uuids_dict:
+    #         RedisStands().delete_stand(stand['stand_uuid'])
+    # for stand_uuid in db_uuids_dict:
+    #     RedisStands().set_stand(stand_uuid, db_uuids_dict[stand_uuid])
+    print(DataSyncManager().push_stands_to_redis())
     return app

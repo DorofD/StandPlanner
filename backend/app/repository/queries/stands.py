@@ -116,6 +116,14 @@ class DBStands:
             result_dict[note['uuid']] = note['name']
         return result_dict
 
+    def get_uuids_list(self):
+        query = f"""
+            SELECT uuid FROM {self.table_name};
+        """
+        tmp_dict = execute_parametrized_query(query)
+        uuids_list = [row['uuid'] for row in tmp_dict]
+        return uuids_list
+
     def get_stands_list_by_source_type(self, source_type):
         query = f"""
             SELECT id, uuid, name, source_type, updated_at, created_by
@@ -174,10 +182,6 @@ class DBStands:
             return None
 
     def update_stand_field(self, id: int, field: str, value: str):
-        """Можно менять значения полей name, description, page_layout"""
-        allowed_fields = {'name', 'description', 'page_layout'}
-        if field not in allowed_fields:
-            raise ValueError(f"Field '{field}' is not allowed to be updated")
         query = f"""
             UPDATE {self.table_name} SET {field} = %s
             WHERE id = %s;

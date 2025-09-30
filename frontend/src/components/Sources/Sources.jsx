@@ -1,7 +1,9 @@
 import React, { Component, useState, useEffect } from "react";
 import "./Sources.css";
 import SourceCard from "./SourceCard/SourceCard";
+import StandCard from "../Stands/StandCard/StandCard";
 import { apiGetSources, apiAddSource, apiDeleteSource, apiActualizeSource, apiActualizeAllSources, apiChangeSource } from "../../services/apiSources";
+import { apiGetStands, apiGetStand, apiChangeStand, apiAddStand, apiDeleteStand } from "../../services/apiStands";
 import { useAuthContext } from "../../hooks/useAuthContext";
 import { useTimedMessagesContext } from "../../hooks/useTimedMessagesContext";
 import AcceptModal from "../AcceptModal/AcceptModal";
@@ -28,6 +30,15 @@ export default function Sources() {
     const [serverResponse, setServerResponse] = useState([]);
     const [isChanged, setIsChanged] = useState(false)
 
+    // stands
+    const [loadingStands, setLoadingStands] = useState('start')
+    const [newStand, setNewStand] = useState({ name: '', description: '' })
+    const [stands, setStands] = useState([])
+    const [pickedStand, setPickedStand] = useState({ id: '', name: '', source_type: '' })
+    const [loadedStand, setLoadedStand] = useState(false)
+    const [isStandChanged, setIsStandChanged] = useState(false)
+    // stands
+
     const openAcceptModalWithAction = (action) => {
         setActionFunction(() => action);
         setIsAcceptModalOpen(true);
@@ -41,6 +52,8 @@ export default function Sources() {
         setNewSource({ value: '', description: '', source_type: '' });
         setChangedSource({ id: 0, description: '' })
         setPickedSource({ id: 0 });
+        setPickedStand({ id: '', name: '', source_type: '' })
+        setNewStand({ name: '', description: '' })
     }
 
     async function getSources(source_type) {
@@ -232,7 +245,6 @@ export default function Sources() {
             return 1
         }
         let fields_to_update = {}
-        // if (isChanged.name) { fields_to_update.name = loadedStand.name }
         if (isChanged.description) { fields_to_update.description = pickedSource.description }
         const response = await apiChangeSource(selectedType, pickedSource['id'], fields_to_update)
         if (response.status == 200) {
@@ -272,6 +284,82 @@ export default function Sources() {
             });
     }
 
+    // stands functions
+
+    async function getStands() {
+        try {
+            setLoadingStands('loading')
+            const result = await apiGetStands()
+            const loadedStands = Array.isArray(result) ? result : [];
+            setStands(loadedStands)
+            setLoadingStands('loaded')
+        } catch (err) {
+            setLoadingStands('error')
+        }
+    }
+
+    async function getStand(id) {
+        try {
+            const lStand = await apiGetStand(id)
+
+            setLoadedStand(lStand)
+            setIsChanged({ name: false, description: false })
+        } catch (err) {
+            setLoadingStands('error')
+        }
+    }
+
+    async function addStand() {
+        if (!newStand['name'] || !newStand['description']) {
+            addMessage('Заполните доступные поля', 'warning', 3000)
+            return false
+        }
+        const response = await apiAddStand(newStand['name'], newStand['description'])
+        if (response.status == 200) {
+            setNewStand({ name: '', description: '' })
+            setPickedStand({ id: '', name: '', description: '' })
+            getStands()
+            addMessage('Стенд добавлен', 'success', 3000)
+
+        } else {
+            addMessage('Не удалось добавить стенд', 'error', 3000)
+        }
+    }
+
+    async function changeStand() {
+        if (pickedStand.id !== loadedStand.id) {
+            addMessage("Внутренняя ошибка: pickedStand.id !== loadedStand.id", 'error', 10000)
+            return 1
+        }
+        if (!isStandChanged.name && !isStandChanged.description) {
+            addMessage("Внесите изменения, чтобы их применить", 'warning', 3000)
+            return 1
+        }
+        let fields_to_update = {}
+        if (isStandChanged.name) { fields_to_update.name = loadedStand.name }
+        if (isStandChanged.description) { fields_to_update.description = loadedStand.description }
+        const response = await apiChangeStand(pickedStand['id'], fields_to_update)
+        if (response.status == 200) {
+            getStands()
+            addMessage('Стенд изменён', 'success', 3000)
+
+        } else {
+            addMessage('Не удалось изменить стенд', 'error', 3000)
+        }
+    }
+
+    async function deleteStand() {
+        const response = await apiDeleteStand(pickedStand['id'])
+        if (response.status == 200) {
+            getStands()
+            setPickedStand({ id: '', name: '', description: '' })
+            addMessage('Стенд удалён', 'info', 3000)
+
+        } else {
+            addMessage('Не удалось удалить стенд', 'error', 3000)
+        }
+    }
+    // stands functions
 
     return (
 
@@ -280,7 +368,7 @@ export default function Sources() {
             <div className="sourcesLeft">
                 <div className="sourcesSetType">
                     <div className="sourcesSetTypeHeader">
-                        <p >Управление источниками информации о стендах</p>
+                        <p >Управление источниками данных о стендах</p>
                         <button
                             onClick={() => {
                                 setShowHint((prev) => !prev);
@@ -299,17 +387,17 @@ export default function Sources() {
                         </div>
                         || <>
                             <button
-                                onClick={() => { resetLocalChanges(); setSources([]); setSelectedType('manual') }}
+                                onClick={() => { resetLocalChanges(); setSources([]); setSelectedType('manual'); getStands() }}
                                 className={selectedType == 'manual' ? "sourcesSetType picked" : "sourcesSetType"}>
-                                Manual
+                                Ручное управление стендами
                             </button>
                             <button onClick={() => { resetLocalChanges(); setSelectedType('confluence_page_id'); getSources('confluence_page_id'); setNewSource({ value: '', description: '', source_type: 'confluence_page_id' }) }}
                                 className={selectedType == 'confluence_page_id' ? "sourcesSetType picked" : "sourcesSetType"}>
-                                Confluence PageId
+                                Управление Confluence PageId
                             </button>
                             <button onClick={() => { resetLocalChanges(); setSelectedType('confluence_tag'); getSources('confluence_tag'); setSources([]); setNewSource({ value: '', description: '', source_type: 'confluence_tag' }) }}
                                 className={selectedType == 'confluence_tag' ? "sourcesSetType picked" : "sourcesSetType"}>
-                                Confluence Tag
+                                Управление Confluence Tag
                             </button>
                         </>
                     }
@@ -317,15 +405,23 @@ export default function Sources() {
 
                 <div className="sourcesNotes">
                     {selectedType === 'manual' && <>
-                        <div className="sourcesHint">
-                            <div className="hintBox">
-                                <p>
-                                    Тип источников <strong>manual</strong> подразумевает создание стендов вручную и не имеет собственных объектов
-                                </p>
-                                <p>
-                                    Перейдите во вкладку <strong>Администрирование / Стенды</strong>, если хотите создать стенд
-                                </p>
-                            </div>
+                        <div className="admin-sources-standsLeft">
+                            {loadingStands === 'loading' && <p> Loading ...</p>}
+                            {loadingStands === 'error' && <p> бекенд отвалился</p>}
+                            {loadingStands === 'loaded' && stands.length == 0 && <p>Пока не добавлено ни одного стенда</p>}
+                            {loadingStands === 'loaded' && <>
+                                {stands.map(stand =>
+                                    <StandCard
+                                        key={stand.id}
+                                        id={stand.id}
+                                        name={stand.name}
+                                        picked={pickedStand['id'] === stand.id && true || false}
+                                        source_type={stand.source_type}
+                                        status={stand.status}
+                                        updated_at={stand.stand_last}
+                                        errorWarning={stand.source_status === 'failed' && true || false}
+                                        onClick={() => { setNewStand({ name: '', description: '' }); setPickedStand(stand); getStand(stand.id) }}>
+                                    </StandCard>)}</>}
                         </div>
                     </>}
                     {selectedType === 'confluence_tag' && <>
@@ -380,11 +476,87 @@ export default function Sources() {
             </div>
             <div className="sourcesRight">
                 {selectedType === 'manual' && <>
-                    <div className="sourcesHint">
-                        <div className="hintBox">
-                            Выбран тип источников <strong>manual</strong>
-                        </div>
-                    </div>
+                    {loadingStands === 'loading' && <p> Loading ...</p>}
+                    {loadingStands === 'error' && <p> бекенд отвалился</p>}
+                    {loadingStands === 'loaded' && <>
+                        {stands && !pickedStand.id &&
+                            <div className="admin-sources-standsManageStandWrapper">
+                                <div className="admin-sources-standsManageStand">
+                                    <div className="admin-sources-standsManageStandTopLabel">Добавить новый стенд</div>
+                                    <input type="text"
+                                        maxLength={100}
+                                        placeholder='Название'
+                                        className="admin-sources-manageStand newName"
+                                        value={newStand.name}
+                                        onChange={e => setNewStand({ ...newStand, name: e.target.value })}
+                                    />
+
+                                    <textarea name="newStand"
+                                        maxLength={4000}
+                                        placeholder='Описание'
+                                        className="admin-sources-manageStand description"
+                                        value={newStand.description}
+                                        onChange={e => setNewStand({ ...newStand, description: e.target.value })}
+                                    >
+                                    </textarea>
+                                    <div className="admin-sources-standsManageStandButtons">
+                                        <button onClick={() => { addStand() }}> Добавить </button>
+                                        <button onClick={() => setNewStand({ name: '', description: '' })}> Очистить </button>
+                                    </div>
+                                </div>
+                            </div>
+
+                        }
+
+                        {stands && pickedStand.id && loadedStand &&
+                            <div className="admin-sources-standsManageStandWrapper changeStand">
+                                <div className="admin-sources-standsManageStand">
+                                    <div className="admin-sources-standsManageStandTopLabel">Редактировать стенд</div>
+                                    <div className="admin-sources-changeStandParams">
+                                        <input type="text"
+                                            maxLength={100}
+                                            placeholder='Название'
+                                            className="admin-sources-manageStand name"
+                                            value={loadedStand.name}
+                                            onChange={e => {
+                                                setLoadedStand({ ...loadedStand, name: e.target.value });
+                                                setIsStandChanged({ ...isStandChanged, name: true })
+                                            }}
+                                        />
+                                        <div className="param-row">
+                                            <div className="param-key">Статус</div>
+                                            <div>{pickedStand.status}</div>
+                                        </div>
+                                        <div className="param-row">
+                                            <div className="param-key">Источник</div>
+                                            <div>{pickedStand.source_type || "Отсутствует"}</div>
+                                        </div>
+                                        <div className="param-row">
+                                            <div className="param-key">Последнее обновление</div>
+                                            <div>{pickedStand.updated_at === "never" && "Отсутствует" || pickedStand.updated_at}</div>
+                                        </div>
+                                    </div>
+                                    <textarea name="newStand"
+                                        maxLength={4000}
+                                        placeholder='Описание'
+                                        className="admin-sources-manageStand description"
+                                        value={loadedStand.description}
+                                        onChange={e => {
+                                            setLoadedStand({ ...loadedStand, description: e.target.value });
+                                            setIsStandChanged({ ...isStandChanged, description: true });
+                                        }}
+                                    >
+                                    </textarea>
+                                    <div className="admin-sources-standsManageStandButtons">
+                                        <button onClick={() => { openAcceptModalWithAction(changeStand) }}> Применить изменения </button>
+                                        <button onClick={() => { setPickedStand({ id: 0 }); setLoadedStand(false) }}> Отменить </button>
+                                        <button className={pickedStand.source_type !== 'manual' && "admin-sources-standsDeleteButton disabled" || "admin-sources-standsDeleteButton"} disabled={pickedStand.source_type !== 'manual' && true || false} onClick={() => { openAcceptModalWithAction(deleteStand) }}> Удалить </button>
+                                    </div>
+                                </div>
+                            </div> || <></>
+                        }
+                    </>}
+
                 </>}
                 {loading === 'start' && selectedType !== 'manual' &&
                     <div className="sourcesHint">

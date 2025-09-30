@@ -12,7 +12,6 @@ import Logs from "./Logs/Logs";
 import Apscheduler from "./Apscheduler/Apscheduler";
 import Login from "./Login/Login";
 import Sources from "./Sources/Sources";
-// import TestComponent from "./TestComponent/TestComponent";
 import { PrivateRoute } from "./PrivateRoute/PrivateRoute";
 import { useAuthContext } from "../hooks/useAuthContext";
 import "./App.css"
@@ -26,15 +25,14 @@ export default function App() {
                 <Route element={<PrivateRoute />}>
                     <Route path="/" element={<Base />}>
                         <Route index element={<Main />} />
+                        <Route path="/stands" element={<Stands />} />
                         <Route path="/planner" element={<Planner />} />
                         {userRole === 'admin' && <Route path="/admin" element={<Admin />}>
                             <Route path="/admin/users" element={<Users />} />
                             <Route path="/admin/sources" element={<Sources />} />
-                            <Route path="/admin/stands" element={<Stands />} />
                             <Route path="/admin/rocket" element={<Rocket />} />
                             <Route path="/admin/logs" element={<Logs />} />
                             <Route path="/admin/apscheduler" element={<Apscheduler />} />
-                            {/* <Route path="/admin/test" element={<TestComponent />} /> */}
                         </Route>}
                         <Route path="/about" element={<About />} />
                     </Route>

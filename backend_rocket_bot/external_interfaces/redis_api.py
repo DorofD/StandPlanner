@@ -2,6 +2,7 @@
 import redis
 import os
 import json
+from datetime import datetime, timezone
 from dotenv import load_dotenv
 from services.logger import logger
 
@@ -21,42 +22,39 @@ class RedisApi:
         except redis.ConnectionError as e:
             return False
 
-    # def set_stand(self, stand_uuid, status='Unknown', last_modified_by=''):
-    #     stand_key = f'stand:{stand_uuid}'
-    #     return self.r.hset(stand_key, mapping={
-    #         'stand_uuid': stand_uuid, 'status': status, 'last_modified_by': last_modified_by})
-    def set_stand(self, stand_uuid, status='Unknown', last_modified_by=''):
+    def set_stand(self, stand_uuid, name, status='Unknown', last_modified_by='default'):
         stand_key = f'stand:{stand_uuid}'
-        try:
-            self.r.hset(stand_key, mapping={
-                'stand_uuid': stand_uuid,
-                'status': status,
-                'last_modified_by': last_modified_by
-            })
-            stored = self.r.hgetall(stand_key)
-            if stored.get('status') == status and stored.get('last_modified_by') == last_modified_by:
-                return True
-            else:
-                return False
-        except redis.ConnectionError as e:
-            logger.error(f"Redis error: {e}")
-            return False
+        self.r.hset(stand_key, mapping={
+            'uuid': stand_uuid,
+            'name': name,
+            'status': status,
+            'last_modified_by': last_modified_by
+        })
+        return self.r.sadd('stands:all', stand_uuid)
+
+    def get_all_stand_uuids(self):
+        return [uuid for uuid in self.r.smembers('stands:all')]
+
+    def get_all_stands(self):
+        result = []
+        for uuid in self.get_all_stand_uuids():
+            stand = self.r.hgetall(f'stand:{uuid}')
+            stand['queue'] = self.r.lrange(f'stand:{uuid}:queue', 0, -1)
+            result.append(stand)
+        return result
+
+    def delete_stand(self, stand_uuid):
+        key = f'stand:{stand_uuid}'
+        queue_key = f'stand:{stand_uuid}:queue'
+        return self.r.delete(key), self.r.delete(queue_key)
 
     def get_stand(self, stand_uuid):
         key = f'stand:{stand_uuid}'
         return self.r.hgetall(key)
 
-    def get_all_stands(self):
-        keys = self.r.keys('stand:*')
-        return [self.r.hgetall(k) for k in keys]
-
-    def delete_stand(self, stand_uuid):
-        key = f'stand:{stand_uuid}'
-        return self.r.delete(key)
-
-    def add_user_to_stand_queue(self, stand_uuid, user):
+    def add_user_to_stand_queue(self, stand_uuid, username):
         queue_key = f'stand:{stand_uuid}:queue'
-        return self.r.rpush(queue_key, user)
+        return self.r.rpush(queue_key, username)
 
     def get_stand_queue(self, stand_uuid):
         queue_key = f'stand:{stand_uuid}:queue'
@@ -66,6 +64,21 @@ class RedisApi:
         queue_key = f'stand:{stand_uuid}:queue'
         return self.r.delete(queue_key)
 
+    def delete_first_user_from_stand_queue(self, stand_uuid):
+        """Возвращает удалённое значение"""
+        queue_key = f'stand:{stand_uuid}:queue'
+        return self.r.lpop(queue_key)
+
+    def delete_user_from_stand_queue_by_username(self, stand_uuid, username, all=True):
+        """
+        all = True удаляет все вхождения, False - только первое
+        Возвращает число удаленных записей
+        """
+        queue_key = f'stand:{stand_uuid}:queue'
+        if all:
+            return self.r.lrem(queue_key, 0, username)
+        return self.r.lrem(queue_key, 1, username)
+
     def push_message_to_queue(self, queue_name, message: dict):
         msg_str = json.dumps(message)
         try:
@@ -74,3 +87,40 @@ class RedisApi:
         except redis.RedisError as e:
             logger.error(f"Redis error: {e}")
             return False
+
+    def add_event(self, action_type, action_name, action_details):
+        event = {
+            'datetime': datetime.now(timezone.utc).strftime('%Y-%m-%d %H:%M:%S'),
+            'action_type': action_type,
+            'action_name': action_name,
+            'action_details': action_details
+        }
+        self.r.lpush(self.key, json.dumps(event))
+        self.r.ltrim(self.key, 0, self.max_events - 1)
+
+
+# RedisApi().add_user_to_stand_queue(
+#     '04211380-2588-44b0-9c22-39d4eed46c15', 'edorofeev12')
+# RedisApi().add_user_to_stand_queue(
+#     '04211380-2588-44b0-9c22-39d4eed46c15', 'billibiobov324')
+# RedisApi().add_user_to_stand_queue(
+#     '04211380-2588-44b0-9c22-39d4eed46c15', 'billibiobov324')
+# RedisApi().add_user_to_stand_queue(
+#     '04211380-2588-44b0-9c22-39d4eed46c15', 'billibiobov324')
+# RedisApi().add_user_to_stand_queue(
+#     '04211380-2588-44b0-9c22-39d4eed46c15', 'billibiobov324')
+# RedisApi().add_user_to_stand_queue(
+#     '04211380-2588-44b0-9c22-39d4eed46c15', 'billibiobov324')
+# print('---', RedisApi().delete_user_from_stand_queue_by_username(
+#     '04211380-2588-44b0-9c22-39d4eed46c15', "billibiobov324", False), '---')
+# s_q = RedisApi().get_stand_queue('04211380-2588-44b0-9c22-39d4eed46c15')
+# for i in s_q:
+#     print(i)
+
+
+# print(RedisApi().add_user_to_stand_queue(
+#     '04211380-2588-44b0-9c22-39d4eed46c15', 'Bobe1'))
+# print(RedisApi().add_user_to_stand_queue(
+#     '04211380-2588-44b0-9c22-39d4eed46c15', 'Bobe2'))
+
+# print(RedisApi().get_all_stands())

@@ -204,3 +204,36 @@ textarea.mainComments:focus {
 .layoutRender td {
     border: solid 1px var(--border-color);
 }
+
+
+div.standsManageStandWrapper {
+    padding: 10px;
+    width: 100%;
+    height: 40%;
+    box-sizing: border-box;
+}
+
+div.standsManageStandWrapper.changeStand {
+    height: 70%;
+}
+
+
+div.standsManageStand {
+    padding: 15px;
+    border: solid 3px var(--border-color);
+    border-radius: 10px;
+    box-sizing: border-box;
+    height: 100%;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+}
+
+div.standsManageStandTopLabel {
+    width: 100%;
+    font-weight: bolder;
+    margin-bottom: 10px;
+    text-align: center;
+}

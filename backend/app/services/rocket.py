@@ -4,7 +4,7 @@ from app.repository.queries.rocket_rooms import DBRocketRooms
 from app.repository.queries.rocket_bot_settings import DBRocketBotSettings
 from app.repository.queries.stands import DBStands
 from app.repository.queries.sources_confluence_page_id import DBSourcesConfluencePageId
-from app.domain.rocket_bot_api import RocketBotAPI
+from app.external_interfaces.rocket_bot_api import RocketBotAPI
 
 
 def check_bot():

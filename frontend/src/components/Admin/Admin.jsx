@@ -7,7 +7,7 @@ import { useSidebarState } from "../../hooks/useSidebarStateContext";
 
 import UsersGearIcon from "../../svg_images/UsersGear.svg"
 import ConfluenceIcon from "../../svg_images/Confluence.svg"
-import BareMetalIcon from "../../svg_images/BareMetal.svg"
+// import BareMetalIcon from "../../svg_images/BareMetal.svg"
 import CatalogIcon from "../../svg_images/Catalog.svg"
 import PythonGearIcon from "../../svg_images/PythonGear.svg"
 import RocketChatIcon from "../../svg_images/RocketChat.svg"
@@ -47,13 +47,13 @@ export default function Admin() {
                             <ConfluenceIcon className="baseSidebarIcon"></ConfluenceIcon>}
                         {sidebarCollapsed && <div className="baseSidebarTextDiv">Источники данных</div>}
                     </NavLink>
-                    <NavLink to="/admin/stands" >
+                    {/* <NavLink to="/admin/stands" >
                         {!sidebarCollapsed &&
                             <div className="baseHrefText">Стенды</div>
                             ||
                             <BareMetalIcon className="baseSidebarIcon"></BareMetalIcon>}
                         {sidebarCollapsed && <div className="baseSidebarTextDiv">Стенды</div>}
-                    </NavLink>
+                    </NavLink> */}
                     <NavLink to="/admin/rocket" >
                         {!sidebarCollapsed &&
                             <div className="baseHrefText">Rocket.Chat</div>

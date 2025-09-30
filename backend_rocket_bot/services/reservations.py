@@ -1,0 +1,157 @@
+from datetime import datetime
+from external_interfaces.redis_api import RedisApi
+
+
+class ReservationsHandler():
+    def __init__(self, settings):
+        self.redis = RedisApi()
+        self.rooms_stands_dict = []
+        self.substrings_purposes_dict = {}
+        self.rooms_stands_dict = {}
+        for room in settings['target_rooms']:
+            self.rooms_stands_dict[room['rid']] = {
+                'name': room['name'], 'stand_uuid': room['stand_uuid']}
+        self.substrings_purposes_dict = {}
+        for purpose in settings['target_strings']:
+            for substring in settings['target_strings'][purpose]:
+                self.substrings_purposes_dict[substring] = purpose
+
+    def handle_message(self, msg):
+        msg_id = msg['_id']
+        msg_rid = msg['rid']
+        msg_text = msg['msg']
+        dt = datetime.fromtimestamp(msg['ts']['$date'] / 1000)
+        msg_date = dt.strftime('%Y-%m-%d %H:%M:%S')
+
+        author = {}
+        author['id'] = msg['u']['_id']
+        author['username'] = msg['u']['username']
+        author['name'] = msg['u']['name']
+
+        target_stand = {}
+        target_stand['name'] = self.rooms_stands_dict[msg_rid]['name']
+        target_stand['uuid'] = self.rooms_stands_dict[msg_rid]['uuid']
+        target_stand['users_queue'] = self.redis.get_stand_queue(
+            target_stand['uuid'])
+
+        print(
+            f"""
+                Оригинальное сообщение: \n
+                Пользователь: {author['name']}({author['username']}, {author['id']}), \n
+                время: {msg_date}, \n
+                сообщение {msg_text}, \n
+                стенд: {target_stand['name']}/{target_stand['uuid']}, \n
+                message_id: {msg_id} \n
+                """
+        )
+
+        message_action = self._define_message_action(msg_text)
+        # не удалось определить действие по подстроке
+        if not message_action['action_defined']:
+            result = {'success': True,
+                      'action': False,
+                      'message': message_action['message'],
+                      'error': '',
+                      'event': {}}
+            return result
+
+        action_valid = self._validate_action(
+            message_action, target_stand, author)
+        # действие не может быть выполнено в указанных условиях
+        if not action_valid['success']:
+            result = {'success': True,
+                      'action': False,
+                      'message': action_valid['message'],
+                      'error': '',
+                      'event': {}}
+            return result
+
+        if message_action == "free" or message_action == "busy" or message_action == "maintenance":
+            new_status = message_action.capitalize()
+            execute = self.redis.set_stand(
+                target_stand['uuid'], new_status, author)
+            if execute:
+                result = {'success': True,
+                          'action': True,
+                          'message': '',
+                          'error': '',
+                          'event': {
+                              'action_type': 'set_stand_status',
+                              'stand': target_stand,
+                              'author': author,
+                              'stand_status': new_status,
+                              'time': msg_date}}
+                return result
+            else:
+                result = {'success': False,
+                          'action': False,
+                          'message': '',
+                          'error': "Failed to set new stand status",
+                          'event': {}}
+                return result
+        if message_action == "lining_up":
+            pass
+
+    def _define_message_action(self, message_text):
+        matches = []
+        for substring in self.substrings_purposes_dict:
+            if substring.lower() in message_text.lower():
+                matches.append(substring)
+        if not matches:
+            return {'action_defined': False, 'message': "No substring match"}
+        if len(matches) > 1:
+            return {'action_defined': False, 'message': "More than one substring match "}
+        if matches[0]:
+            action = self.substrings_purposes_dict[matches[0]]
+            return {'action_defined': action.lower(), 'message': f"Found substring match"}
+
+    def _validate_action(self, action, target_stand, author):
+        # Статусы стендов:
+        # "Free"
+        # "Busy"
+        # "Unknown"
+        # "Maintenance"
+        redis_stand = self.redis.get_stand(
+            target_stand['uuid'])
+        if not redis_stand:
+            return {'success': False, 'message': f"Stand {target_stand['name']}({target_stand['uuid']}) not found in redis"}
+        current_status = redis_stand['status']
+        if current_status == 'Unknown':
+            return {'success': True}
+        if action == current_status.lower() and action != 'lining_up':
+            return {'success': False, 'message': f"Stand {target_stand['name']}({target_stand['uuid']}) is already in status {current_status}"}
+
+        if action == 'free':
+            if current_status == 'Busy' or current_status == 'Maintenance':
+                if author['username'] != redis_stand['last_modified_by']['username']:
+                    return {'success': False, 'message': f"Stand {target_stand['name']}({target_stand['uuid']}) is Busy by {redis_stand['last_modified_by']['username']}, only author or admin can free it"}
+                return {'success': True}
+
+        if action == 'busy':
+            if current_status == 'Free':
+                return {'success': True}
+            if current_status == 'Maintenance':
+                if author['username'] != redis_stand['last_modified_by']['username']:
+                    return {'success': False, 'message': f"Stand {target_stand['name']}({target_stand['uuid']}) is in Maintenance by {redis_stand['last_modified_by']['username']}, only author or admin can free it"}
+                else:
+                    return {'success': False, 'message': f"Stand {target_stand['name']}({target_stand['uuid']}) is in Maintenance by you, free it before busy"}
+            if author['username'] != redis_stand['last_modified_by']['username']:
+                return {'success': False, 'message': f"Stand {target_stand['name']}({target_stand['uuid']}) is busy by {redis_stand['last_modified_by']['username']}, only author or administrator can free it"}
+
+        if action == 'maintenance':
+            if current_status == 'Free':
+                return {'success': True}
+            if current_status == 'Busy':
+                if author['username'] != redis_stand['last_modified_by']['username']:
+                    return {'success': False, 'message': f"Stand {target_stand['name']}({target_stand['uuid']}) is Busy by {redis_stand['last_modified_by']['username']}, only author or admin can free it"}
+                else:
+                    return {'success': False, 'message': f"Stand {target_stand['name']}({target_stand['uuid']}) is Busy by you, free it before Maintenance"}
+
+        if action == 'lining_up':
+            if current_status == 'Free':
+                return {'success': False, 'message': f"Stand {target_stand['name']}({target_stand['uuid']}) is Free now, you can Busy it"}
+            if current_status == 'Busy' or current_status == 'Maintenance':
+                if author['username'] == redis_stand['last_modified_by']['username']:
+                    return {'success': False, 'message': f"Stand {target_stand['name']}({target_stand['uuid']}) is Busy or Maintenance by you, you can't get in line at the same time"}
+                else:
+                    return {'success': True}

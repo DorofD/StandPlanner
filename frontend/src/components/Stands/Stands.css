@@ -1,4 +1,4 @@
-div.stands {
+/* div.stands {
     height: 100%;
     width: 100%;
     display: flex;
@@ -45,44 +45,10 @@ div.standsLeft2 {
 }
 
 
-div.standsManageStandWrapper {
-    padding: 10px;
-    width: 100%;
-    height: 40%;
-    box-sizing: border-box;
-}
-
-div.standsManageStandWrapper.changeStand {
-    height: 70%;
-}
-
-
-div.standsManageStand {
-    padding: 15px;
-    border: solid 3px var(--border-color);
-    border-radius: 10px;
-    box-sizing: border-box;
-    height: 100%;
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 10px;
-}
-
-div.standsManageStandTopLabel {
-    width: 100%;
-    font-weight: bolder;
-    margin-bottom: 10px;
-    text-align: center;
-}
-
-
 
 input.manageStand.newName {
     width: 40%;
     max-height: 40px;
-    /* margin: 10px; */
     box-sizing: border-box;
     flex: 20%;
     padding-left: 10px;
@@ -91,7 +57,6 @@ input.manageStand.newName {
 input.manageStand.name {
     width: 80%;
     max-height: 40px;
-    /* margin: 10px; */
     box-sizing: border-box;
     flex: 20%;
     padding-left: 10px;
@@ -125,7 +90,6 @@ div.changeStandParams {
 .param-key {
     min-width: 220px;
     color: var(--text-secondary-color);
-    /* font-weight: bold; */
 }
 
 
@@ -168,4 +132,213 @@ div.standsNotes {
 ources .hintBox p {
     text-indent: 15px;
     text-align: justify;
+} */
+
+div.standsRightContainer {
+    width: 70%;
+    height: 100%;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+}
+
+div.standsLeftContainer {
+    height: 100%;
+    width: 30%;
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
+}
+
+div.standsLeft1 {
+    width: 100%;
+    height: 10%;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+
+/* div.mainLeft2 {
+    width: 100%;
+    height: 90%;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    gap: 10px;
+    padding-left: 10px;
+    overflow-y: auto;
+    } */
+
+div.standsLeft2 {
+    width: 100%;
+    height: 90%;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    gap: 10px;
+    padding-left: 15px;
+    padding-right: 15px;
+    padding-top: 15px;
+    overflow-y: auto;
+    border-top: solid 3px var(--border-color);
+    border-bottom: solid 3px var(--border-color);
+}
+
+div.standsRight1 {
+    width: 100%;
+    height: 35%;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+div.standsRight2 {
+    width: 100%;
+    height: 65%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 10px;
+}
+
+div.standsStandParams {
+    padding: 10px;
+    width: 100%;
+    height: 100%;
+    box-sizing: border-box;
+}
+
+div.standsLeftBody {
+    width: 100%;
+    height: 90%;
+    box-sizing: border-box;
+}
+
+div.standsStandLayout {
+    height: 100%;
+    width: 100%;
+    box-sizing: border-box;
+    text-align: center;
+    padding: 5px;
+    margin: 10px;
+    border: solid 4px var(--border-color);
+    border-radius: 10px;
+    overflow-y: auto;
+}
+
+div.standsStandLayout th,
+div.standsStandLayout td,
+div.standsStandLayout tr {
+    box-sizing: border-box;
+    border: solid 1px var(--border-color);
+}
+
+
+div.standsStandLayout li,
+div.standsStandLayout ul,
+div.standsStandLayout li {
+    text-align: left;
+}
+
+table {
+    font-size: medium;
+    height: 100%;
+    width: 50%;
+    overflow-wrap: break-word;
+    overflow: auto;
+}
+
+div.standsComments {
+    height: 100%;
+    width: 35%;
+    text-align: center;
+}
+
+textarea.standsStands {
+    font-size: 18px;
+    width: 95%;
+    height: 70%;
+    resize: none;
+    padding: 5px;
+    margin-bottom: 10px;
+    border: solid 4px #afafaf;
+    border-radius: 10px;
+    color: black;
+}
+
+div.standsManageStandAllParams {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    height: 70%;
+    width: 100%;
+}
+
+textarea.standsStandDescription {
+    padding-left: 10px;
+    padding-top: 10px;
+    font-size: large;
+    width: 100%;
+    height: 100%;
+    resize: none;
+    box-sizing: border-box;
+    margin-right: auto;
+}
+
+div.standsStandsParamsLeft {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 100%;
+    padding: 10px;
+}
+
+div.standsStandsParamsRight {
+    width: 100%;
+    height: 100%;
+    padding: 10px;
+}
+
+textarea.standsComments {
+    font-size: 18px;
+    width: 400px;
+    height: 80px;
+    resize: none;
+    padding: 5px;
+    margin-bottom: 10px;
+    border: solid 4px #afafaf;
+    border-radius: 10px;
+    color: black;
+
+}
+
+textarea.standsComments:focus {
+    border: solid 4px black;
+}
+
+input.standsStandsFilter {
+    width: 40%;
+}
+
+.sendIcon {
+    width: 35px;
+    height: 40px;
+}
+
+.layoutRender {
+    box-sizing: border-box;
+}
+
+.layoutRender table,
+.layoutRender tr,
+.layoutRender th,
+.layoutRender td {
+    border: solid 1px var(--border-color);
 }

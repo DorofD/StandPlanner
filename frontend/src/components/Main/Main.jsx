@@ -137,71 +137,9 @@ export default function Main() {
             </div>
             <div className="mainRightContainer">
                 <div className="mainRight1">
-                    <div className="mainStandParams">
-                        <div className="standsManageStand">
-                            <div className="standsManageStandTopLabel">{pickedStand.name}</div>
-                            <div className="standsManageStandAllParams">
-                                <div className="mainStandsParamsLeft">
-                                    <div className="param-row">
-                                        <div className="param-key">Статус</div>
-                                        <div>{pickedStand.status}</div>
-                                    </div>
-                                    <div className="param-row">
-                                        <div className="param-key">Источник</div>
-                                        <div>{pickedStand.source_type || pickedStand.id && "Отсутствует" || ""}</div>
-                                    </div>
-                                    <div className="param-row">
-                                        <div className="param-key">Кем создан</div>
-                                        <div>{pickedStand.created_by || pickedStand.id && "Неизвестно" || ""}</div>
-                                    </div>
-                                    <div className="param-row">
-                                        <div className="param-key">Статус источника</div>
-                                        <div>{pickedStand.source_status || pickedStand.id && !pickedStand.source_status && "Отсутствует"}</div>
-                                    </div>
-                                    <div className="param-row">
-                                        <div className="param-key">Последнее обновление</div>
-                                        <div>{pickedStand.updated_at === "never" && "Отсутствует" || pickedStand.updated_at}</div>
-                                    </div>
-                                    <div className="param-row">
-                                        <div className="param-key">Ссылка на страницу стенда</div>
-                                        <div>{standInfo.source_link && <div className="sourcesIconsContainer">
-                                            Доступна
-                                            <div className="iconWithTooltip" onClick={() => handleCopy(standInfo.source_link)}>
-                                                <CopyIcon className="externalLinkIconStyle" />
-                                                <span className="tooltip">Скопировать ссылку</span>
-                                            </div>
-                                            <div className="iconWithTooltip" onClick={handleOpen}>
-                                                <ExternalLinkIcon className="externalLinkIconStyle" />
-                                                <span className="tooltip">Открыть ссылку в новом окне</span>
-                                            </div>
-                                        </div> || pickedStand.id && "Отсутствует" || ""}</div>
-                                    </div>
-                                </div>
-                                <div className="mainStandsParamsRight">
-                                    <textarea name="newStand"
-                                        maxLength={4000}
-                                        placeholder='Описание'
-                                        className="mainStandDescription"
-                                        value={standInfo.description}
-                                    >
-                                    </textarea>
-                                </div>
-
-                            </div>
-                        </div>
-
-                    </div>
                 </div>
                 <div className="mainRight2">
-                    <div className="mainStandLayout">
-                        {standInfo.page_layout && <>
-                            {standInfo.page_layout.map(element =>
-                                renderFromJson(element)
-                            )
-                            }
-                        </>
-                        }
-                    </div>
+
                 </div>
             </div>
 
