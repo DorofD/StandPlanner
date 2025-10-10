@@ -140,7 +140,6 @@ export default function Logs() {
                                 <div id={index} className="logsStatus"> {level} | </div>
                             </>
                         ))}</p>
-                        <p className="logsCount">Размер файла базы данных: {dbFileSize}</p>
                     </div>
                     <div className="logsActions">
                         <button onClick={() => getLogsFile()}>Скачать файл</button>

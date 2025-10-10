@@ -4,13 +4,14 @@ from app.redis_repository.stands import RedisStands
 
 class DataSyncManager():
     def __init__(self):
+        pass
         self.db_s = DBStands()
         self.redis_s = RedisStands()
 
     def push_stands_to_redis(self):
         local_uuids_list = self.db_s.get_uuids_list()
         local_uuids_names_dict = self.db_s.get_uuids_to_names_dict()
-        redis_stands = self.redis_s.get_all_stand_uuids()
+        redis_stands = self.redis_s.get_all_stands_uuids()
         deleted_count = 0
         for r_uuid in redis_stands:
             if r_uuid not in local_uuids_list:

@@ -79,42 +79,64 @@ export default function Rocket() {
 
     async function updateLocalRocketRooms() {
         setLoaderActive(true)
-        const response = await apiUpdateLocalRocketRooms(rocketRooms)
-        if (response.status == 200) {
+        try {
+
+            const response = await apiUpdateLocalRocketRooms(rocketRooms)
+
+            if (response.status == 200) {
+                setLoaderActive(false)
+                getLocalRocketRooms()
+                addMessage('Локальные комнаты обновлены', 'success', 3000)
+            } else {
+                addMessage('Не удалось обновить локальные комнаты', 'error', 3000)
+                setLoaderActive(false)
+            }
+        } catch (err) {
             setLoaderActive(false)
-            getLocalRocketRooms()
-            addMessage('Локальные комнаты обновлены', 'success', 3000)
-        } else {
-            addMessage('Не удалось обновить локальные комнаты', 'error', 3000)
-            setLoaderActive(false)
+            console.log(err)
+            addMessage(`Что-то пошло не так: ${err.message}`, 'error', 5000)
         }
 
     }
 
     async function linkRoomsData() {
         setLoaderActive(true)
-        const response = await apiLinkRoomsData()
-        if (response.status == 200) {
+        try {
+
+            const response = await apiLinkRoomsData()
+            if (response.status == 200) {
+                setLoaderActive(false)
+                getLocalRocketRooms()
+                addMessage('Обработка завершена', 'success', 3000)
+            } else {
+                addMessage('Что-то пошло не так при обработке данных', 'error', 3000)
+                setLoaderActive(false)
+            }
+        } catch (err) {
             setLoaderActive(false)
-            getLocalRocketRooms()
-            addMessage('Обработка завершена', 'success', 3000)
-        } else {
-            addMessage('Что-то пошло не так при обработке данных', 'error', 3000)
-            setLoaderActive(false)
+            console.log(err)
+            addMessage(`Что-то пошло не так: ${err.message}`, 'error', 5000)
         }
 
     }
 
     async function deleteLocalRoom() {
-        const response = await apiDeleteLocalRoom(pickedLocalRoom.id)
-        if (response.status == 200) {
-            getLocalRocketRooms()
-            closeAcceptModal()
-            addMessage('Комната удалена', 'success', 3000)
+        try {
 
-        } else {
-            closeAcceptModal()
-            addMessage('Не удалось удалить комнату', 'error', 3000)
+            const response = await apiDeleteLocalRoom(pickedLocalRoom.id)
+            if (response.status == 200) {
+                getLocalRocketRooms()
+                closeAcceptModal()
+                addMessage('Комната удалена', 'success', 3000)
+
+            } else {
+                closeAcceptModal()
+                addMessage('Не удалось удалить комнату', 'error', 3000)
+            }
+        } catch (err) {
+            setLoaderActive(false)
+            console.log(err)
+            addMessage(`Что-то пошло не так: ${err.message}`, 'error', 5000)
         }
     }
 
@@ -175,7 +197,7 @@ export default function Rocket() {
                         <button onClick={() => linkRoomsData()}>
                             Связать данные
                         </button>
-                        <button onClick={() => getRbotStatus()}>
+                        <button className="botSettingsButton" onClick={() => getRbotStatus()}>
                             Настройки бота
                         </button>
                     </div>

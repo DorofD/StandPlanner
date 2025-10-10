@@ -1,15 +1,5 @@
 from app.repository.queries.base_query import execute_parametrized_query
 
-# CREATE TABLE IF NOT EXISTS rocket_rooms (
-#     id SERIAL PRIMARY KEY,
-#     rocket_id TEXT UNIQUE,
-#     rocket_link TEXT UNIQUE,
-#     name TEXT UNIQUE,
-#     stand_uuid TEXT,
-#     description TEXT,
-#     updated_at TEXT,
-#     FOREIGN KEY(stand_uuid) REFERENCES stands(uuid)
-
 
 class DBRocketRooms():
     def __init__(self):

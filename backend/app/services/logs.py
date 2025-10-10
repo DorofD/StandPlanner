@@ -43,14 +43,9 @@ def get_logs():
     log_file_size_mb = log_file_size / (1024 * 1024)
     log_file_size_str = f"{log_file_size_mb:.4f} МБ"
 
-    db_file_path = 'data/database.db'
-    db_file_size = os.path.getsize(db_file_path)
-    db_file_size_mb = db_file_size / (1024 * 1024)
-    db_file_size_str = f"{db_file_size_mb:.4f} МБ"
-
     result = {'logs': parsed_logs, 'level': log_level,
               'count': len(parsed_logs), 'levels': current_levels,
-              'log_file_size': log_file_size_str, 'db_file_size': db_file_size_str}
+              'log_file_size': log_file_size_str}
     return result
 
 

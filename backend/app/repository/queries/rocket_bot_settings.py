@@ -1,14 +1,5 @@
 from app.repository.queries.base_query import execute_parametrized_query
 
-# CREATE TABLE IF NOT EXISTS rocket_bot_settings (
-#             id SERIAL PRIMARY KEY,
-#             target_rooms JSONB,
-#             target_strings JSONB,
-#             reply_on_messages BOOLEAN,
-#             profile_name TEXT,
-#             active BOOLEAN
-#         );
-
 
 class DBRocketBotSettings():
     def __init__(self):

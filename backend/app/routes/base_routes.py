@@ -1,7 +1,6 @@
 from flask import Blueprint, request, current_app, jsonify
 from flask_jwt_extended import create_access_token, create_refresh_token, set_refresh_cookies, jwt_required, get_jwt_identity, get_jwt
 from app.services.stands import get_stands, get_stand, add_stand, delete_stand, change_stand
-from app.services.reservations import add_reservaiton, get_reservations_for_planner, change_reservation, delete_reservation
 from app.services.sources import add_source, get_sources, process_source, bulk_process_sources, delete_source, change_source
 from app import scheduler as app_scheduler
 import traceback
@@ -12,18 +11,16 @@ main = Blueprint('main', __name__)
 @main.route('/reservations', methods=(['GET', 'POST']))
 def reservations():
     if request.method == 'GET':
-        reservations = get_reservations_for_planner()
+        reservations = []
         return jsonify(reservations)
     if request.method == 'POST':
         data = request.json
         if data['action'] == 'add':
-            add_reservaiton(data['user_id'], data['stand_id'],
-                            data['start_time'], data['duration'])
+            pass
         if data['action'] == 'change':
-            change_reservation(data['reservation_id'], data['stand_id'],
-                               data['start_time'], data['duration'])
+            pass
         if data['action'] == 'delete':
-            delete_reservation(data['reservation_id'])
+            pass
     return jsonify({'success': True}), 200, {'ContentType': 'application/json'}
 
 

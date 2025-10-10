@@ -28,6 +28,8 @@ export default function Stands() {
             setLoading('loaded')
         } catch (err) {
             setLoading('error')
+            console.log(err)
+            addMessage(`Что-то пошло не так: ${err.message}`, 'error', 5000)
         }
     }
 

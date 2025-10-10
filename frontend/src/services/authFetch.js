@@ -46,5 +46,10 @@ export async function authFetch(url, options = {}) {
         console.log('Forbidden, check your role')
         throw new Error('Forbidden, check your role');
     }
+
+    if (response.status === 500) {
+        console.log('500 Internal Server Error')
+        throw new Error('500 Internal Server Error');
+    }
     return response;
 }

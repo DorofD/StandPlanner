@@ -32,14 +32,30 @@ class RedisApi:
         })
         return self.r.sadd('stands:all', stand_uuid)
 
-    def get_all_stand_uuids(self):
+    def get_all_stands_uuids(self):
         return [uuid for uuid in self.r.smembers('stands:all')]
 
+    # def get_all_stands(self):
+    #     result = []
+    #     for uuid in self.get_all_stands_uuids():
+    #         stand = self.r.hgetall(f'stand:{uuid}')
+    #         stand['queue'] = self.r.lrange(f'stand:{uuid}:queue', 0, -1)
+    #         result.append(stand)
+    #     return result
+
     def get_all_stands(self):
+        uuids = self.get_all_stands_uuids()
+        pipe = self.r.pipeline()
+        # добавляем все команды redis в пайплайн
+        for uuid in uuids:
+            pipe.hgetall(f'stand:{uuid}')
+            pipe.lrange(f'stand:{uuid}:queue', 0, -1)
+        # выполняем все команды за один сетевой запрос
+        results = pipe.execute()
         result = []
-        for uuid in self.get_all_stand_uuids():
-            stand = self.r.hgetall(f'stand:{uuid}')
-            stand['queue'] = self.r.lrange(f'stand:{uuid}:queue', 0, -1)
+        for i, uuid in enumerate(uuids):
+            stand = results[i*2]
+            stand['queue'] = results[i*2+1]
             result.append(stand)
         return result
 
@@ -122,5 +138,10 @@ class RedisApi:
 #     '04211380-2588-44b0-9c22-39d4eed46c15', 'Bobe1'))
 # print(RedisApi().add_user_to_stand_queue(
 #     '04211380-2588-44b0-9c22-39d4eed46c15', 'Bobe2'))
+# for i in RedisApi().get_all_stands():
+#     print(i)
+# for i in RedisApi().get_all_stands():
+#     print(i)
 
-# print(RedisApi().get_all_stands())
+# print(RedisApi().get_stand_queue(
+#     '03346474-1460-4820-adaf-486c6c2783ad'))

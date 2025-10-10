@@ -108,7 +108,7 @@ def link_data():
             # совпадение Confluence PageID
             if "ConfluencePageId=" in stand['created_by']:
                 pageId = stand['created_by'].replace("ConfluencePageId=", '')
-                if pageId in room['description']:
+                if 'description' in room and room['description'] and pageId in room['description']:
                     hit_count += 1
 
             # привязка стенда, если совпал хотя бы 1 пункт

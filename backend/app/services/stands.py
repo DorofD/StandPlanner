@@ -6,15 +6,12 @@ import sqlite3
 
 def get_stands():
     stands_list = DBStands().get_stands_list()
-    # redis_stands_list = RedisStands().get_all_stands()
-    for i in range(len(stands_list)):
-        r_stand = RedisStands(
-        ).get_stand(stands_list[i]['name'])
-        if r_stand:
-            status = r_stand['status']
-        else:
-            status = 'Unknown'
-        stands_list[i]['status'] = status
+    r_stands_list = RedisStands().get_all_stands()
+    for stand in stands_list:
+        try:
+            stand['status'] = r_stands_list[stand['uuid']]['status']
+        except KeyError:
+            stand['status'] = "Unknown"
     return stands_list
 
 
