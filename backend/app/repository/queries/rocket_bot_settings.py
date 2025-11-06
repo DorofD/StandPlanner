@@ -1,3 +1,4 @@
+from psycopg2.extras import Json
 from app.repository.queries.base_query import execute_parametrized_query
 
 
@@ -23,7 +24,7 @@ class DBRocketBotSettings():
             INSERT INTO {self.table_name} (target_rooms, target_strings, reply_on_messages, profile_name, active, updated_at)
             VALUES (%s, %s, %s, %s, %s, %s)
         """
-        params = (target_rooms, target_strings,
+        params = (target_rooms, Json(target_strings),
                   reply_on_messages, profile_name, False, 'never')
         return execute_parametrized_query(query, params)
 
@@ -31,6 +32,8 @@ class DBRocketBotSettings():
         if field not in self.allowed_fields:
             raise ValueError(f"Field '{field}' is not allowed to be updated.")
         query = f"UPDATE {self.table_name} SET {field} = %s WHERE id = %s"
+        if type(value) == dict:
+            value = Json(value)
         params = (value, id)
         return execute_parametrized_query(query, params)
 

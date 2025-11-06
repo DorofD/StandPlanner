@@ -97,7 +97,8 @@ def create_db():
     #     "busy": [str, str, ...],
     #     "free": [str, str, ...],
     #     "maintenance": [str, str, ...],
-    #     "lining_up": [str, str, ...]
+    #     "in_busy_queue": [str, str, ...],
+    #     "out_of_busy_queue": [str, str, ...]
     # },
     # "reply_on_messages": bool
     # """

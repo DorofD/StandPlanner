@@ -13,7 +13,7 @@ export default function RocketRoomCard({ id, rid, name, fname, room_type, announ
                 <div className="rocketRoomCardParams">
                     <div className="rocketRoomBottom">
                         <p className="rocketRoomCardValueFaded">name </p>
-                        <div>{name}</div>
+                        <div className={!picked && "nowrapElipsis" || ""}>{name}</div>
                     </div>
                     <div className="rocketRoomBottom">
                         <p className="rocketRoomCardValueFaded">room type</p>

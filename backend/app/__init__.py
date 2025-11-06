@@ -14,6 +14,7 @@ from app.domain.scheduler import Scheduler
 from app.domain.data_sync import DataSyncManager
 from app.repository.db_model import create_db
 from app.services.users import add_user, get_users
+from app.services.rocket import get_active_settings_profile, add_settings_profile
 scheduler = None
 
 
@@ -86,5 +87,18 @@ def create_app():
     if not users:
         add_user('admin', 'local', 'admin', 'admin')
 
+    if not get_active_settings_profile()['success']:
+        add_settings_profile(
+            profile_name='default',
+            target_rooms=[],
+            target_strings={
+                "busy": ['занял, занято'],
+                "free": ['освободил', 'передал', 'отдал'],
+                "maintenance": ['обслуживание'],
+                "in_busy_queue": ['следующий'],
+                "out_of_busy_queue": ['снялся']},
+            reply_on_messages=False
+        )
+        print('add default rocket bot settings profile')
     print(DataSyncManager().push_stands_to_redis())
     return app

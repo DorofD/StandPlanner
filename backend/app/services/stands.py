@@ -20,7 +20,8 @@ def get_stand(id):
     if not stand:
         return stand
     r_stand = RedisStands(
-    ).get_stand(stand['name'])
+    ).get_stand(stand['uuid'])
+    print(r_stand)
     if r_stand:
         status = r_stand['status']
     else:

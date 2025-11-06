@@ -12,7 +12,8 @@ def get_settings():
                             "busy": [str, str, ...],
                             "free": [str, str, ...],
                             "maintenance": [str, str, ...],
-                            "lining_up": [str, str, ...]
+                            "in_busy_queue": [str, str, ...],
+                            "out_of_busy_queue": [str, str, ...]
                         },
                         "reply_on_messages": bool
                     },
@@ -54,7 +55,8 @@ def validate_settings(settings: dict) -> dict:
                             "busy": [str, str, ...],
                             "free": [str, str, ...],
                             "maintenance": [str, str, ...],
-                            "lining_up": [str, str, ...]
+                            "in_busy_queue": [str, str, ...],
+                            "out_of_busy_queue": [str, str, ...]
                         },
         "reply_on_messages": bool
     """
@@ -64,11 +66,12 @@ def validate_settings(settings: dict) -> dict:
         missing = required_keys - settings.keys()
         return {'success': False, 'error': f'Fail to validate settings: Missing required keys: {", ".join(missing)}'}
 
-    # Проверяем target_rooms
+    # Проверка target_rooms
     target_rooms = settings["target_rooms"]
     if not isinstance(target_rooms, list):
         return {'success': False, 'error': 'Fail to validate settings: "target_rooms" must be a list'}
-    for idx, room in enumerate(target_rooms):
+    for idx, room in enumerate(target_rooms):    # Проверка target_strings
+
         if not isinstance(room, dict):
             return {'success': False, 'error': f'Fail to validate settings: Room at index {idx} is not a dictionary'}
         room_required_keys = {"rid", "name", "stand_uuid"}
@@ -78,21 +81,5 @@ def validate_settings(settings: dict) -> dict:
         for key in room_required_keys:
             if not isinstance(room[key], str):
                 return {'success': False, 'error': f'Fail to validate settings: Value of "{key}" in room at index {idx} must be a string'}
-
-    # Проверяем target_strings
-    target_strings = settings["target_strings"]
-    if not isinstance(target_strings, dict):
-        return {'success': False, 'error': 'Fail to validate settings: "target_strings" must be a dictionary'}
-    required_string_keys = {"busy", "free", "maintenance", "lining_up"}
-    if not required_string_keys.issubset(target_strings.keys()):
-        missing = required_string_keys - target_strings.keys()
-        return {'success': False, 'error': f'Fail to validate settings: "target_strings" is missing keys: {", ".join(missing)}'}
-    for key in required_string_keys:
-        value = target_strings[key]
-        if not isinstance(value, list):
-            return {'success': False, 'error': f'Fail to validate settings: "{key}" in "target_strings" must be a list'}
-        for i, item in enumerate(value):
-            if not isinstance(item, str):
-                return {'success': False, 'error': f'Fail to validate settings: Element at index {i} in "{key}" of "target_strings" must be a string'}
 
     return {'success': True}

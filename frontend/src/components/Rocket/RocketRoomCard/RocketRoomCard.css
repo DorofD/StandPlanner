@@ -58,3 +58,9 @@ div.rocketRoomCardParams {
 div.rocketRoomCardClose {
     text-align: right;
 }
+
+.nowrapElipsis {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}

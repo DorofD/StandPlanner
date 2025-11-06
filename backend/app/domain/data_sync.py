@@ -23,3 +23,6 @@ class DataSyncManager():
                 self.redis_s.set_stand(l_uuid, local_uuids_names_dict[l_uuid])
                 added_count += 1
         return {'deleted': deleted_count, 'added': added_count}
+
+    def update_rocket_bot_settings(self):
+        pass

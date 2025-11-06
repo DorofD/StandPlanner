@@ -1,5 +1,5 @@
 from flask import Blueprint, request, jsonify, current_app
-from app.services.rocket import check_bot, get_bot_status, get_active_settings_profile, get_rocket_rooms, get_local_rocket_rooms, update_rooms, delete_room, link_data
+from app.services.rocket import check_bot, get_bot_status, get_active_settings_profile, get_rocket_rooms, get_local_rocket_rooms, update_rooms, delete_room, link_data, add_settings_profile
 from flask_jwt_extended import jwt_required
 from app.routes import role_required
 
@@ -37,6 +37,8 @@ def rocket():
             link_data()
         if data['action'] == 'delete':
             delete_room(data['id'])
+        if data['action'] == 'add_settings':
+            add_settings_profile(data['settings'])
 
     return jsonify({'success': True}), 200, {'ContentType': 'application/json'}
 

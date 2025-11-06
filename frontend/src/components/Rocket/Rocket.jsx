@@ -1,6 +1,6 @@
 import React, { Component, useState, useEffect } from "react";
 import "./Rocket.css"
-import { apiGetRbotCheck, apiGetRbotStatus, apiGetRocketRooms, apiGetLocalRocketRooms, apiUpdateLocalRocketRooms, apiDeleteLocalRoom, apiLinkRoomsData } from "../../services/apiRocket";
+import { apiGetRbotCheck, apiGetRbotStatus, apiGetRocketRooms, apiGetLocalRocketRooms, apiUpdateLocalRocketRooms, apiDeleteLocalRoom, apiLinkRoomsData, apiAddRbotSettings } from "../../services/apiRocket";
 import TimedMessages from "../TimedMessages/TimedMessages";
 import RocketRoomCard from "./RocketRoomCard/RocketRoomCard";
 import LocalRocketRoomCard from "./LocalRocketRoomCard/LocalRocketRoomCard";
@@ -150,7 +150,7 @@ export default function Rocket() {
             <div className="rocketLeft">
                 <div className="rocketLeft1">
                     {loading === 'loading' && <p> Loading ...</p>}
-                    {loading === 'error' && <p> бекенд отвалился</p>}
+                    {loading === 'error' && <p> Бот или основной бекенд недоступен</p>}
 
                     {loading === 'loaded' && rbotCheck.success &&
                         <>

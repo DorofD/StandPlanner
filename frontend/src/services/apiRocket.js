@@ -64,6 +64,18 @@ export async function apiDeleteLocalRoom(id) {
     return response
 }
 
+export async function apiAddRbotSettings(settings) {
+    const response = await authFetch(`${process.env.BACKEND_URL}/rocket`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+            action: 'add_settings',
+            settings: settings
+        })
+    })
+    return response
+}
+
 // export async function apiChangeUser(id, chanesDict) {
 //     const response = await authFetch(`${process.env.BACKEND_URL}/users`, {
 //         method: 'POST',

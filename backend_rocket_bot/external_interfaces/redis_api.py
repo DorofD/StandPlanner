@@ -66,7 +66,9 @@ class RedisApi:
 
     def get_stand(self, stand_uuid):
         key = f'stand:{stand_uuid}'
-        return self.r.hgetall(key)
+        stand = self.r.hgetall(key)
+        stand['queue'] = self.get_stand_queue(stand_uuid['uuid'])
+        return stand
 
     def add_user_to_stand_queue(self, stand_uuid, username):
         queue_key = f'stand:{stand_uuid}:queue'

@@ -39,7 +39,10 @@ class RedisStands(RedisBase):
 
     def get_stand(self, stand_uuid):
         key = f'stand:{stand_uuid}'
-        return self.r.hgetall(key)
+        stand = self.r.hgetall(key)
+        if stand:
+            stand['queue'] = self.get_stand_queue(stand_uuid)
+        return stand
 
     def delete_stand(self, stand_uuid):
         key = f'stand:{stand_uuid}'

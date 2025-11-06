@@ -17,7 +17,7 @@ ws_lock = asyncio.Lock()
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    logger.info("Let's get started")
+    logger.info("Rocket bot started")
 
     settings = get_settings()
     app.state.settings = settings
@@ -32,7 +32,12 @@ async def lifespan(app: FastAPI):
         yield
     else:
         app.state.ws_client = None
-        logger.info(f"Can't load settings: {settings['error']}")
+        if 'error' in settings:
+            error_msg = settings['error']
+        else:
+            error_msg = "Unknown error"
+        logger.info(f"Can't load settings: {error_msg}")
+
         yield
     logger.info("Shutting down")
     ws_client = getattr(app.state, "ws_client", None)

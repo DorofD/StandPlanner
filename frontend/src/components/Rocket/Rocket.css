@@ -15,7 +15,7 @@ div.rocketLeft {
 }
 
 div.rocketCenter {
-    width: 35%;
+    width: 30%;
     height: 100%;
     display: flex;
     flex-direction: column;
@@ -23,7 +23,7 @@ div.rocketCenter {
 }
 
 div.rocketRight {
-    width: 40%;
+    width: 30%;
     height: 100%;
     /* display: flex; */
     box-sizing: border-box;
@@ -78,7 +78,8 @@ div.rocketCenter2 {
     height: 80%;
     box-sizing: border-box;
     display: flex;
-    overflow: auto;
+    /* overflow: auto; */
+    overflow: scroll;
     padding: 20px;
     flex-direction: column;
     gap: 2px;
@@ -103,7 +104,8 @@ div.rocketRight2 {
     height: 80%;
     box-sizing: border-box;
     display: flex;
-    overflow: auto;
+    /* overflow: auto; */
+    overflow: scroll;
     padding: 20px;
     flex-direction: column;
     gap: 2px;
@@ -161,7 +163,8 @@ div.rocketParams {
     height: 80%;
     box-sizing: border-box;
     display: flex;
-    overflow: auto;
+    /* overflow: auto; */
+    overflow: hidden;
     padding: 20px;
     flex-direction: column;
     gap: 2px;
@@ -175,7 +178,8 @@ div.rocketParams {
     box-sizing: border-box;
     height: 100%;
     width: 100%;
-    overflow: auto;
+    /* overflow: auto; */
+    overflow: hidden;
     margin: 10px;
     padding: 5px;
     border: solid 3px var(--border-color);

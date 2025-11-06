@@ -35,18 +35,33 @@ def get_active_settings_profile():
     dbr_settings = DBRocketBotSettings()
     profile = dbr_settings.get_active_profile()
     print(profile)
-    # """
-    # "target_rooms": [{'rid':str, 'name': str, 'stand_uuid'}, ...],
-    # "target_strings": {
-    #     "busy": [str, str, ...],
-    #     "free": [str, str, ...],
-    #     "maintenance": [str, str, ...],
-    #     "lining_up": [str, str, ...]
-    # },
-    # "reply_on_messages": bool
-    # """
 
+    # """    структура ответа (data), получаемого от основного приложения:
+    # {
+    #     "success": bool,
+    #     "settings": {
+    #                     "target_rooms": [{'rid':str, 'name': str, 'stand_uuid'}, ...],
+    #                     "target_strings": {
+    #                         "busy": [str, str, ...],
+    #                         "free": [str, str, ...],
+    #                         "maintenance": [str, str, ...],
+    #                         "in_busy_queue": [str, str, ...],
+    #                         "out_of_busy_queue": [str, str, ...]
+    #                     },
+    #                     "reply_on_messages": bool
+    #                 },
+    #     "error": str
+    # }
+    # """
+    if not profile:
+        return {'success': False, "error": "No active profiles"}
     return {'success': True, "settings": profile}
+
+
+def add_settings_profile(profile_name, target_rooms, target_strings, reply_on_messages):
+    DBRocketBotSettings().add_profile(target_rooms, target_strings,
+                                      reply_on_messages, profile_name)
+    return True
 
 
 def update_rooms(rocket_rooms):

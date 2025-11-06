@@ -14,11 +14,13 @@ export default function LocalRocketRoomCard({ id, rid, rocket_link, room_type, n
                 <div className="rocketRoomCardParams">
                     <div className="rocketRoomBottom">
                         <p className="rocketRoomCardValueFaded">name </p>
-                        <div>{name}</div>
+                        <div className={!picked && "nowrapElipsis" || ""}>{name}</div>
                     </div>
                     <div className="rocketRoomBottom">
                         <p className="rocketRoomCardValueFaded">status </p>
-                        <div className={status === "relevant" && "rocketRoomCardValueFaded paramValue success-colors" || "rocketRoomCardValueFaded"}>{status}</div>
+                        <div className={status === "relevant" && "rocketRoomCardValueFaded paramValue success-colors" ||
+                            status === "outdated" && "rocketRoomCardValueFaded paramValue warning-colors" ||
+                            "rocketRoomCardValueFaded"}>{status}</div>
                     </div>
                     {picked && <>
                         <div className="rocketRoomBottom">

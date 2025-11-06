@@ -12,14 +12,14 @@ class MessageQueueHandler:
         self._running = False
         self._thread = None
         self.redis = RedisApi()
-        self.r
+        self.rh = ReservationsHandler()
         # self.start_time = 0
 
     def _listen_queue(self):
         while self._running:
             try:
                 message = ws_message_queue.get(timeout=2)
-                handled_message = self._handle_message(message)
+                handled_message = self.rh.handle_reservation(message)
                 if not handled_message['success']:
                     logger.error(
                         f"mq_handler: Unknown error in handled_message: {handled_message['error']}")
@@ -45,7 +45,7 @@ class MessageQueueHandler:
                     self._push_to_redis_queue(
                         'rocket_events', handled_message['event'])
 
-                    # if not handled_message['success']:
+                    # if not handled_message['suhandle_reservationccess']:
 
                     #     if handled_message['action']
             except Empty:
