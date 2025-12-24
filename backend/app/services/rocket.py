@@ -32,9 +32,9 @@ def get_local_rocket_rooms():
 
 
 def get_active_settings_profile():
-    dbr_settings = DBRocketBotSettings()
-    profile = dbr_settings.get_active_profile()
-    print(profile)
+    # dbr_settings = DBRocketBotSettings()
+    # profile = dbr_settings.get_active_profile()
+    # print(profile)
 
     # """    структура ответа (data), получаемого от основного приложения:
     # {
@@ -53,9 +53,32 @@ def get_active_settings_profile():
     #     "error": str
     # }
     # """
-    if not profile:
-        return {'success': False, "error": "No active profiles"}
-    return {'success': True, "settings": profile}
+    # if not profile:
+    #     return {'success': False, "error": "No active profiles"}
+    # return {'success': True, "settings": profile}
+    settings = {}
+    settings['target_strings'] = {
+        "busy": [
+            "занял, занято"
+        ],
+        "free": [
+            "освободил",
+            "передал",
+            "отдал"
+        ],
+        "maintenance": [
+            "обслуживание"
+        ],
+        "in_busy_queue": [
+            "следующий"
+        ],
+        "out_of_busy_queue": [
+            "снялся"
+        ],
+        "problem": ["!ошибка"]
+    }
+    settings['target_rooms'] = DBRocketRooms().get_rooms_for_bot()
+    return {'success': True, 'settings': settings}
 
 
 def add_settings_profile(profile_name, target_rooms, target_strings, reply_on_messages):

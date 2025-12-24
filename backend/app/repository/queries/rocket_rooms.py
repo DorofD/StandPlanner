@@ -11,6 +11,10 @@ class DBRocketRooms():
         query = f"SELECT * FROM {self.table_name}"
         return execute_parametrized_query(query)
 
+    def get_rooms_for_bot(self):
+        query = f"SELECT rocket_id as rid, name, fname, stand_uuid FROM {self.table_name} WHERE status = 'relevant' LIMIT 100"
+        return execute_parametrized_query(query)
+
     def add_room(self, rocket_id, rocket_link, room_type, name, fname, stand_uuid, description, status, updated_at):
         query = f"""
             INSERT INTO {self.table_name} (rocket_id, rocket_link, room_type, name, fname, stand_uuid, description, status, updated_at)

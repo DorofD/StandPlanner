@@ -3,10 +3,9 @@ import json
 import uuid
 import threading
 from websocket import WebSocketApp
-from datetime import datetime
 from dotenv import load_dotenv
-from shared.queues import ws_message_queue
-from services.logger import logger, get_formatted_uptime
+from external_interfaces.rocket_http_api import RocketChatAPI
+from services.logger import logger
 
 
 class RocketChatWSClient:
@@ -32,15 +31,11 @@ class RocketChatWSClient:
         self.ws_login_id = ''
         self.connected = False
         self.ws = None
-        self.rooms_to_sub = []
-        self.room_id_to_channel_dict = {}
-        self._count = 0
-        self._last_ws_pong = 0
-        self._connection_start_time = 0
+        self.local_queue = None
+        self.rooms_to_sub = RocketChatAPI().get_rooms()
 
     def on_open(self, ws):
         logger.info(f"WebSocket: connection opened")
-        self._connection_start_time = datetime.now()
         self.connected = True
 
         # DDP handshake (connect)
@@ -56,19 +51,19 @@ class RocketChatWSClient:
 
         if msg.get("msg") == "ping":
             ws.send('{"msg":"pong"}')
-            # print("Отправлен pong")
+            print("Отправлен pong")
 
         if msg.get("msg") == "nosub":
             logger.error(
                 f"Fail to sub on room: {self.sub_id_to_channel_dict[msg.get('id')]['channel_name']}, error: {msg.get('error')['error']}")
-            # print(
-            #     f"Fail to sub on room: {self.sub_id_to_channel_dict[msg.get('id')]['channel_name']}, error: {msg.get('error')['error']}")
+            print(
+                f"Fail to sub on room: {self.sub_id_to_channel_dict[msg.get('id')]['channel_name']}, error: {msg.get('error')['error']}")
 
         # После успешного DDP connect надо авторизоваться
         if msg.get("msg") == "connected":
-            # print("DDP: connected, авторизация...")
+            print("DDP: connected, авторизация...")
             self.ws_login_id = str(uuid.uuid4())
-            # print(f"Generated login_id is {self.ws_login_id}")
+            print(f"Generated login_id is {self.ws_login_id}")
             ws.send(json.dumps({
                 "msg": "method",
                 "method": "login",
@@ -83,28 +78,36 @@ class RocketChatWSClient:
             if msg.get("error"):
                 logger.error(
                     f"WebSocket DDP: auth failed: {msg.get('error')['message']}")
-                # print(
-                #     f"WebSocket DDP: auth failed: {msg.get('error')['message']}")
+                print(
+                    f"WebSocket DDP: auth failed: {msg.get('error')['message']}")
             else:
-                # print("WebSocket DDP: auth success, subscribing to rooms")
+                print("!WebSocket DDP: auth success, subscribing to rooms")
                 logger.info(
                     "WebSocket DDP: auth success, subscribing to rooms")
-                for room in self.rooms_to_sub:
-                    # print(f"Send sub message for {room['name']}")
-                    sub_id = str(uuid.uuid4())
-                    ws.send(json.dumps({
-                        "msg": "sub",
-                        "id": sub_id,
-                        "name": "stream-room-messages",
-                        "params": [
-                            room['rid'],
-                            False
-                        ]
-                    }))
-                    self.room_id_to_channel_dict[room['rid']] = {'channel_name': room['name'],
-                                                                 'channel_id': room['rid'],
-                                                                 'sub_id': sub_id,
-                                                                 }
+                # for room in self.rooms_to_sub:
+                #     print(room)
+                #     # print(f"Send sub message for {room['name']}")
+                #     sub_id = str(uuid.uuid4())
+                #     ws.send(json.dumps({
+                #         "msg": "sub",
+                #         "id": sub_id,
+                #         "name": "stream-room-messages",
+                #         "params": [
+                #             room['_id'],
+                #             False
+                #         ]
+                #     }))
+                # подписка на уведомления{
+                sub_id = str(uuid.uuid4())
+                ws.send(json.dumps({
+                    "msg": "sub",
+                    "id": sub_id,
+                    "name": "stream-notify-user",
+                    "params": [
+                        f"{self.user_id }/rooms-changed",
+                        False
+                    ]
+                }))
 
         # cообщения из комнат
         if msg.get("collection") == "stream-room-messages":
@@ -114,8 +117,27 @@ class RocketChatWSClient:
                 message_obj = args[0]
                 # print(
                 #     f"\nВ комнате {self.room_id_to_channel_dict[message_obj.get('rid')]['channel_name']} сообщение от {message_obj.get('u', {}).get('username')}: {message_obj.get('msg')}")
-                ws_message_queue.put(message_obj)
-                self._count += 1
+                # print(
+                #     f"\nCообщение от {message_obj.get('u', {}).get('username')}: {message_obj.get('msg')}")
+                try:
+                    self.local_queue.put(message_obj)
+                except Exception as exc:
+                    print(
+                        f"Exception when tryin to put msg in local_queue: {exc}")
+        # cообщения об уведомлениях
+        if msg.get("collection") == "stream-notify-user":
+            fields = msg.get("fields", {})
+            args = fields.get("args", [])
+            if args:
+                # print(args)
+                message_obj = args[1]
+                # print(
+                #     f"\nCообщение от {message_obj.get('u', {}).get('username')}: {message_obj.get('lastMessage').get('msg')}")
+                try:
+                    self.local_queue.put(message_obj)
+                except Exception as exc:
+                    print(
+                        f"Exception when tryin to put msg in local_queue: {exc}")
 
     def on_close(self, ws, close_status_code, close_msg):
         logger.info(
@@ -124,16 +146,15 @@ class RocketChatWSClient:
 
     def on_error(self, ws, error):
         logger.error(f"WebSocket: Error: {error}")
-        # print(f"WebSocket: Error: {error}")
+        print(f"WebSocket: Error: {error}")
         self.connected = False
 
     def on_pong(self, ws, error):
-        formatted_now = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-        self._last_ws_pong = formatted_now
+        # print('pong from on_pong')
+        pass
 
-    def connect(self, target_rooms):
+    def connect(self):
         logger.info(f"WebSocket: start connecton")
-        self.rooms_to_sub = target_rooms
         self.ws = WebSocketApp(
             self.ws_url + "/websocket",
             header=[f"{k}: {v}" for k, v in self.headers.items()],
@@ -143,6 +164,10 @@ class RocketChatWSClient:
             on_error=self.on_error,
             on_pong=self.on_pong
         )
+
+    def run(self, local_queue):
+        self.local_queue = local_queue
+        self.connect()
         # run_forever блокирует основной поток, поэтому запускаем в дополнительном
         self._ws_thread = threading.Thread(
             target=self.ws.run_forever,
@@ -162,17 +187,3 @@ class RocketChatWSClient:
             self.ws.close()
         if self._ws_thread and self._ws_thread.is_alive():
             self._ws_thread.join(timeout=5)
-
-    @property
-    def status(self):
-        # if self._connection_start_time == 0:
-        #     ws_conn_uptime = False
-        # else:
-        #     now = datetime.now()
-        #     ws_conn_uptime = get_formatted_uptime(
-        #         self._connection_start_time, now)
-        return {
-            "alive": True,
-            "message_count": self._count,
-            "ws_last_pong": self._last_ws_pong,
-            "ws_connected": self.connected}
